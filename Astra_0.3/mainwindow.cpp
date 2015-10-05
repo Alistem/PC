@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lineEdit_30->setText("0");
     ui->lineEdit_31->setText("0");
     ui->lineEdit_32->setText("0");
+    ui->lineEdit_time->setText("0.01");
 //=====================================================================
     ui->action8->triggered(true); // Один контроллер (при инициализации)
     ui->action8->setChecked(true);// Один контроллер (при инициализации)
@@ -66,9 +67,9 @@ MainWindow::MainWindow(QWidget *parent) :
     off_gradient_three=70;
     off_gradient_four=40;
 
-    new_frame();
     num_frame=1;
     num_sum=1;
+    new_frame(); 
     frame_num_lcd();
     frame_sum_lcd();
     frame_text(1,frames_list[0]); // При инициализации выводим в lineEdit содержимое первого (пустого) кадра
@@ -1624,7 +1625,8 @@ void MainWindow::add_frame(int num) // вставляем новый кадр в
 }
 void MainWindow::del_frame(int num) // удаляем кадр
 {
-    frames_list.removeAt(num-1);
+    frames_list.removeAt(num-1); // ШИМ
+    frames_time.removeAt(num-1); // Время
     if(frames_list.size()==0)
         new_frame();
 
@@ -1633,6 +1635,14 @@ void MainWindow::del_frame(int num) // удаляем кадр
 void MainWindow::frames_to_map(int num, QByteArray fr_data) // пишем кадр в мап
 {
     frames_list[num-1]=fr_data;
+}
+
+void MainWindow::rev_ret_time() // обратная связь для времени
+{
+    QByteArray buff;
+    buff=frames_time[num_frame-1];
+    double time_double=buff.toDouble()*0.01;
+    qDebug()<<time_double;
 }
 
 void MainWindow::rev_ret() // обратная связь
@@ -1905,6 +1915,7 @@ void MainWindow::on_pushButton_111_clicked() // Create Frame
     frame_text_all();
     frame_num_lcd();
     frame_sum_lcd();
+    rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
 }
 void MainWindow::on_toolButton_9_clicked() // Кадр назад

@@ -32,6 +32,7 @@ private slots:
     void add_frame(int);
     void del_frame(int);
     void rev_ret();
+    void rev_ret_time();
 
     void stylesheet_switch();
 
