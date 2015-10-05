@@ -183,7 +183,7 @@ private:
 
     QString back_color,back_color_red,back_color_green,back_color_blue;
     QString btn_off;
-    double frame_time;
+    int frame_time;
     int num_frame;
     int num_sum;
     int num_channels; // ол-во контроллеров в св¤зке (суммарное количество каналов)

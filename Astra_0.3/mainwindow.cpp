@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     num_of_ch=32; // кол-во каналов (на будущее, для расширения)
 
-    color_button=1;
+    color_button=1; // кнопочки красного цвета
     stylesheet_switch(); // Меняем цвет кнопок при инициализации на красный (по-умолчанию)
 
     ui->lineEdit->setText("0");
@@ -50,8 +50,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lineEdit_31->setText("0");
     ui->lineEdit_32->setText("0");
 //=====================================================================
-    ui->action8->triggered(true);
-    ui->action8->setChecked(true);
+    ui->action8->triggered(true); // Один контроллер (при инициализации)
+    ui->action8->setChecked(true);// Один контроллер (при инициализации)
     //====================================================================
 
     back_color="QPushButton{border-image: url(:/bkg); background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba(255, 40, 200, 255), stop:0.463277 rgba(220, 42, 100, 255), stop:0.564246 rgba(130, 0, 0, 255), stop:0.672 rgba(75, 0, 0, 255), stop:0.701 rgba(255, 255, 255, 0));}";
@@ -66,12 +66,10 @@ MainWindow::MainWindow(QWidget *parent) :
     off_gradient_three=70;
     off_gradient_four=40;
 
-    frame.fill(0,32); // QByteArray для ШИМ элементов кадра
     new_frame();
     num_frame=1;
-    frame_num_lcd();
-    frames_list[num_frame-1]=frame; // Массив с кадрами
     num_sum=1;
+    frame_num_lcd();
     frame_sum_lcd();
     frame_text(1,frames_list[0]); // При инициализации выводим в lineEdit содержимое первого (пустого) кадра
     frame_text_all(); // При инициализации выводим в lineEdit содержимое первого (пустого) кадра
@@ -1612,15 +1610,17 @@ void MainWindow::new_frame() // пишем новый кадр в мап
 {
     QByteArray buff,time_buff;
     buff.fill(0,num_of_ch);
-    time_buff.fill(0 ,num_of_ch);
+    time_buff="0001";
     frames_list.append(buff);
     frames_time.append(time_buff);
 }
 void MainWindow::add_frame(int num) // вставляем новый кадр в мапе (врезаем посреди других кадров)
 {
-    QByteArray buff;
+    QByteArray buff,time_buff;
     buff.fill(0,num_of_ch);
+    time_buff="0001";
     frames_list.insert((num-1),buff);
+    frames_time.insert((num-1),time_buff);
 }
 void MainWindow::del_frame(int num) // удаляем кадр
 {
@@ -2188,28 +2188,24 @@ void MainWindow::open_animation() // открытие анимации из фа
 
 //=======================Блок времени=============================
 
-void MainWindow::current_time(double tme) // пишет текущее время кадра из Qlist в глобальную переменную
-{
-    frame_time=tme;
-}
-
 void MainWindow::on_slider_time_valueChanged(int value) //передаёт значение со слайдера в окно длинны кадра
 {
     QString frame_lenth1,frame_lenth;
     QByteArray time_buff;
-    if(entr_tme==0){ //блокировка slider-lineEdit
     double sl= value*0.01;// float value
     QString time_string=QString::number(sl,'f',2); //=============конвертируем из double в string c точностью 2 знака после запятой
-    ui->lineEdit_time->setText(time_string);
     frame_lenth1="0000"; // болванка
     frame_lenth.setNum(value,16); // конвертируем в стринг по основанию 16
     for(int i=0; i<frame_lenth.length();++i){ // заменяем значения в балванке на реальные
         int pos=frame_lenth1.length()-frame_lenth.length()+i;
-    frame_lenth1.replace(pos,1,frame_lenth.at(i));
+        frame_lenth1.replace(pos,1,frame_lenth.at(i));
     }
-    time_buff.append(frame_lenth1); // загоняем значения в массив
-    if (block_anim==false || anim_pause==1){}// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе
+    time_buff.append(frame_lenth1); // загоняем значение в массив
+    if (block_anim==false || anim_pause==1){// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе
         frames_time[num_frame-1]=time_buff; //отправка времени кадра в QList
+    }
+    if(entr_tme==0){ //блокировка slider-lineEdit
+        ui->lineEdit_time->setText(time_string);
     }
     else{
         entr_tme=0;
@@ -2219,12 +2215,15 @@ void MainWindow::on_slider_time_valueChanged(int value) //передаёт зн�
 void MainWindow::on_lineEdit_time_editingFinished() //передаёт значение в QList и слайдер, перемещает на него фокус
 {
     entr_tme=1;
-    QString str=ui->lineEdit_time->text();
     double tme_double=ui->lineEdit_time->text().toDouble();
     int tme_sli=tme_double*100;
     ui->slider_time->setValue(tme_sli);
-    if (block_anim==false || anim_pause==1)// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе
-//        frames_time[num_frame-1]=tme_double; //отправка времени кадра в QList
     ui->lineEdit_time->clearFocus(); // Не
-    //    qDebug() << tme_sli;
 }
+
+void MainWindow::current_time(double tme) // пишет текущее время кадра из Qlist в глобальную переменную
+{
+    frame_time;
+}
+
+
