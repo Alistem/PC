@@ -23,7 +23,6 @@ private slots:
     void frame_text_all();
     void change_bright_btn(int);
     void massive_frame(int);
-    void current_time(double tme);
 
     void frame_num_lcd();
     void frame_sum_lcd();

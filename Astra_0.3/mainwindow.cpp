@@ -1642,7 +1642,9 @@ void MainWindow::rev_ret_time() // обратная связь для време
     QByteArray buff;
     buff=frames_time[num_frame-1];
     double time_double=buff.toDouble()*0.01;
-    qDebug()<<time_double;
+    QString str;
+    str.setNum(time_double,'f',2);
+    ui->lineEdit_time->setText(str);
 }
 
 void MainWindow::rev_ret() // обратная связь
@@ -1929,6 +1931,7 @@ void MainWindow::on_toolButton_9_clicked() // Кадр назад
         return;
     frame_num_lcd();
     frame_sum_lcd();
+    rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
 }
 void MainWindow::on_toolButton_11_clicked() //Кадр вперёд
@@ -1940,6 +1943,7 @@ void MainWindow::on_toolButton_11_clicked() //Кадр вперёд
     num_frame+=1;
     frame_num_lcd();
     frame_sum_lcd();
+    rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
 
 }
@@ -1954,6 +1958,7 @@ void MainWindow::on_toolButton_15_clicked() //В начало
         return;
     frame_num_lcd();
     frame_sum_lcd();
+    rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
 }
 void MainWindow::on_toolButton_13_clicked() // В конец
@@ -1963,6 +1968,7 @@ void MainWindow::on_toolButton_13_clicked() // В конец
     num_frame=frames_list.size();
     frame_num_lcd();
     frame_sum_lcd();
+    rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
 }
 void MainWindow::on_pushButton_100_clicked() //Удалить кадр
@@ -1974,6 +1980,7 @@ void MainWindow::on_pushButton_100_clicked() //Удалить кадр
     }
     frame_num_lcd();
     frame_sum_lcd();
+    rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
 }
 
@@ -2020,6 +2027,7 @@ void MainWindow::animation_body_one() //первый кадр анимации**
         frame_num_lcd();
         frame_text_all();
 //        block_anim=true; // блокировка записи кадров при анимации и переключении кадров
+        rev_ret_time(); //Обратная связь со времением
         rev_ret(); //Обратная связь с движками
 //        block_anim=false; // блокировка записи кадров при анимации и переключении кадров
 
@@ -2232,9 +2240,5 @@ void MainWindow::on_lineEdit_time_editingFinished() //передаёт знач�
     ui->lineEdit_time->clearFocus(); // Не
 }
 
-void MainWindow::current_time(double tme) // пишет текущее время кадра из Qlist в глобальную переменную
-{
-    frame_time;
-}
 
 
