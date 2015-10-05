@@ -2133,6 +2133,7 @@ void MainWindow::on_toolButton_16_clicked() //Stop animation********************
 //    block_anim=false; // блокировка записи кадров при анимации и переключении кадров
 }
 
+
 void MainWindow::on_toolButton_14_clicked(bool checked) // повтор анимации по кругу
 {
     if (checked){
