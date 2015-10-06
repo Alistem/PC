@@ -175,7 +175,7 @@ private:
     //==================Animation==============
     QList<QByteArray> frames_list; // массив кадров (каждый элемент которого есть - один кадр (со значени¤ми ¤ркости))
     QByteArray frame; // массив с данными текущего кадра (по всем каналам);
-    QByteArray time;
+    double time_current;
     QList<double> frames_time;
 
     //=========================================

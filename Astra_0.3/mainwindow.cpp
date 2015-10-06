@@ -1641,9 +1641,8 @@ void MainWindow::frames_to_map(int num, QByteArray fr_data) // пишем кад
 
 void MainWindow::rev_ret_time() // обратная связь для времени
 {
-    double buff;
-    buff=frames_time[num_frame-1];
-    int num=buff*100;
+    time_current=frames_time[num_frame-1];
+    int num=time_current*100;
     entr_tme=0;
     ui->slider_time->setValue(num);
 }
@@ -1998,6 +1997,9 @@ void MainWindow::block_btn_anim(bool block)
         ui->toolButton_11->setEnabled(false);
         ui->toolButton_13->setEnabled(false);
         ui->toolButton_15->setEnabled(false);
+        ui->lineEdit_time->setEnabled(false);
+        ui->slider_time->setEnabled(false);
+        ui->toolButton_all_time->setEnabled(false);
     }
     else{
         ui->pushButton_inv->setEnabled(true);
@@ -2007,6 +2009,9 @@ void MainWindow::block_btn_anim(bool block)
         ui->toolButton_11->setEnabled(true);
         ui->toolButton_13->setEnabled(true);
         ui->toolButton_15->setEnabled(true);
+        ui->lineEdit_time->setEnabled(true);
+        ui->slider_time->setEnabled(true);
+        ui->toolButton_all_time->setEnabled(true);
     }
 
 }
@@ -2212,6 +2217,7 @@ void MainWindow::open_animation() // открытие анимации из фа
 void MainWindow::on_slider_time_valueChanged(int value) //передаёт значение со слайдера в окно длинны кадра
 {
     double sl= value*0.01;// float value
+    time_current=sl;
     QString time_string=QString::number(sl,'f',2); //=============конвертируем из double в string c точностью 2 знака после запятой
 //    QString frame_lenth1,frame_lenth;
 //    QByteArray time_buff;
@@ -2242,6 +2248,3 @@ void MainWindow::on_lineEdit_time_editingFinished() //передаёт знач�
     ui->slider_time->setValue(tme_sli);
     ui->lineEdit_time->clearFocus(); // Не
 }
-
-
-
