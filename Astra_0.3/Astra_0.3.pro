@@ -13,11 +13,16 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    com_port_main.cpp \
+    com_port1.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    com_port_main.h \
+    com_port1.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    com_port1.ui
 
 RESOURCES += \
     icons.qrc
