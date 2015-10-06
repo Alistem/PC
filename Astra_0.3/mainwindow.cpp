@@ -99,7 +99,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::stylesheet_switch()
 {
-     init_style_red="QPushButton{border-image: url(:/led_my_super); background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba(120, 0, 0, 255), stop:0.463277 rgba(100, 0, 0, 255), stop:0.564246 rgba(70, 0, 0, 255), stop:0.672 rgba(40, 0, 0, 255), stop:0.7 rgba(255, 255, 255, 0));}";
+    init_style_red="QPushButton{border-image: url(:/led_my_super); background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba(120, 0, 0, 255), stop:0.463277 rgba(100, 0, 0, 255), stop:0.564246 rgba(70, 0, 0, 255), stop:0.672 rgba(40, 0, 0, 255), stop:0.7 rgba(255, 255, 255, 0));}";
     init_style_green="QPushButton{border-image: url(:/led_my_super); background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba(0, 120, 0, 255), stop:0.463277 rgba(0, 100, 0, 255), stop:0.564246 rgba(0, 70, 0, 255), stop:0.672 rgba(0, 40, 0, 255), stop:0.7 rgba(255, 255, 255, 0));}";
     init_style_blue="QPushButton{border-image: url(:/led_my_super); background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba(0, 50, 120, 255), stop:0.463277 rgba(0, 50, 100, 255), stop:0.564246 rgba(0, 50, 70, 255), stop:0.672 rgba(0, 50, 40, 255), stop:0.7 rgba(255, 255, 255, 0));}";
     if (color_button==1){
@@ -2068,6 +2068,7 @@ void MainWindow::animation_body() //все кадры анимации (кром
 
 
 //        block_anim=true; // блокировка записи кадров при анимации и переключении кадров
+        rev_ret_time(); //Обратная связь со времением
         rev_ret(); //переключение элементов в соответствии с вызываемым кадром анимации
 //        block_anim=false; // блокировка записи кадров при анимации и переключении кадров
 
@@ -2136,6 +2137,7 @@ void MainWindow::on_toolButton_16_clicked() //Stop animation********************
     ui->progressBar->setValue(num_frame); // прогресс-бар ставим в ноль
 //    block_anim=true; // блокировка записи кадров при анимации и переключении кадров
     rev_ret(); //переключение элементов в соответствии с вызываемым кадром анимации
+    rev_ret_time(); //Обратная связь со времением
 //    block_anim=false; // блокировка записи кадров при анимации и переключении кадров
 }
 
