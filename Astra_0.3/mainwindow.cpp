@@ -1609,17 +1609,19 @@ void MainWindow::frame_text_all() // Все кадры в 16-тиричном ф
 
 void MainWindow::new_frame() // пишем новый кадр в мап
 {
-    QByteArray buff,time_buff;
+    QByteArray buff;
+    double time_buff;
     buff.fill(0,num_of_ch);
-    time_buff="0001";
+    time_buff=0.01;
     frames_list.append(buff);
     frames_time.append(time_buff);
 }
 void MainWindow::add_frame(int num) // вставляем новый кадр в мапе (врезаем посреди других кадров)
 {
-    QByteArray buff,time_buff;
+    QByteArray buff;
+    double time_buff;
     buff.fill(0,num_of_ch);
-    time_buff="0001";
+    time_buff=0.01;
     frames_list.insert((num-1),buff);
     frames_time.insert((num-1),time_buff);
 }
@@ -1639,12 +1641,11 @@ void MainWindow::frames_to_map(int num, QByteArray fr_data) // пишем кад
 
 void MainWindow::rev_ret_time() // обратная связь для времени
 {
-    QByteArray buff;
+    double buff;
     buff=frames_time[num_frame-1];
-    double time_double=buff.toDouble()*0.01;
-    QString str;
-    str.setNum(time_double,'f',2);
-    ui->lineEdit_time->setText(str);
+    int num=buff*100;
+    entr_tme=0;
+    ui->slider_time->setValue(num);
 }
 
 void MainWindow::rev_ret() // обратная связь
@@ -2210,19 +2211,20 @@ void MainWindow::open_animation() // открытие анимации из фа
 
 void MainWindow::on_slider_time_valueChanged(int value) //передаёт значение со слайдера в окно длинны кадра
 {
-    QString frame_lenth1,frame_lenth;
-    QByteArray time_buff;
     double sl= value*0.01;// float value
     QString time_string=QString::number(sl,'f',2); //=============конвертируем из double в string c точностью 2 знака после запятой
-    frame_lenth1="0000"; // болванка
-    frame_lenth.setNum(value,16); // конвертируем в стринг по основанию 16
-    for(int i=0; i<frame_lenth.length();++i){ // заменяем значения в балванке на реальные
-        int pos=frame_lenth1.length()-frame_lenth.length()+i;
-        frame_lenth1.replace(pos,1,frame_lenth.at(i));
-    }
-    time_buff.append(frame_lenth1); // загоняем значение в массив
+//    QString frame_lenth1,frame_lenth;
+//    QByteArray time_buff;
+//    frame_lenth1="0000"; // болванка
+//    frame_lenth.setNum(value,16); // конвертируем в стринг по основанию 16
+//    for(int i=0; i<frame_lenth.length();++i){ // заменяем значения в балванке на реальные
+//        int pos=frame_lenth1.length()-frame_lenth.length()+i;
+//        frame_lenth1.replace(pos,1,frame_lenth.at(i));
+//    }
+//    time_buff.append(frame_lenth1); // загоняем значение в массив
+
     if (block_anim==false || anim_pause==1){// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе
-        frames_time[num_frame-1]=time_buff; //отправка времени кадра в QList
+        frames_time[num_frame-1]=sl; //отправка времени кадра в QList
     }
     if(entr_tme==0){ //блокировка slider-lineEdit
         ui->lineEdit_time->setText(time_string);
