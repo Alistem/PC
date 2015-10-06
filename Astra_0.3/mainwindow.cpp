@@ -2204,7 +2204,7 @@ void MainWindow::open_animation() // открытие анимации из фа
     num_frame=1;
     frame_num_lcd();
     frame=frames_list.at(num_frame-1);
-    rev_ret(); //Обратная связь с движками
+    rev_ret(); //обратная связь с движка
 }
 
 //=======================Блок времени=============================
