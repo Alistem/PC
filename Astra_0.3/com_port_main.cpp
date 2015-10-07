@@ -171,8 +171,8 @@ void com_port_w::com_port_num_res()
 }
 void com_port_w::closeEvent(QCloseEvent *ev)
  {
-//    bool flag=false;
-//    emit flag_close_win(flag);
+    bool flag=false;
+    emit flag_close_win(flag);
     emit disconnect();
 //     ev->accept();
  }

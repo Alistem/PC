@@ -93,6 +93,13 @@
         </spacer>
        </item>
        <item>
+        <widget class="QPushButton" name="com_port_Button">
+         <property name="text">
+          <string>Загрузка/Получение данных из PLC</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -725,7 +732,7 @@ p, li { white-space: pre-wrap; }
          <x>0</x>
          <y>0</y>
          <width>1338</width>
-         <height>303</height>
+         <height>317</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_3">

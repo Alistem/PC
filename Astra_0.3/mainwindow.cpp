@@ -2158,16 +2158,25 @@ void MainWindow::on_toolButton_14_clicked(bool checked) // повтор аним
 
 void MainWindow::save_animation() // сохранение анимации в файл
 {
-    QByteArray buff_frames;
+    QByteArray buff_frames,buff_times;
+
     frames_to_map(num_frame,frame); // Пишем текущий кадр в массив
     frame_text_all(); // пишем все кадры в QList
+
+    for(int i=0;i<frames_time.size();++i){ // цикл для извлечения значений всех кадров в буффер
+        int times_int=frames_time.at(i)*100;
+        buff_times.append(times_int);
+
+    }
+    qDebug()<<buff_times;
+
 
     for(int i=0;i<frames_list.size();++i){ // цикл для извлечения значений всех кадров в буффер
         QByteArray buff=frames_list.at(i);
         buff_frames+=buff;
     }
 
-
+// times all than frames all!!!!!
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "",
                                                     tr("Animation Files (*.amt)"));
     if (fileName != "") {
@@ -2256,7 +2265,7 @@ void MainWindow::on_lineEdit_time_editingFinished() //передаёт знач�
 
 //===============================================     Работа с ком-портом    =================================
 
-void MainWindow::on_com_portButton_clicked()
+void MainWindow::on_com_port_Button_clicked()
 {
     if(com_port_window==false){
         com_port_w *com_port = new com_port_w;
