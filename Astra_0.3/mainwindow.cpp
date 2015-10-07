@@ -1,5 +1,6 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "com_port_main.h"
 #include <QDebug>
 #include <QTimer>
 #include <QFileDialog>
@@ -81,6 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
     anim_pause=0; // стоп анимации ставим в ноль
     anim_start=0;
     block_anim=0;
+    com_port_window=false; // при инициализации задаём флаг окна передачи данных в ноль. Окно не создано
 
     timer = new QTimer(this); // таймер для анимации
     connect(timer, SIGNAL(timeout()), SLOT(animation_body())); // коннект для таймера анимации
@@ -2250,4 +2252,18 @@ void MainWindow::on_lineEdit_time_editingFinished() //передаёт знач�
     int tme_sli=tme_double*100;
     ui->slider_time->setValue(tme_sli);
     ui->lineEdit_time->clearFocus(); // Не
+}
+
+//===============================================     Работа с ком-портом    =================================
+
+void MainWindow::on_com_portButton_clicked()
+{
+    if(com_port_window==false){
+        com_port_w *com_port = new com_port_w;
+        com_port->show();
+        connect(com_port,SIGNAL(flag_close_win(bool)),this,SLOT(com_port_window_status(bool)));
+        com_port_window=true;
+    }
+    else
+        return;
 }

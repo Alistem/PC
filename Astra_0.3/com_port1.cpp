@@ -78,7 +78,8 @@ void com_port::COMConnector(){
 
 void com_port::WriteToCOMPort(){
     if(stop==true){
-        QByteArray ba1=QByteArray::fromHex(post_data.toAscii());
+        QByteArray ba1=QByteArray::fromHex(post_data); //==========!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=============
+        qDebug()<<ba1;
         qint64 num=com1->write(ba1); // тут мы пишем данные в ком-порт и !!! после записи сравниваем количество байт записанных с отправленными. Если всё ок - рапортуем в письменном виде об успешной передаче данных
         if (num == ba1.size()) {
             QString errors=QObject::tr("Data successfully sent to port %1").arg(com1->portName());
@@ -653,7 +654,8 @@ void com_port::command_and_read_data_sector() //
         str_i=templ;
         templ="00000000";
         post_data="63ff"+str_i+"01";
-        ba=QByteArray::fromHex(post_data.toAscii());
+        ba=QByteArray::fromHex(post_data);
+        qDebug()<<ba;
         ctrl_sum_xor(ba);
         ba+=ctrl_sum;
         command_for_read_frame=ba;

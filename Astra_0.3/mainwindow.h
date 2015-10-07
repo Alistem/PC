@@ -77,6 +77,7 @@ private slots:
     void on_toolButton_13_clicked();
     void on_pushButton_100_clicked();
 
+
     void on_toolButton_12_clicked(bool);
     void on_toolButton_16_clicked();
     void on_toolButton_14_clicked(bool);
@@ -165,8 +166,8 @@ private slots:
     void on_action_red_triggered();
     void on_action_green_triggered();
     void on_action_blue_triggered();
+    void on_com_portButton_clicked();
 
-//    void time_current_res(int i);
 
 private:
     Ui::MainWindow *ui;
@@ -205,6 +206,8 @@ private:
     //===================Animation=============
     bool block_anim,anim_stop,anim_pause,repeat,anim_start;
     QTimer *timer;
+    //==================com-port-==============
+    bool com_port_window;
 };
 
 #endif // MAINWINDOW_H
