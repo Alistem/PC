@@ -2267,3 +2267,7 @@ void MainWindow::on_com_portButton_clicked()
     else
         return;
 }
+void MainWindow::com_port_window_status(bool flag)
+{
+    com_port_window=flag;
+}

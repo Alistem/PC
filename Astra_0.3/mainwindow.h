@@ -167,6 +167,7 @@ private slots:
     void on_action_green_triggered();
     void on_action_blue_triggered();
     void on_com_portButton_clicked();
+    void com_port_window_status(bool);
 
 
 private:
