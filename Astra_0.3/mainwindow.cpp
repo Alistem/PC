@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     num_of_ch=32; // кол-во каналов (на будущее, для расширения)
 
+
     color_button=1; // кнопочки красного цвета
     stylesheet_switch(); // Меняем цвет кнопок при инициализации на красный (по-умолчанию)
 
@@ -73,8 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
     new_frame(); 
     frame_num_lcd();
     frame_sum_lcd();
-    frame_text(1,frames_list[0]); // При инициализации выводим в lineEdit содержимое первого (пустого) кадра
-    frame_text_all(); // При инициализации выводим в lineEdit содержимое первого (пустого) кадра
+    frame=frames_list[num_frame-1];
     all_frames=0;
     entr_bright=0;
     repeat=0;
@@ -1617,6 +1617,8 @@ void MainWindow::new_frame() // пишем новый кадр в мап
     time_buff=0.01;
     frames_list.append(buff);
     frames_time.append(time_buff);
+    frame_text(num_frame-1,buff);
+    frame_text_all();
 }
 void MainWindow::add_frame(int num) // вставляем новый кадр в мапе (врезаем посреди других кадров)
 {
@@ -2158,7 +2160,7 @@ void MainWindow::on_toolButton_14_clicked(bool checked) // повтор аним
 
 void MainWindow::save_animation() // сохранение анимации в файл
 {
-    QByteArray buff_frames,buff_times;
+    QByteArray buff_frames,buff_times,buff_all;
 
     frames_to_map(num_frame,frame); // Пишем текущий кадр в массив
     frame_text_all(); // пишем все кадры в QList
@@ -2168,12 +2170,19 @@ void MainWindow::save_animation() // сохранение анимации в ф
         buff_times.append(times_int);
 
     }
-    qDebug()<<buff_times;
 
 
     for(int i=0;i<frames_list.size();++i){ // цикл для извлечения значений всех кадров в буффер
         QByteArray buff=frames_list.at(i);
         buff_frames+=buff;
+    }
+    qDebug()<<buff_frames;
+
+    for(int i=0;i<frames_list.size();++i){ // цикл для извлечения значений всех кадров в буффер
+//        QByteArray buff_ti=buff_times.at(i);
+//        QByteArray buff_fr=buff_frames.at(i);
+        buff_all+=buff_times.at(i);
+//        buff_all+=buff_frames.at(i);
     }
 
 // times all than frames all!!!!!
