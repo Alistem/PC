@@ -2221,13 +2221,15 @@ void MainWindow::open_animation() // открытие анимации из фа
 //=============================================================================================
 
     int frames=0; //счётчик кадров
-    for(int i=0;i<buffer_array_all.size();i+=num_of_ch){
+    for(int i=0;i<buffer_array_all.size();i+=num_of_ch+2){
         QByteArray buffer_frame,buffer_time;
         buffer_frame=buffer_array_all.mid(i,num_of_ch+2); // массив с данными текущего кадра (по всем каналам)
         buffer_time=buffer_frame.left(2);
         buffer_frame.remove(0,2);
         frames_list.append(buffer_frame);
-        frames_time.append(buffer_time.toDouble(0));
+        int boo=buffer_time.toHex().toInt(0,16);
+        double time_double=boo*0.01;
+        frames_time.append(time_double);
         frames+=1;
     }
     frame_sum_lcd();
@@ -2235,6 +2237,7 @@ void MainWindow::open_animation() // открытие анимации из фа
     frame_num_lcd();
     frame=frames_list.at(num_frame-1);
     rev_ret(); //обратная связь с движка
+    rev_ret_time();
 }
 
 //=======================Блок времени=============================
@@ -2244,15 +2247,6 @@ void MainWindow::on_slider_time_valueChanged(int value) //передаёт зн�
     double sl= value*0.01;// float value
     time_current=sl;
     QString time_string=QString::number(sl,'f',2); //=============конвертируем из double в string c точностью 2 знака после запятой
-//    QString frame_lenth1,frame_lenth;
-//    QByteArray time_buff;
-//    frame_lenth1="0000"; // болванка
-//    frame_lenth.setNum(value,16); // конвертируем в стринг по основанию 16
-//    for(int i=0; i<frame_lenth.length();++i){ // заменяем значения в балванке на реальные
-//        int pos=frame_lenth1.length()-frame_lenth.length()+i;
-//        frame_lenth1.replace(pos,1,frame_lenth.at(i));
-//    }
-//    time_buff.append(frame_lenth1); // загоняем значение в массив
 
     if (block_anim==false || anim_pause==1){// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе
         frames_time[num_frame-1]=sl; //отправка времени кадра в QList
