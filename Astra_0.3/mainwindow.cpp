@@ -2168,9 +2168,15 @@ void MainWindow::save_animation() // сохранение анимации в ф
     for(int i=0;i<frames_list.size();++i){ // цикл для извлечения значений всех кадров в буффер
         double time_d=frames_time.at(i)*100;
         int times_int=time_d;
-        buff_all.append(times_int);
+        QByteArray ba,ba1;
+        ba.fill(0,4);
+        ba1=QByteArray::number(times_int, 16);
+        ba.replace(ba.size()-ba1.size(),ba1.size(),ba1);
+        qDebug()<<ba.toHex()<<ba.size();
+        buff_all.append(ba);
         buff_all+=frames_list.at(i);
     }
+
 
 // times all than frames all!!!!!
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "",
@@ -2248,7 +2254,7 @@ void MainWindow::on_slider_time_valueChanged(int value) //передаёт зн�
     else{
         entr_tme=0;
         return;
-    }
+    }  
 }
 void MainWindow::on_lineEdit_time_editingFinished() //передаёт значение в QList и слайдер, перемещает на него фокус
 {
