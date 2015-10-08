@@ -1645,8 +1645,8 @@ void MainWindow::frames_to_map(int num, QByteArray fr_data) // пишем кад
 
 void MainWindow::rev_ret_time() // обратная связь для времени
 {
-    time_current=frames_time[num_frame-1];
-    int num=time_current*100;
+    time_current=frames_time[num_frame-1]*100;
+    int num=time_current;
     entr_tme=0;
     ui->slider_time->setValue(num);
 }
@@ -2160,29 +2160,16 @@ void MainWindow::on_toolButton_14_clicked(bool checked) // повтор аним
 
 void MainWindow::save_animation() // сохранение анимации в файл
 {
-    QByteArray buff_frames,buff_times,buff_all;
+    QByteArray buff_all;
 
     frames_to_map(num_frame,frame); // Пишем текущий кадр в массив
     frame_text_all(); // пишем все кадры в QList
 
-    for(int i=0;i<frames_time.size();++i){ // цикл для извлечения значений всех кадров в буффер
-        int times_int=frames_time.at(i)*100;
-        buff_times.append(times_int);
-
-    }
-
-
     for(int i=0;i<frames_list.size();++i){ // цикл для извлечения значений всех кадров в буффер
-        QByteArray buff=frames_list.at(i);
-        buff_frames+=buff;
-    }
-    qDebug()<<buff_frames;
-
-    for(int i=0;i<frames_list.size();++i){ // цикл для извлечения значений всех кадров в буффер
-//        QByteArray buff_ti=buff_times.at(i);
-//        QByteArray buff_fr=buff_frames.at(i);
-        buff_all+=buff_times.at(i);
-//        buff_all+=buff_frames.at(i);
+        double time_d=frames_time.at(i)*100;
+        int times_int=time_d;
+        buff_all.append(times_int);
+        buff_all+=frames_list.at(i);
     }
 
 // times all than frames all!!!!!
@@ -2193,7 +2180,7 @@ void MainWindow::save_animation() // сохранение анимации в ф
         if (!file.open(QIODevice::WriteOnly))
             return;// сообщение об ошибке
         else {
-            file.write(buff_frames);
+            file.write(buff_all);
             file.close();
         }
     }
@@ -2238,7 +2225,7 @@ void MainWindow::open_animation() // открытие анимации из фа
 //=======================Блок времени=============================
 
 void MainWindow::on_slider_time_valueChanged(int value) //передаёт значение со слайдера в окно длинны кадра
-{
+{  
     double sl= value*0.01;// float value
     time_current=sl;
     QString time_string=QString::number(sl,'f',2); //=============конвертируем из double в string c точностью 2 знака после запятой
@@ -2266,8 +2253,8 @@ void MainWindow::on_slider_time_valueChanged(int value) //передаёт зн�
 void MainWindow::on_lineEdit_time_editingFinished() //передаёт значение в QList и слайдер, перемещает на него фокус
 {
     entr_tme=1;
-    double tme_double=ui->lineEdit_time->text().toDouble();
-    int tme_sli=tme_double*100;
+    double tme_double=ui->lineEdit_time->text().toDouble()*100;
+    int tme_sli=tme_double;
     ui->slider_time->setValue(tme_sli);
     ui->lineEdit_time->clearFocus(); // Не
 }
