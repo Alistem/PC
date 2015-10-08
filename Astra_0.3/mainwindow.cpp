@@ -2174,7 +2174,6 @@ void MainWindow::save_animation() // сохранение анимации в ф
         ba1=ba;
         ba.fill(0,2);
         ba.replace(ba.size()-ba1.size(),ba1.size(),ba1);
-        qDebug()<<ba.toHex()<<ba.size();
         buff_all.append(ba);
         buff_all+=frames_list.at(i);
     }
@@ -2211,16 +2210,24 @@ void MainWindow::open_animation() // открытие анимации из фа
     else
         return; // Если передумали открывать файл, то прерываем дальнейшее выполнение операции
 
+//===============================Чистим массивы для нового проекта=============================
+
     frame.clear(); // очищаем содержимое буфера текущего кадра
     int size=frames_list.size();
     for(int i=size-1;i>=0;--i){
         frames_list.removeAt(i); //чистим массив кадров (удаляем все к чертям)
+        frames_time.removeAt(i); //чистим массив времени кадров
     }
+//=============================================================================================
+
     int frames=0; //счётчик кадров
     for(int i=0;i<buffer_array_all.size();i+=num_of_ch){
-        QByteArray buffer1;
-        buffer1=buffer_array_all.mid(i,num_of_ch); // массив с данными текущего кадра (по всем каналам)
-        frames_list.append(buffer1);
+        QByteArray buffer_frame,buffer_time;
+        buffer_frame=buffer_array_all.mid(i,num_of_ch+2); // массив с данными текущего кадра (по всем каналам)
+        buffer_time=buffer_frame.left(2);
+        buffer_frame.remove(0,2);
+        frames_list.append(buffer_frame);
+        frames_time.append(buffer_time.toDouble(0));
         frames+=1;
     }
     frame_sum_lcd();
