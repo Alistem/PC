@@ -2169,8 +2169,10 @@ void MainWindow::save_animation() // сохранение анимации в ф
         double time_d=frames_time.at(i)*100;
         int times_int=time_d;
         QByteArray ba,ba1;
-        ba.fill(0,4);
-        ba1=QByteArray::number(times_int, 16);
+        ba1.setNum(times_int, 16);
+        ba=QByteArray::fromHex(ba1);
+        ba1=ba;
+        ba.fill(0,2);
         ba.replace(ba.size()-ba1.size(),ba1.size(),ba1);
         qDebug()<<ba.toHex()<<ba.size();
         buff_all.append(ba);
