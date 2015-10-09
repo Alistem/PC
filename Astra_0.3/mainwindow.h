@@ -170,6 +170,8 @@ private slots:
     void com_port_window_status(bool);
 
 
+    void on_toolButton_all_time_clicked();
+
 private:
     Ui::MainWindow *ui;
     int ch_num,color_button;

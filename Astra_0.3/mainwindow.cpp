@@ -19,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
     color_button=1; // кнопочки красного цвета
     stylesheet_switch(); // Меняем цвет кнопок при инициализации на красный (по-умолчанию)
 
+    ui->textEdit->hide();
+    ui->textEdit_2->hide();
+
     ui->lineEdit->setText("0");
     ui->lineEdit_2->setText("0");
     ui->lineEdit_3->setText("0");
@@ -2040,7 +2043,7 @@ void MainWindow::animation_body_one() //первый кадр анимации**
         rev_ret_time(); //Обратная связь со времением
         rev_ret(); //Обратная связь с движками
 //        block_anim=false; // блокировка записи кадров при анимации и переключении кадров
-        int time_frame=time_current*1000;
+        int time_frame=time_current*10;
 //===========таймер анимации========
         timer->start(time_frame);
 //===========прогресс анимации========
@@ -2075,7 +2078,7 @@ void MainWindow::animation_body() //все кадры анимации (кром
         rev_ret_time(); //Обратная связь со времением
         rev_ret(); //переключение элементов в соответствии с вызываемым кадром анимации
 //        block_anim=false; // блокировка записи кадров при анимации и переключении кадров
-        int time_frame=time_current*1000;
+        int time_frame=time_current*10;
 //===========таймер анимации==============
         timer->start(time_frame);
 // ===========для прогресс-бара=============
@@ -2244,11 +2247,10 @@ void MainWindow::open_animation() // открытие анимации из фа
 
 void MainWindow::on_slider_time_valueChanged(int value) //передаёт значение со слайдера в окно длинны кадра
 {  
-    double sl= value*0.01;// float value
-    time_current=sl;
+    double sl= value*0.01;// float value   
     QString time_string=QString::number(sl,'f',2); //=============конвертируем из double в string c точностью 2 знака после запятой
-
     if (block_anim==false || anim_pause==1){// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе
+        time_current=sl;
         frames_time[num_frame-1]=sl; //отправка времени кадра в QList
     }
     if(entr_tme==0){ //блокировка slider-lineEdit
@@ -2268,6 +2270,13 @@ void MainWindow::on_lineEdit_time_editingFinished() //передаёт знач�
     ui->lineEdit_time->clearFocus(); // Не
 }
 
+void MainWindow::on_toolButton_all_time_clicked() // Запись текущего времени на все кадры
+{
+    for(int i=0;i<frames_time.size();++i){
+        frames_time[i]=time_current;
+    }
+}
+
 //===============================================     Работа с ком-портом    =================================
 
 void MainWindow::on_com_port_Button_clicked()
@@ -2285,3 +2294,5 @@ void MainWindow::com_port_window_status(bool flag)
 {
     com_port_window=flag;
 }
+
+
