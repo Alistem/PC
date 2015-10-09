@@ -7,7 +7,7 @@
 #include <iostream>
 #include "com_port1.h"
 //#include <QApplication>
-//#include <QCloseEvent>
+#include <QCloseEvent>
 
 QT_USE_NAMESPACE
 
@@ -174,7 +174,7 @@ void com_port_w::closeEvent(QCloseEvent *ev)
     bool flag=false;
     emit flag_close_win(flag);
     emit disconnect();
-//     ev->accept();
+     ev->accept();
  }
 void com_port_w::error_label_main(QString error)
 {
