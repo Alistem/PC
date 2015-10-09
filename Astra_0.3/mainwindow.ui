@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>585</width>
-    <height>500</height>
+    <height>422</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,7 +32,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <property name="sizeConstraint">
-     <enum>QLayout::SetMaximumSize</enum>
+     <enum>QLayout::SetMinimumSize</enum>
     </property>
     <property name="leftMargin">
      <number>5</number>
@@ -91,13 +91,13 @@
       </property>
       <property name="maximumSize">
        <size>
-        <width>16777215</width>
-        <height>300</height>
+        <width>0</width>
+        <height>330</height>
        </size>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_17">
        <property name="spacing">
-        <number>4</number>
+        <number>0</number>
        </property>
        <property name="leftMargin">
         <number>1</number>
@@ -119,15 +119,24 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>92</height>
+           <height>40</height>
           </size>
          </property>
         </spacer>
        </item>
        <item>
         <widget class="QPushButton" name="com_port_Button">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>25</height>
+          </size>
+         </property>
          <property name="text">
           <string>Загрузка/Получение данных из PLC</string>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+P</string>
          </property>
         </widget>
        </item>
@@ -553,7 +562,7 @@
             <x>10</x>
             <y>15</y>
             <width>201</width>
-            <height>23</height>
+            <height>25</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -714,6 +723,18 @@ p, li { white-space: pre-wrap; }
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>100</height>
+       </size>
+      </property>
      </widget>
     </item>
     <item row="0" column="0" rowspan="2" colspan="2">
@@ -727,7 +748,7 @@ p, li { white-space: pre-wrap; }
       <property name="minimumSize">
        <size>
         <width>356</width>
-        <height>50</height>
+        <height>20</height>
        </size>
       </property>
       <property name="maximumSize">
@@ -813,7 +834,7 @@ p, li { white-space: pre-wrap; }
           <property name="maximumSize">
            <size>
             <width>350</width>
-            <height>280</height>
+            <height>16777215</height>
            </size>
           </property>
           <property name="title">

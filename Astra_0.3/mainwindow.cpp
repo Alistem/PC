@@ -2259,7 +2259,7 @@ void MainWindow::on_slider_time_valueChanged(int value) //передаёт зн�
     else{
         entr_tme=0;
         return;
-    }  
+    }
 }
 void MainWindow::on_lineEdit_time_editingFinished() //передаёт значение в QList и слайдер, перемещает на него фокус
 {
