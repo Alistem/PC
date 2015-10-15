@@ -172,14 +172,16 @@ private slots:
 
     void on_toolButton_all_time_clicked();
 
+    void on_pushButton_copy_clicked();
+
 private:
     Ui::MainWindow *ui;
     int ch_num,color_button;
     QString init_style,init_style_red,init_style_green,init_style_blue;
     //==================Animation==============
     QList<QByteArray> frames_list; // массив кадров (каждый элемент которого есть - один кадр (со значени¤ми ¤ркости))
-    QByteArray frame; // массив с данными текущего кадра (по всем каналам);
-    double time_current;
+    QByteArray frame,buffer_for_frame; // массив с данными текущего кадра (по всем каналам);
+    double time_current,buffer_for_time;
     QList<double> frames_time;
 
     //=========================================

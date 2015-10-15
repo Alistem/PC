@@ -72,6 +72,11 @@ MainWindow::MainWindow(QWidget *parent) :
     off_gradient_three=70;
     off_gradient_four=40;
 
+    //=================================Инициализация буффера обмена============================================
+    ui->label_buffer->setStyleSheet("background-color: rgb(170, 255, 127);"); // красим в пустой цвет буффер обмена
+    buffer_for_frame.clear();
+    buffer_for_time=0;
+    //=========================================================================================================
     num_frame=1;
     num_sum=1;
     new_frame(); 
@@ -2297,3 +2302,9 @@ void MainWindow::com_port_window_status(bool flag)
 }
 
 
+
+void MainWindow::on_pushButton_copy_clicked()
+{
+    QString c;
+    ui->label_buffer->setText(c.setNum(num_frame,10));
+}
