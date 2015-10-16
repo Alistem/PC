@@ -115,6 +115,7 @@ private slots:
     void on_lineEdit_31_editingFinished();
     void on_lineEdit_32_editingFinished();
     void on_lineEdit_time_editingFinished();
+    void lineEdit_background(int name);
 
 
     void animation_init();

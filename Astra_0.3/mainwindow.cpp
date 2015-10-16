@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
     ui->setupUi(this);
     //================================Init==============================
 
@@ -19,8 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     color_button=1; // кнопочки красного цвета
     stylesheet_switch(); // Меняем цвет кнопок при инициализации на красный (по-умолчанию)
 
-    ui->textEdit->hide();
-    ui->textEdit_2->hide();
+    ui->tabWidget->hide();
+//    ui->centralWidget->updateGeometry();
 
     ui->lineEdit->setText("0");
     ui->lineEdit_2->setText("0");
@@ -96,6 +97,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), SLOT(animation_body())); // коннект для таймера анимации
     connect(ui->action_save_animation,SIGNAL(triggered()),SLOT(save_animation())); // сохранение анимации
     connect(ui->action_open_animation,SIGNAL(triggered()),SLOT(open_animation())); // открытие анимации
+    connect(ui->action_quit,SIGNAL(triggered()),this,SLOT(close()));
 
 }
 
@@ -278,11 +280,7 @@ void MainWindow::change_bright_btn(int bright) // слот для изменен
 
 void MainWindow::on_lineEdit_editingFinished()
 {
-//    if(ui->lineEdit->text().toInt()>255)
-//        ui->lineEdit->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
-//    else
-//        ui->lineEdit->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
-
+    lineEdit_background(1);
     if(entr_bright==1 || ui->lineEdit->text().toInt()>255){
         entr_bright=0;
                return;
@@ -292,10 +290,15 @@ void MainWindow::on_lineEdit_editingFinished()
     entr_bright=1;
     ui->verticalSlider->setValue(bright);
     return;
-
 }
 void MainWindow::on_lineEdit_2_editingFinished()
 {
+    lineEdit_background(2);
+    if(ui->lineEdit_2->text().toInt()>255)
+        ui->lineEdit_2->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+    else
+        ui->lineEdit_2->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+
     if(entr_bright==1 || ui->lineEdit_2->text().toInt()>255){
         entr_bright=0;
         return;
@@ -307,7 +310,8 @@ void MainWindow::on_lineEdit_2_editingFinished()
     return;
 }
 void MainWindow::on_lineEdit_3_editingFinished()
-{
+{    
+    lineEdit_background(3);
     if(entr_bright==1 || ui->lineEdit_3->text().toInt()>255){
         entr_bright=0;
         return;
@@ -320,6 +324,7 @@ void MainWindow::on_lineEdit_3_editingFinished()
 }
 void MainWindow::on_lineEdit_4_editingFinished()
 {
+    lineEdit_background(4);
     if(entr_bright==1 || ui->lineEdit_4->text().toInt()>255){
         entr_bright=0;
         return;
@@ -332,6 +337,7 @@ void MainWindow::on_lineEdit_4_editingFinished()
 }
 void MainWindow::on_lineEdit_5_editingFinished()
 {
+    lineEdit_background(5);
     if(entr_bright==1 || ui->lineEdit_5->text().toInt()>255){
         entr_bright=0;
         return;
@@ -344,6 +350,7 @@ void MainWindow::on_lineEdit_5_editingFinished()
 }
 void MainWindow::on_lineEdit_6_editingFinished()
 {
+    lineEdit_background(6);
     if(entr_bright==1 || ui->lineEdit_6->text().toInt()>255){
         entr_bright=0;
         return;
@@ -356,6 +363,7 @@ void MainWindow::on_lineEdit_6_editingFinished()
 }
 void MainWindow::on_lineEdit_7_editingFinished()
 {
+    lineEdit_background(7);
     if(entr_bright==1 || ui->lineEdit_7->text().toInt()>255){
         entr_bright=0;
         return;
@@ -368,6 +376,7 @@ void MainWindow::on_lineEdit_7_editingFinished()
 }
 void MainWindow::on_lineEdit_8_editingFinished()
 {
+    lineEdit_background(8);
     if(entr_bright==1 || ui->lineEdit_8->text().toInt()>255){
         entr_bright=0;
         return;
@@ -380,6 +389,7 @@ void MainWindow::on_lineEdit_8_editingFinished()
 }
 void MainWindow::on_lineEdit_9_editingFinished()
 {
+    lineEdit_background(9);
     if(entr_bright==1 || ui->lineEdit_9->text().toInt()>255){
         entr_bright=0;
         return;
@@ -392,6 +402,7 @@ void MainWindow::on_lineEdit_9_editingFinished()
 }
 void MainWindow::on_lineEdit_10_editingFinished()
 {
+    lineEdit_background(10);
     if(entr_bright==1 || ui->lineEdit_10->text().toInt()>255){
         entr_bright=0;
         return;
@@ -404,6 +415,7 @@ void MainWindow::on_lineEdit_10_editingFinished()
 }
 void MainWindow::on_lineEdit_11_editingFinished()
 {
+    lineEdit_background(11);
     if(entr_bright==1 || ui->lineEdit_11->text().toInt()>255){
         entr_bright=0;
         return;
@@ -416,6 +428,7 @@ void MainWindow::on_lineEdit_11_editingFinished()
 }
 void MainWindow::on_lineEdit_12_editingFinished()
 {
+    lineEdit_background(12);
     if(entr_bright==1 || ui->lineEdit_12->text().toInt()>255){
         entr_bright=0;
         return;
@@ -428,6 +441,7 @@ void MainWindow::on_lineEdit_12_editingFinished()
 }
 void MainWindow::on_lineEdit_13_editingFinished()
 {
+    lineEdit_background(13);
     if(entr_bright==1 || ui->lineEdit_13->text().toInt()>255){
         entr_bright=0;
         return;
@@ -440,6 +454,7 @@ void MainWindow::on_lineEdit_13_editingFinished()
 }
 void MainWindow::on_lineEdit_14_editingFinished()
 {
+    lineEdit_background(14);
     if(entr_bright==1 || ui->lineEdit_14->text().toInt()>255){
         entr_bright=0;
         return;
@@ -452,6 +467,7 @@ void MainWindow::on_lineEdit_14_editingFinished()
 }
 void MainWindow::on_lineEdit_15_editingFinished()
 {
+    lineEdit_background(15);
     if(entr_bright==1 || ui->lineEdit_15->text().toInt()>255){
         entr_bright=0;
         return;
@@ -464,6 +480,7 @@ void MainWindow::on_lineEdit_15_editingFinished()
 }
 void MainWindow::on_lineEdit_16_editingFinished()
 {
+    lineEdit_background(16);
     if(entr_bright==1 || ui->lineEdit_16->text().toInt()>255){
         entr_bright=0;
         return;
@@ -476,6 +493,7 @@ void MainWindow::on_lineEdit_16_editingFinished()
 }
 void MainWindow::on_lineEdit_17_editingFinished()
 {
+    lineEdit_background(17);
     if(entr_bright==1 || ui->lineEdit_17->text().toInt()>255){
         entr_bright=0;
         return;
@@ -488,6 +506,7 @@ void MainWindow::on_lineEdit_17_editingFinished()
 }
 void MainWindow::on_lineEdit_18_editingFinished()
 {
+    lineEdit_background(18);
     if(entr_bright==1 || ui->lineEdit_18->text().toInt()>255){
         entr_bright=0;
         return;
@@ -500,6 +519,7 @@ void MainWindow::on_lineEdit_18_editingFinished()
 }
 void MainWindow::on_lineEdit_19_editingFinished()
 {
+    lineEdit_background(19);
     if(entr_bright==1 || ui->lineEdit_19->text().toInt()>255){
         entr_bright=0;
         return;
@@ -512,6 +532,7 @@ void MainWindow::on_lineEdit_19_editingFinished()
 }
 void MainWindow::on_lineEdit_20_editingFinished()
 {
+    lineEdit_background(20);
     if(entr_bright==1 || ui->lineEdit_20->text().toInt()>255){
         entr_bright=0;
         return;
@@ -524,6 +545,7 @@ void MainWindow::on_lineEdit_20_editingFinished()
 }
 void MainWindow::on_lineEdit_21_editingFinished()
 {
+    lineEdit_background(21);
     if(entr_bright==1 || ui->lineEdit_21->text().toInt()>255){
         entr_bright=0;
         return;
@@ -536,6 +558,7 @@ void MainWindow::on_lineEdit_21_editingFinished()
 }
 void MainWindow::on_lineEdit_22_editingFinished()
 {
+    lineEdit_background(22);
     if(entr_bright==1 || ui->lineEdit_22->text().toInt()>255){
         entr_bright=0;
         return;
@@ -548,6 +571,7 @@ void MainWindow::on_lineEdit_22_editingFinished()
 }
 void MainWindow::on_lineEdit_23_editingFinished()
 {
+    lineEdit_background(23);
     if(entr_bright==1 || ui->lineEdit_23->text().toInt()>255){
         entr_bright=0;
         return;
@@ -560,6 +584,7 @@ void MainWindow::on_lineEdit_23_editingFinished()
 }
 void MainWindow::on_lineEdit_24_editingFinished()
 {
+    lineEdit_background(24);
     if(entr_bright==1 || ui->lineEdit_24->text().toInt()>255){
         entr_bright=0;
         return;
@@ -572,6 +597,7 @@ void MainWindow::on_lineEdit_24_editingFinished()
 }
 void MainWindow::on_lineEdit_25_editingFinished()
 {
+    lineEdit_background(25);
     if(entr_bright==1 || ui->lineEdit_25->text().toInt()>255){
         entr_bright=0;
         return;
@@ -584,6 +610,7 @@ void MainWindow::on_lineEdit_25_editingFinished()
 }
 void MainWindow::on_lineEdit_26_editingFinished()
 {
+    lineEdit_background(26);
     if(entr_bright==1 || ui->lineEdit_26->text().toInt()>255){
         entr_bright=0;
         return;
@@ -596,6 +623,8 @@ void MainWindow::on_lineEdit_26_editingFinished()
 }
 void MainWindow::on_lineEdit_27_editingFinished()
 {
+    lineEdit_background(27);
+    ui->lineEdit_27->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
     if(entr_bright==1 || ui->lineEdit_27->text().toInt()>255){
         entr_bright=0;
         return;
@@ -608,6 +637,7 @@ void MainWindow::on_lineEdit_27_editingFinished()
 }
 void MainWindow::on_lineEdit_28_editingFinished()
 {
+    lineEdit_background(28);
     if(entr_bright==1 || ui->lineEdit_28->text().toInt()>255){
         entr_bright=0;
         return;
@@ -620,6 +650,7 @@ void MainWindow::on_lineEdit_28_editingFinished()
 }
 void MainWindow::on_lineEdit_29_editingFinished()
 {
+    lineEdit_background(29);
     if(entr_bright==1 || ui->lineEdit_29->text().toInt()>255){
         entr_bright=0;
         return;
@@ -632,6 +663,7 @@ void MainWindow::on_lineEdit_29_editingFinished()
 }
 void MainWindow::on_lineEdit_30_editingFinished()
 {
+    lineEdit_background(30);
     if(entr_bright==1 || ui->lineEdit_30->text().toInt()>255){
         entr_bright=0;
         return;
@@ -644,6 +676,7 @@ void MainWindow::on_lineEdit_30_editingFinished()
 }
 void MainWindow::on_lineEdit_31_editingFinished()
 {
+    lineEdit_background(31);
     if(entr_bright==1 || ui->lineEdit_31->text().toInt()>255){
         entr_bright=0;
         return;
@@ -656,6 +689,7 @@ void MainWindow::on_lineEdit_31_editingFinished()
 }
 void MainWindow::on_lineEdit_32_editingFinished()
 {
+    lineEdit_background(32);
     if(entr_bright==1 || ui->lineEdit_32->text().toInt()>255){
         entr_bright=0;
         return;
@@ -667,25 +701,222 @@ void MainWindow::on_lineEdit_32_editingFinished()
     return;
 }
 
+void MainWindow::lineEdit_background(int name){
+    if(name==1){
+        if(ui->lineEdit->text().toInt()>255)
+            ui->lineEdit->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==2){
+        if(ui->lineEdit_2->text().toInt()>255)
+            ui->lineEdit_2->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_2->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==3){
+        if(ui->lineEdit_3->text().toInt()>255)
+            ui->lineEdit_3->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_3->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==4){
+        if(ui->lineEdit_4->text().toInt()>255)
+            ui->lineEdit_4->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_4->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==5){
+        if(ui->lineEdit_5->text().toInt()>255)
+            ui->lineEdit_5->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_5->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==6){
+        if(ui->lineEdit_6->text().toInt()>255)
+            ui->lineEdit_6->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_6->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==7){
+        if(ui->lineEdit_7->text().toInt()>255)
+            ui->lineEdit_7->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_7->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==8){
+        if(ui->lineEdit_8->text().toInt()>255)
+            ui->lineEdit_8->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_8->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==9){
+        if(ui->lineEdit_9->text().toInt()>255)
+            ui->lineEdit_9->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_9->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==10){
+        if(ui->lineEdit_10->text().toInt()>255)
+            ui->lineEdit_10->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_10->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==11){
+        if(ui->lineEdit_11->text().toInt()>255)
+            ui->lineEdit_11->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_11->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==12){
+        if(ui->lineEdit_12->text().toInt()>255)
+            ui->lineEdit_12->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_12->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==13){
+        if(ui->lineEdit_13->text().toInt()>255)
+            ui->lineEdit_13->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_13->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+
+    }
+    if(name==14){
+        if(ui->lineEdit_14->text().toInt()>255)
+            ui->lineEdit_14->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_14->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==15){
+        if(ui->lineEdit_15->text().toInt()>255)
+            ui->lineEdit_15->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_15->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==16){
+        if(ui->lineEdit_16->text().toInt()>255)
+            ui->lineEdit_16->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_16->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==17){
+        if(ui->lineEdit_17->text().toInt()>255)
+            ui->lineEdit_17->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_17->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==18){
+        if(ui->lineEdit_18->text().toInt()>255)
+            ui->lineEdit_18->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_18->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==19){
+        if(ui->lineEdit_19->text().toInt()>255)
+            ui->lineEdit_19->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_19->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+
+    }
+    if(name==20){
+        if(ui->lineEdit_20->text().toInt()>255)
+            ui->lineEdit_20->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_20->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==21){
+        if(ui->lineEdit_21->text().toInt()>255)
+            ui->lineEdit_21->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_21->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==22){
+        if(ui->lineEdit_22->text().toInt()>255)
+            ui->lineEdit_22->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_22->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==23){
+        if(ui->lineEdit_23->text().toInt()>255)
+            ui->lineEdit_23->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_23->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==24){
+        if(ui->lineEdit_24->text().toInt()>255)
+            ui->lineEdit_24->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_24->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==25){
+        if(ui->lineEdit_25->text().toInt()>255)
+            ui->lineEdit_25->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_25->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+
+    }
+    if(name==26){
+        if(ui->lineEdit_26->text().toInt()>255)
+            ui->lineEdit_26->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_26->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==27){
+        if(ui->lineEdit_27->text().toInt()>255)
+            ui->lineEdit_27->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_27->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==28){
+        if(ui->lineEdit_28->text().toInt()>255)
+            ui->lineEdit_28->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_28->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==29){
+        if(ui->lineEdit_29->text().toInt()>255)
+            ui->lineEdit_29->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_29->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==30){
+        if(ui->lineEdit_30->text().toInt()>255)
+            ui->lineEdit_30->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_30->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+
+    }
+    if(name==31){
+        if(ui->lineEdit_31->text().toInt()>255)
+            ui->lineEdit_31->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_31->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+    }
+    if(name==32){
+        if(ui->lineEdit_32->text().toInt()>255)
+            ui->lineEdit_32->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
+        else
+            ui->lineEdit_32->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
+
+    }
+}
+
 void MainWindow::on_verticalSlider_valueChanged(int value)
 {
     ch_num=1;
     change_bright_btn(value);
-//    QString str=QString("%1").arg(value);
-//    ui->textBrowser->setText(str);
     massive_frame(value);
-
     int gbg=value;
     QString bright=QString::number(gbg);
     if(entr_bright==0){ //блокировка slider-lineEdit
         ui->lineEdit->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider->setFocus();
         entr_bright=0;
     }
 }
-
 void MainWindow::on_verticalSlider_2_valueChanged(int value)
 {
     ch_num=2;
@@ -696,6 +927,7 @@ void MainWindow::on_verticalSlider_2_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_2->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_2->setFocus();
@@ -712,6 +944,7 @@ void MainWindow::on_verticalSlider_3_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_3->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_3->setFocus();
@@ -728,6 +961,7 @@ void MainWindow::on_verticalSlider_4_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_4->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_4->setFocus();
@@ -744,6 +978,7 @@ void MainWindow::on_verticalSlider_5_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_5->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_5->setFocus();
@@ -760,6 +995,7 @@ void MainWindow::on_verticalSlider_6_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_6->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_6->setFocus();
@@ -776,6 +1012,7 @@ void MainWindow::on_verticalSlider_7_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_7->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_7->setFocus();
@@ -792,6 +1029,7 @@ void MainWindow::on_verticalSlider_8_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_8->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_8->setFocus();
@@ -808,6 +1046,7 @@ void MainWindow::on_verticalSlider_9_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_9->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_9->setFocus();
@@ -824,6 +1063,7 @@ void MainWindow::on_verticalSlider_10_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_10->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_10->setFocus();
@@ -840,6 +1080,7 @@ void MainWindow::on_verticalSlider_11_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_11->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_11->setFocus();
@@ -856,6 +1097,7 @@ void MainWindow::on_verticalSlider_12_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_12->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_12->setFocus();
@@ -872,6 +1114,7 @@ void MainWindow::on_verticalSlider_13_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_13->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_13->setFocus();
@@ -888,6 +1131,7 @@ void MainWindow::on_verticalSlider_14_valueChanged(int value)
    QString bright=QString::number(gbg);
    if(entr_bright==0){
        ui->lineEdit_14->setText(bright);
+       lineEdit_background(ch_num);
    }
    else{
        ui->verticalSlider_14->setFocus();
@@ -904,6 +1148,7 @@ void MainWindow::on_verticalSlider_15_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_15->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_15->setFocus();
@@ -920,6 +1165,7 @@ void MainWindow::on_verticalSlider_16_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_16->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_16->setFocus();
@@ -936,6 +1182,7 @@ void MainWindow::on_verticalSlider_17_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_17->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_17->setFocus();
@@ -952,6 +1199,7 @@ void MainWindow::on_verticalSlider_18_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_18->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_18->setFocus();
@@ -968,6 +1216,7 @@ void MainWindow::on_verticalSlider_19_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_19->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_19->setFocus();
@@ -984,6 +1233,7 @@ void MainWindow::on_verticalSlider_20_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_20->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_20->setFocus();
@@ -1000,6 +1250,7 @@ void MainWindow::on_verticalSlider_21_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_21->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_21->setFocus();
@@ -1016,6 +1267,7 @@ void MainWindow::on_verticalSlider_22_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_22->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_22->setFocus();
@@ -1032,6 +1284,7 @@ void MainWindow::on_verticalSlider_23_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_23->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_23->setFocus();
@@ -1048,6 +1301,7 @@ void MainWindow::on_verticalSlider_24_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_24->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_24->setFocus();
@@ -1064,6 +1318,7 @@ void MainWindow::on_verticalSlider_25_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_25->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_25->setFocus();
@@ -1080,6 +1335,7 @@ void MainWindow::on_verticalSlider_26_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_26->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_26->setFocus();
@@ -1096,6 +1352,7 @@ void MainWindow::on_verticalSlider_27_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_27->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_27->setFocus();
@@ -1112,6 +1369,7 @@ void MainWindow::on_verticalSlider_28_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_28->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_28->setFocus();
@@ -1128,6 +1386,7 @@ void MainWindow::on_verticalSlider_29_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_29->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_29->setFocus();
@@ -1144,6 +1403,7 @@ void MainWindow::on_verticalSlider_30_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_30->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_30->setFocus();
@@ -1160,6 +1420,7 @@ void MainWindow::on_verticalSlider_31_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_31->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_31->setFocus();
@@ -1176,6 +1437,7 @@ void MainWindow::on_verticalSlider_32_valueChanged(int value)
     QString bright=QString::number(gbg);
     if(entr_bright==0){
         ui->lineEdit_32->setText(bright);
+        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider_32->setFocus();
@@ -2304,7 +2566,7 @@ void MainWindow::com_port_window_status(bool flag)
     com_port_window=flag;
     //----------------------------flag----------------------------
 }
-
+//==========================================Буффер обмена========================================
 void MainWindow::on_pushButton_copy_clicked()
 {
     QString c;
@@ -2322,5 +2584,5 @@ void MainWindow::on_pushButton_paste_clicked()
     ui->label_buffer->setStyleSheet("background-color: rgb(170, 255, 127);"); // красим в пустой цвет буффер обмена
     rev_ret();
     rev_ret_time();
-    qDebug()<<frames_list[num_frame-1]<<frames_time[num_frame-1];
 }
+//===============================================================================================
