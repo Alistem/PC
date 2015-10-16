@@ -176,6 +176,8 @@ private slots:
     void on_pushButton_copy_clicked();
     void on_pushButton_paste_clicked();
 
+    void on_pushButton_inv_clicked();
+
 private:
     Ui::MainWindow *ui;
     int ch_num,color_button;
@@ -194,7 +196,7 @@ private:
     int frame_time;
     int num_frame;
     int num_sum;
-    int num_channels; // ол-во контроллеров в св¤зке (суммарное количество каналов)
+    int num_channels; // кол-во контроллеров в св¤зке (суммарное количество каналов)
     int num_of_ch; // кол-во каналов (на будущее, дл¤ расширени¤)
     int on_gradient_one;
     int on_gradient_two;

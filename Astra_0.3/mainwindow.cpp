@@ -2278,6 +2278,9 @@ void MainWindow::block_btn_anim(bool block)
         ui->lineEdit_time->setEnabled(false);
         ui->slider_time->setEnabled(false);
         ui->toolButton_all_time->setEnabled(false);
+        ui->com_port_Button->setEnabled(false);
+        ui->pushButton_copy->setEnabled(false);
+        ui->pushButton_paste->setEnabled(false);
     }
     else{
         ui->pushButton_inv->setEnabled(true);
@@ -2290,6 +2293,9 @@ void MainWindow::block_btn_anim(bool block)
         ui->lineEdit_time->setEnabled(true);
         ui->slider_time->setEnabled(true);
         ui->toolButton_all_time->setEnabled(true);
+        ui->com_port_Button->setEnabled(true);
+        ui->pushButton_copy->setEnabled(true);
+        ui->pushButton_paste->setEnabled(true);
     }
 
 }
@@ -2586,3 +2592,15 @@ void MainWindow::on_pushButton_paste_clicked()
     rev_ret_time();
 }
 //===============================================================================================
+
+void MainWindow::on_pushButton_inv_clicked()
+{
+   QByteArray buff;
+   buff=frames_list[num_frame-1];
+   for(int i=0;i<num_channels;++i){
+       int x;
+       QByteArray bu;
+       x=bu.fromHex(buff[i]);
+       qDebug()<<x;
+   }
+}
