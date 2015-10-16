@@ -173,6 +173,7 @@ private slots:
     void on_toolButton_all_time_clicked();
 
     void on_pushButton_copy_clicked();
+    void on_pushButton_paste_clicked();
 
 private:
     Ui::MainWindow *ui;

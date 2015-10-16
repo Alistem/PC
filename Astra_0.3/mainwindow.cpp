@@ -677,7 +677,7 @@ void MainWindow::on_verticalSlider_valueChanged(int value)
 
     int gbg=value;
     QString bright=QString::number(gbg);
-    if(entr_bright==0){
+    if(entr_bright==0){ //блокировка slider-lineEdit
         ui->lineEdit->setText(bright);
     }
     else{
@@ -685,6 +685,7 @@ void MainWindow::on_verticalSlider_valueChanged(int value)
         entr_bright=0;
     }
 }
+
 void MainWindow::on_verticalSlider_2_valueChanged(int value)
 {
     ch_num=2;
@@ -1574,6 +1575,9 @@ void MainWindow::on_pushButton_32_clicked(bool checked)
 void MainWindow::massive_frame(int value)
 {
     frame[ch_num-1]=value; // массив с данными текущего кадра (по всем каналам)
+    if (block_anim==false || anim_pause==1){// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе
+        frames_list[num_frame-1]=frame; //отправка кадра в QList
+    }
     frame_text(num_frame,frame);// вывод текущего кадра в TextEdit
 }
 
@@ -2301,10 +2305,22 @@ void MainWindow::com_port_window_status(bool flag)
     //----------------------------flag----------------------------
 }
 
-
-
 void MainWindow::on_pushButton_copy_clicked()
 {
     QString c;
     ui->label_buffer->setText(c.setNum(num_frame,10));
+    buffer_for_frame=frames_list[num_frame-1];
+    buffer_for_time=frames_time[num_frame-1];
+    if(buffer_for_frame.size()!=0)
+        ui->label_buffer->setStyleSheet("background-color: rgb(255, 170, 127);"); // красим в пустой цвет буффер обмена
+}
+void MainWindow::on_pushButton_paste_clicked()
+{
+    ui->label_buffer->setText("");
+    frames_list[num_frame-1]=buffer_for_frame;
+    frames_time[num_frame-1]=buffer_for_time;
+    ui->label_buffer->setStyleSheet("background-color: rgb(170, 255, 127);"); // красим в пустой цвет буффер обмена
+    rev_ret();
+    rev_ret_time();
+    qDebug()<<frames_list[num_frame-1]<<frames_time[num_frame-1];
 }

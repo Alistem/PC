@@ -106,7 +106,7 @@
       <widget class="QWidget" name="scrollAreaWidgetContents">
        <property name="geometry">
         <rect>
-         <x>-363</x>
+         <x>0</x>
          <y>0</y>
          <width>1338</width>
          <height>331</height>
@@ -5073,7 +5073,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_33">
+           <widget class="QPushButton" name="pushButton_paste">
             <property name="minimumSize">
              <size>
               <width>0</width>
