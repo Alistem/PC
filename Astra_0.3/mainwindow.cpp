@@ -1844,6 +1844,8 @@ void MainWindow::massive_frame(int value)
 }
 
 
+// =====================================Debugging on displey====================================
+
 void MainWindow::frame_text(int value, QByteArray fra) // Текущий кадр в 16-тиричном формате (In the textEdit)
 {
     QByteArray ba;
@@ -1882,6 +1884,10 @@ void MainWindow::frame_text_all() // Все кадры в 16-тиричном ф
     ui->textEdit_2->setText(sum);
     all_frames=0;
 }
+//==============================================================================================
+
+
+//========================================Edit by frames data===================================
 
 void MainWindow::new_frame() // пишем новый кадр в мап
 {
@@ -1923,6 +1929,13 @@ void MainWindow::rev_ret_time() // обратная связь для време
     int num=time_current;
     entr_tme=0;
     ui->slider_time->setValue(num);
+}
+void MainWindow::on_toolButton_all_time_clicked() // Запись текущего времени на все кадры
+{
+    for(int i=0;i<frames_time.size();++i){
+        frames_time[i]=time_current;
+    }
+    qDebug()<<frames_time;
 }
 
 void MainWindow::rev_ret() // обратная связь
@@ -2261,7 +2274,21 @@ void MainWindow::on_pushButton_100_clicked() //Удалить кадр
     rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
 }
-
+void MainWindow::on_pushButton_inv_clicked() // Inversion
+{
+   QByteArray buff;
+   int k;
+   buff=frames_list[num_frame-1];
+   for(int i=0;i<num_channels;++i){
+       QByteArray ba=buff.mid(i,1);
+       k=ba.toHex().toInt(0,16);
+       int ink=255-k;
+       ch_num=i+1;
+       massive_frame(ink);
+   }
+   rev_ret();
+   rev_ret_time();
+}
 
 
 //======================Animation====================================================
@@ -2426,7 +2453,6 @@ void MainWindow::on_toolButton_16_clicked() //Stop animation********************
 //    block_anim=false; // блокировка записи кадров при анимации и переключении кадров
 }
 
-
 void MainWindow::on_toolButton_14_clicked(bool checked) // повтор анимации по кругу
 {
     if (checked){
@@ -2472,7 +2498,6 @@ void MainWindow::save_animation() // сохранение анимации в ф
         }
     }
 }
-
 void MainWindow::open_animation() // открытие анимации из файла
 {
     QByteArray buffer_array_all;
@@ -2547,14 +2572,7 @@ void MainWindow::on_lineEdit_time_editingFinished() //передаёт знач�
     ui->lineEdit_time->clearFocus(); // Не
 }
 
-void MainWindow::on_toolButton_all_time_clicked() // Запись текущего времени на все кадры
-{
-    for(int i=0;i<frames_time.size();++i){
-        frames_time[i]=time_current;
-    }
-}
-
-//===============================================     Работа с ком-портом    =================================
+//=========================================     Работа с ком-портом    ==========================
 
 void MainWindow::on_com_port_Button_clicked()
 {
@@ -2593,14 +2611,3 @@ void MainWindow::on_pushButton_paste_clicked()
 }
 //===============================================================================================
 
-void MainWindow::on_pushButton_inv_clicked()
-{
-   QByteArray buff;
-   buff=frames_list[num_frame-1];
-   for(int i=0;i<num_channels;++i){
-       int x;
-       QByteArray bu;
-       x=bu.fromHex(buff[i]);
-       qDebug()<<x;
-   }
-}
