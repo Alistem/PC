@@ -1925,8 +1925,9 @@ void MainWindow::frames_to_map(int num, QByteArray fr_data) // пишем кад
 
 void MainWindow::rev_ret_time() // обратная связь для времени
 {
-    time_current=frames_time[num_frame-1]*100;
-    int num=time_current;
+    time_current=frames_time[num_frame-1];
+    double g=time_current*100;
+    int num=g;
     entr_tme=0;
     ui->slider_time->setValue(num);
 }
@@ -1935,7 +1936,6 @@ void MainWindow::on_toolButton_all_time_clicked() // Запись текущег
     for(int i=0;i<frames_time.size();++i){
         frames_time[i]=time_current;
     }
-    qDebug()<<frames_time;
 }
 
 void MainWindow::rev_ret() // обратная связь
