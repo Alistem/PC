@@ -83,7 +83,11 @@ MainWindow::MainWindow(QWidget *parent) :
     new_frame(); 
     frame_num_lcd();
     frame_sum_lcd();
+    //====================Инициализация массивов кадров и времени================================
+    time_current=1;
+    frames_time[num_frame-1]=time_current;
     frame=frames_list[num_frame-1];
+    //===========================================================================================
     all_frames=0;
     entr_bright=0;
     repeat=0;
@@ -2228,6 +2232,7 @@ void MainWindow::on_action32_triggered(bool checked)
 
 void MainWindow::on_pushButton_111_clicked() // Create Frame
 {
+    fix_num_of_lineedits(); // Все введённые цифры записываются
     frames_to_map(num_frame,frame); //запись данных кадра в мап    
     num_frame+=1;
     if(num_frame<num_sum)
@@ -2242,7 +2247,7 @@ void MainWindow::on_pushButton_111_clicked() // Create Frame
 }
 void MainWindow::on_toolButton_9_clicked() // Кадр назад
 {
-    on_lineEdit_time_editingFinished();
+    fix_num_of_lineedits();
 
     frames_to_map(num_frame,frame); //запись данных кадра в мап
     frame_text_all();
@@ -2258,7 +2263,7 @@ void MainWindow::on_toolButton_9_clicked() // Кадр назад
 }
 void MainWindow::on_toolButton_11_clicked() //Кадр вперёд
 {
-    on_lineEdit_time_editingFinished();
+    fix_num_of_lineedits(); // Все введённые цифры записываются
 
     frames_to_map(num_frame,frame); //запись данных кадра в мап
     frame_text_all();
@@ -2273,7 +2278,7 @@ void MainWindow::on_toolButton_11_clicked() //Кадр вперёд
 }
 void MainWindow::on_toolButton_15_clicked() //В начало
 {
-    on_lineEdit_time_editingFinished();
+    fix_num_of_lineedits(); // Все введённые цифры записываются
 
     frames_to_map(num_frame,frame); //запись данных кадра в мап
     frame_text_all();
@@ -2289,7 +2294,7 @@ void MainWindow::on_toolButton_15_clicked() //В начало
 }
 void MainWindow::on_toolButton_13_clicked() // В конец
 {
-    on_lineEdit_time_editingFinished();
+    fix_num_of_lineedits(); // Все введённые цифры записываются
 
     frames_to_map(num_frame,frame); //запись данных кадра в мап
     frame_text_all();
@@ -2313,7 +2318,7 @@ void MainWindow::on_pushButton_100_clicked() //Удалить кадр
 }
 void MainWindow::on_pushButton_inv_clicked() // Inversion
 {
-    on_lineEdit_time_editingFinished();
+    fix_num_of_lineedits(); // Все введённые цифры записываются
 
    QByteArray buff;
    int k;
@@ -2329,6 +2334,42 @@ void MainWindow::on_pushButton_inv_clicked() // Inversion
    rev_ret_time();
 }
 
+void MainWindow::fix_num_of_lineedits() // fix_num_of_LineEdits
+{
+    on_lineEdit_time_editingFinished();
+    on_lineEdit_editingFinished();
+    on_lineEdit_2_editingFinished();
+    on_lineEdit_3_editingFinished();
+    on_lineEdit_4_editingFinished();
+    on_lineEdit_5_editingFinished();
+    on_lineEdit_6_editingFinished();
+    on_lineEdit_7_editingFinished();
+    on_lineEdit_8_editingFinished();
+    on_lineEdit_9_editingFinished();
+    on_lineEdit_10_editingFinished();
+    on_lineEdit_11_editingFinished();
+    on_lineEdit_12_editingFinished();
+    on_lineEdit_13_editingFinished();
+    on_lineEdit_14_editingFinished();
+    on_lineEdit_15_editingFinished();
+    on_lineEdit_16_editingFinished();
+    on_lineEdit_17_editingFinished();
+    on_lineEdit_18_editingFinished();
+    on_lineEdit_19_editingFinished();
+    on_lineEdit_20_editingFinished();
+    on_lineEdit_21_editingFinished();
+    on_lineEdit_22_editingFinished();
+    on_lineEdit_23_editingFinished();
+    on_lineEdit_24_editingFinished();
+    on_lineEdit_25_editingFinished();
+    on_lineEdit_26_editingFinished();
+    on_lineEdit_27_editingFinished();
+    on_lineEdit_28_editingFinished();
+    on_lineEdit_29_editingFinished();
+    on_lineEdit_30_editingFinished();
+    on_lineEdit_31_editingFinished();
+    on_lineEdit_32_editingFinished();
+}
 
 //======================Animation====================================================
 void MainWindow::block_btn_anim(bool block)
@@ -2516,8 +2557,7 @@ void MainWindow::save_animation() // сохранение анимации в ф
     frame_text_all(); // пишем все кадры в QList
 
     for(int i=0;i<frames_list.size();++i){ // цикл для извлечения значений всех кадров в буффер
-        double time_d=frames_time.at(i)*100;
-        int times_int=time_d;
+        int times_int=frames_time.at(i);
         QByteArray ba,ba1;
         ba1.setNum(times_int, 16);
         ba=QByteArray::fromHex(ba1);
@@ -2579,8 +2619,7 @@ void MainWindow::open_animation() // открытие анимации из фа
         buffer_frame.remove(0,2);
         frames_list.append(buffer_frame);
         int boo=buffer_time.toHex().toInt(0,16);
-        double time_double=boo*0.01;
-        frames_time.append(time_double);
+        frames_time.append(boo);
         frames+=1;
     }
     frame_sum_lcd();
@@ -2595,7 +2634,6 @@ void MainWindow::open_animation() // открытие анимации из фа
 
 void MainWindow::on_slider_time_valueChanged(int value) //передаёт значение со слайдера в окно длинны кадра
 {   
-//    qDebug()<<block_anim;
     double sl=value*0.01;
     QString time_string=QString::number(sl,'f',2); //=============конвертируем из double в string c точностью 2 знака после запятой
     if (block_anim==false || anim_pause==1){// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе       
