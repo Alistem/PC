@@ -1958,6 +1958,7 @@ void MainWindow::rev_ret_time() // обратная связь для време
     time_current=frames_time[num_frame-1];
     entr_tme=0;
     ui->slider_time->setValue(time_current);
+    qDebug()<<time_current;
 }
 void MainWindow::on_toolButton_all_time_clicked() // Запись текущего времени на все кадры
 {
@@ -2439,6 +2440,7 @@ void MainWindow::animation_body() //все кадры анимации (кром
         else{
             ui->toolButton_16->click();
             anim_stop=1; //ставим флаг для прекращения анимации
+            block_anim=false; // блокировка записи кадров при анимации и переключении кадров
             return;
         }
     }
@@ -2483,6 +2485,7 @@ void MainWindow::on_toolButton_16_clicked() //Stop animation********************
     if (anim_pause==0)
     ui->toolButton_12->setChecked(false); // отжимаем кнопку "старт"
     anim_pause=0;
+    block_anim=false; // блокировка записи кадров при анимации и переключении кадров
     num_frame=1; //скидываем номер кадра на первый
     frame_num_lcd();
 
@@ -2593,9 +2596,10 @@ void MainWindow::open_animation() // открытие анимации из фа
 
 void MainWindow::on_slider_time_valueChanged(int value) //передаёт значение со слайдера в окно длинны кадра
 {   
+//    qDebug()<<block_anim;
     double sl=value*0.01;
     QString time_string=QString::number(sl,'f',2); //=============конвертируем из double в string c точностью 2 знака после запятой
-    if (block_anim==false || anim_pause==1){// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе
+    if (block_anim==false || anim_pause==1){// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе       
         time_current=value;
         frames_time[num_frame-1]=value; //отправка времени кадра в QList
     }
