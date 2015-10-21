@@ -1957,7 +1957,7 @@ void MainWindow::rev_ret_time() // обратная связь для време
 {
     time_current=frames_time[num_frame-1];
     entr_tme=0;
-    ui->slider_time->setValue(time_current);t;
+    ui->slider_time->setValue(time_current);
 }
 void MainWindow::on_toolButton_all_time_clicked() // Запись текущего времени на все кадры
 {
