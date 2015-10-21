@@ -1957,8 +1957,7 @@ void MainWindow::rev_ret_time() // обратная связь для време
 {
     time_current=frames_time[num_frame-1];
     entr_tme=0;
-    ui->slider_time->setValue(time_current);
-    qDebug()<<time_current;
+    ui->slider_time->setValue(time_current);t;
 }
 void MainWindow::on_toolButton_all_time_clicked() // Запись текущего времени на все кадры
 {
