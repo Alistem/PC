@@ -2394,7 +2394,6 @@ void MainWindow::fix_num_of_lineedits() // fix_num_of_LineEdits
               g=ui->lineEdit_16->text().toInt();
           frame[i]=g;
    }
-       rev_ret();
 }
 
 //======================Animation====================================================
