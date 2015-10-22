@@ -298,11 +298,6 @@ void MainWindow::on_lineEdit_editingFinished()
 void MainWindow::on_lineEdit_2_editingFinished()
 {
     lineEdit_background(2);
-    if(ui->lineEdit_2->text().toInt()>255)
-        ui->lineEdit_2->setStyleSheet("QLineEdit{background-color:rgb(255, 170, 127);alternate-background-color:rgb(255, 170, 127)}");
-    else
-        ui->lineEdit_2->setStyleSheet("QLineEdit{background-color:rgb(255, 255, 255)}");
-
     if(entr_bright==1 || ui->lineEdit_2->text().toInt()>255){
         entr_bright=0;
         return;
@@ -2247,8 +2242,7 @@ void MainWindow::on_pushButton_111_clicked() // Create Frame
 }
 void MainWindow::on_toolButton_9_clicked() // Кадр назад
 {
-    fix_num_of_lineedits();
-
+    fix_num_of_lineedits(); // Все введённые цифры записываются
     frames_to_map(num_frame,frame); //запись данных кадра в мап
     frame_text_all();
     if(num_frame!=1){
@@ -2264,7 +2258,6 @@ void MainWindow::on_toolButton_9_clicked() // Кадр назад
 void MainWindow::on_toolButton_11_clicked() //Кадр вперёд
 {
     fix_num_of_lineedits(); // Все введённые цифры записываются
-
     frames_to_map(num_frame,frame); //запись данных кадра в мап
     frame_text_all();
     if(num_frame==frames_list.size())
@@ -2279,7 +2272,6 @@ void MainWindow::on_toolButton_11_clicked() //Кадр вперёд
 void MainWindow::on_toolButton_15_clicked() //В начало
 {
     fix_num_of_lineedits(); // Все введённые цифры записываются
-
     frames_to_map(num_frame,frame); //запись данных кадра в мап
     frame_text_all();
     if(num_frame!=1){
@@ -2295,7 +2287,6 @@ void MainWindow::on_toolButton_15_clicked() //В начало
 void MainWindow::on_toolButton_13_clicked() // В конец
 {
     fix_num_of_lineedits(); // Все введённые цифры записываются
-
     frames_to_map(num_frame,frame); //запись данных кадра в мап
     frame_text_all();
     num_frame=frames_list.size();
@@ -2318,8 +2309,7 @@ void MainWindow::on_pushButton_100_clicked() //Удалить кадр
 }
 void MainWindow::on_pushButton_inv_clicked() // Inversion
 {
-    fix_num_of_lineedits(); // Все введённые цифры записываются
-
+   fix_num_of_lineedits(); // Все введённые цифры записываются
    QByteArray buff;
    int k;
    buff=frames_list[num_frame-1];
@@ -2336,39 +2326,75 @@ void MainWindow::on_pushButton_inv_clicked() // Inversion
 
 void MainWindow::fix_num_of_lineedits() // fix_num_of_LineEdits
 {
-    on_lineEdit_time_editingFinished();
-    on_lineEdit_editingFinished();
-    on_lineEdit_2_editingFinished();
-    on_lineEdit_3_editingFinished();
-    on_lineEdit_4_editingFinished();
-    on_lineEdit_5_editingFinished();
-    on_lineEdit_6_editingFinished();
-    on_lineEdit_7_editingFinished();
-    on_lineEdit_8_editingFinished();
-    on_lineEdit_9_editingFinished();
-    on_lineEdit_10_editingFinished();
-    on_lineEdit_11_editingFinished();
-    on_lineEdit_12_editingFinished();
-    on_lineEdit_13_editingFinished();
-    on_lineEdit_14_editingFinished();
-    on_lineEdit_15_editingFinished();
-    on_lineEdit_16_editingFinished();
-    on_lineEdit_17_editingFinished();
-    on_lineEdit_18_editingFinished();
-    on_lineEdit_19_editingFinished();
-    on_lineEdit_20_editingFinished();
-    on_lineEdit_21_editingFinished();
-    on_lineEdit_22_editingFinished();
-    on_lineEdit_23_editingFinished();
-    on_lineEdit_24_editingFinished();
-    on_lineEdit_25_editingFinished();
-    on_lineEdit_26_editingFinished();
-    on_lineEdit_27_editingFinished();
-    on_lineEdit_28_editingFinished();
-    on_lineEdit_29_editingFinished();
-    on_lineEdit_30_editingFinished();
-    on_lineEdit_31_editingFinished();
-    on_lineEdit_32_editingFinished();
+//       on_lineEdit_editingFinished();
+//       on_lineEdit_2_editingFinished();
+//       on_lineEdit_3_editingFinished();
+//       on_lineEdit_4_editingFinished();
+//       on_lineEdit_5_editingFinished();
+//       on_lineEdit_6_editingFinished();
+//       on_lineEdit_7_editingFinished();
+//       on_lineEdit_8_editingFinished();
+//       on_lineEdit_9_editingFinished();
+//       on_lineEdit_10_editingFinished();
+//       on_lineEdit_11_editingFinished();
+//       on_lineEdit_12_editingFinished();
+//       on_lineEdit_13_editingFinished();
+//       on_lineEdit_14_editingFinished();
+//       on_lineEdit_15_editingFinished();
+//       on_lineEdit_16_editingFinished();
+//       on_lineEdit_17_editingFinished();
+//       on_lineEdit_18_editingFinished();
+//       on_lineEdit_19_editingFinished();
+//       on_lineEdit_20_editingFinished();
+//       on_lineEdit_21_editingFinished();
+//       on_lineEdit_22_editingFinished();
+//       on_lineEdit_23_editingFinished();
+//       on_lineEdit_24_editingFinished();
+//       on_lineEdit_25_editingFinished();
+//       on_lineEdit_26_editingFinished();
+//       on_lineEdit_27_editingFinished();
+//       on_lineEdit_28_editingFinished();
+//       on_lineEdit_29_editingFinished();
+//       on_lineEdit_30_editingFinished();
+//       on_lineEdit_31_editingFinished();
+//       on_lineEdit_32_editingFinished();
+       for(int i=0;i<num_of_ch;++i){
+          int g;
+          if(i==0)
+              g=ui->lineEdit->text().toInt();
+          if(i==1)
+              g=ui->lineEdit_2->text().toInt();
+          if(i==2)
+              g=ui->lineEdit_3->text().toInt();
+          if(i==3)
+              g=ui->lineEdit_4->text().toInt();
+          if(i==4)
+              g=ui->lineEdit_5->text().toInt();
+          if(i==5)
+              g=ui->lineEdit_6->text().toInt();
+          if(i==6)
+              g=ui->lineEdit_7->text().toInt();
+          if(i==7)
+              g=ui->lineEdit_8->text().toInt();
+          if(i==8)
+              g=ui->lineEdit_9->text().toInt();
+          if(i==9)
+              g=ui->lineEdit_10->text().toInt();
+          if(i==10)
+              g=ui->lineEdit_11->text().toInt();
+          if(i==11)
+              g=ui->lineEdit_12->text().toInt();
+          if(i==12)
+              g=ui->lineEdit_13->text().toInt();
+          if(i==13)
+              g=ui->lineEdit_14->text().toInt();
+          if(i==14)
+              g=ui->lineEdit_15->text().toInt();
+          if(i==15)
+              g=ui->lineEdit_16->text().toInt();
+          frame[i]=g;
+   }
+       rev_ret();
 }
 
 //======================Animation====================================================
