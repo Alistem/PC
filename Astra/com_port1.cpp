@@ -78,10 +78,11 @@ void com_port::COMConnector(){
 
 void com_port::WriteToCOMPort(){
     if(stop==true){
-        QByteArray ba1/*=QByteArray::fromHex(post_data)*/; //==========!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=============
-        qDebug()<<ba1;
-        qint64 num=com1->write(ba1); // тут мы пишем данные в ком-порт и !!! после записи сравниваем количество байт записанных с отправленными. Если всё ок - рапортуем в письменном виде об успешной передаче данных
-        if (num == ba1.size()) {
+
+        QByteArray ba,ba1;
+        ba+=post_data; //==========!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=============
+        qint64 num=com1->write(ba1.fromHex(ba)); // тут мы пишем данные в ком-порт и !!! после записи сравниваем количество байт записанных с отправленными. Если всё ок - рапортуем в письменном виде об успешной передаче данных
+        if (num == ba.size()) {
             QString errors=QObject::tr("Data successfully sent to port %1").arg(com1->portName());
             emit error_label(errors);
         }   
@@ -196,12 +197,13 @@ void com_port::reset_button_2() // сброс контроллера
         WriteToCOMPort(); // пишем данные в ком-порт
     }
     else{
-        post_data="63ff00000000039f";
-        readData.clear(); // чистим буфер
+        post_data="63ff00000000039f";     
+        readData.clear(); // чистим буфер    
         read_end=0;
-        reset_butt=1;
+        reset_butt=1;       
         reset_timer.start(50); // таймер нужен для ожидания ответа. Если за время ответа не поступило, то делаем ещё один заход
         WriteToCOMPort(); // пишем данные в ком-порт
+
     }
 }
 
@@ -212,7 +214,6 @@ void com_port::reset_button_3() // сброс контроллера
     if(connect_close==1) // если отсоединил вручнную от com_port-а, то прекращаем все действия
         return;
     //=================================================================================================
-
     if(readData.isEmpty()) //иногда приходит пустой массив, перед массивом с данными(похоже, приходит перевод строки)
         return;
     bool st;
@@ -235,7 +236,7 @@ void com_port::reset_button_3() // сброс контроллера
         reset_button_2();
         return;
     }
-    if(readData.contains("Init!")){ // Если ответ OKOB, то статус успешно установлен
+    if(readData.contains("HELLO!")){ // Если ответ OKOB, то статус успешно установлен
 //        qDebug()<<readData;
         ready=0; // готовность к приёму команды // Флаг ставится в 1 когда от контроллера получен сигнал "ОкОк"
         reset=0;
@@ -250,7 +251,7 @@ void com_port::reset_button_3() // сброс контроллера
         return;
     }
     else{
-        if(i_stat!=10){ // Если количество попыток запроса меньше 10
+        if(i_stat<10){ // Если количество попыток запроса меньше 10
             emit status(st=false);//отправка флага о статусе в мэйнвиндоу
             reset_timer.stop();
             reset_button_2(); // Заново пытаемся получить статус
@@ -294,6 +295,7 @@ void com_port::status_new_one()//подготовка контроллера к 
     stat_timer_2.start(50); // таймер нужен для ожидания ответа. Если за время ответа не поступило, то делаем ещё один заход
     WriteToCOMPort(); // пишем данные в ком-порт
     read_end=0;
+
 }
 void com_port::status_new_two()//подготовка контроллера к чтению команды
 {
@@ -655,7 +657,7 @@ void com_port::command_and_read_data_sector() //
         templ="00000000";
         post_data="63ff"+str_i+"01";
 //        ba=QByteArray::fromHex(post_data);
-        qDebug()<<ba;
+        qDebug()<<ba<<"i_frames";
         ctrl_sum_xor(ba);
         ba+=ctrl_sum;
         command_for_read_frame=ba;
