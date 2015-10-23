@@ -284,15 +284,15 @@ void MainWindow::change_bright_btn(int bright) // слот для изменен
 
 void MainWindow::on_lineEdit_editingFinished()
 {
+
     lineEdit_background(1);
     if(entr_bright==1 || ui->lineEdit->text().toInt()>255){
         entr_bright=0;
                return;
     }
-
     int bright=ui->lineEdit->text().toInt();
     entr_bright=1;
-    ui->verticalSlider->setValue(bright);
+    ui->verticalSlider->setValue(bright);  
     return;
 }
 void MainWindow::on_lineEdit_2_editingFinished()
@@ -303,9 +303,8 @@ void MainWindow::on_lineEdit_2_editingFinished()
         return;
     }
     int bright=ui->lineEdit_2->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_2->setValue(b);
+    ui->verticalSlider_2->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_3_editingFinished()
@@ -316,9 +315,8 @@ void MainWindow::on_lineEdit_3_editingFinished()
         return;
     }
     int bright=ui->lineEdit_3->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_3->setValue(b);
+    ui->verticalSlider_3->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_4_editingFinished()
@@ -329,9 +327,8 @@ void MainWindow::on_lineEdit_4_editingFinished()
         return;
     }
     int bright=ui->lineEdit_4->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_4->setValue(b);
+    ui->verticalSlider_4->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_5_editingFinished()
@@ -342,9 +339,8 @@ void MainWindow::on_lineEdit_5_editingFinished()
         return;
     }
     int bright=ui->lineEdit_5->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_5->setValue(b);
+    ui->verticalSlider_5->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_6_editingFinished()
@@ -355,9 +351,8 @@ void MainWindow::on_lineEdit_6_editingFinished()
         return;
     }
     int bright=ui->lineEdit_6->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_6->setValue(b);
+    ui->verticalSlider_6->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_7_editingFinished()
@@ -368,9 +363,8 @@ void MainWindow::on_lineEdit_7_editingFinished()
         return;
     }
     int bright=ui->lineEdit_7->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_7->setValue(b);
+    ui->verticalSlider_7->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_8_editingFinished()
@@ -381,9 +375,8 @@ void MainWindow::on_lineEdit_8_editingFinished()
         return;
     }
     int bright=ui->lineEdit_8->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_8->setValue(b);
+    ui->verticalSlider_8->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_9_editingFinished()
@@ -394,9 +387,8 @@ void MainWindow::on_lineEdit_9_editingFinished()
         return;
     }
     int bright=ui->lineEdit_9->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_9->setValue(b);
+    ui->verticalSlider_9->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_10_editingFinished()
@@ -407,9 +399,8 @@ void MainWindow::on_lineEdit_10_editingFinished()
         return;
     }
     int bright=ui->lineEdit_10->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_10->setValue(b);
+    ui->verticalSlider_10->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_11_editingFinished()
@@ -420,9 +411,8 @@ void MainWindow::on_lineEdit_11_editingFinished()
         return;
     }
     int bright=ui->lineEdit_11->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_11->setValue(b);
+    ui->verticalSlider_11->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_12_editingFinished()
@@ -433,9 +423,8 @@ void MainWindow::on_lineEdit_12_editingFinished()
         return;
     }
     int bright=ui->lineEdit_12->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_12->setValue(b);
+    ui->verticalSlider_12->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_13_editingFinished()
@@ -446,9 +435,8 @@ void MainWindow::on_lineEdit_13_editingFinished()
         return;
     }
     int bright=ui->lineEdit_13->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_13->setValue(b);
+    ui->verticalSlider_13->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_14_editingFinished()
@@ -459,9 +447,8 @@ void MainWindow::on_lineEdit_14_editingFinished()
         return;
     }
     int bright=ui->lineEdit_14->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_14->setValue(b);
+    ui->verticalSlider_14->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_15_editingFinished()
@@ -472,9 +459,8 @@ void MainWindow::on_lineEdit_15_editingFinished()
         return;
     }
     int bright=ui->lineEdit_15->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_15->setValue(b);
+    ui->verticalSlider_15->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_16_editingFinished()
@@ -485,9 +471,8 @@ void MainWindow::on_lineEdit_16_editingFinished()
         return;
     }
     int bright=ui->lineEdit_16->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_16->setValue(b);
+    ui->verticalSlider_16->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_17_editingFinished()
@@ -498,9 +483,8 @@ void MainWindow::on_lineEdit_17_editingFinished()
         return;
     }
     int bright=ui->lineEdit_17->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_17->setValue(b);
+    ui->verticalSlider_17->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_18_editingFinished()
@@ -511,9 +495,8 @@ void MainWindow::on_lineEdit_18_editingFinished()
         return;
     }
     int bright=ui->lineEdit_18->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_18->setValue(b);
+    ui->verticalSlider_18->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_19_editingFinished()
@@ -524,9 +507,8 @@ void MainWindow::on_lineEdit_19_editingFinished()
         return;
     }
     int bright=ui->lineEdit_19->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_19->setValue(b);
+    ui->verticalSlider_19->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_20_editingFinished()
@@ -537,9 +519,8 @@ void MainWindow::on_lineEdit_20_editingFinished()
         return;
     }
     int bright=ui->lineEdit_20->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_20->setValue(b);
+    ui->verticalSlider_20->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_21_editingFinished()
@@ -550,9 +531,8 @@ void MainWindow::on_lineEdit_21_editingFinished()
         return;
     }
     int bright=ui->lineEdit_21->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_21->setValue(b);
+    ui->verticalSlider_21->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_22_editingFinished()
@@ -563,9 +543,8 @@ void MainWindow::on_lineEdit_22_editingFinished()
         return;
     }
     int bright=ui->lineEdit_22->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_22->setValue(b);
+    ui->verticalSlider_22->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_23_editingFinished()
@@ -576,9 +555,8 @@ void MainWindow::on_lineEdit_23_editingFinished()
         return;
     }
     int bright=ui->lineEdit_23->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_23->setValue(b);
+    ui->verticalSlider_23->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_24_editingFinished()
@@ -589,9 +567,8 @@ void MainWindow::on_lineEdit_24_editingFinished()
         return;
     }
     int bright=ui->lineEdit_24->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_24->setValue(b);
+    ui->verticalSlider_24->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_25_editingFinished()
@@ -602,9 +579,8 @@ void MainWindow::on_lineEdit_25_editingFinished()
         return;
     }
     int bright=ui->lineEdit_25->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_25->setValue(b);
+    ui->verticalSlider_25->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_26_editingFinished()
@@ -615,9 +591,8 @@ void MainWindow::on_lineEdit_26_editingFinished()
         return;
     }
     int bright=ui->lineEdit_26->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_26->setValue(b);
+    ui->verticalSlider_26->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_27_editingFinished()
@@ -629,9 +604,8 @@ void MainWindow::on_lineEdit_27_editingFinished()
         return;
     }
     int bright=ui->lineEdit_27->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_27->setValue(b);
+    ui->verticalSlider_27->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_28_editingFinished()
@@ -642,9 +616,8 @@ void MainWindow::on_lineEdit_28_editingFinished()
         return;
     }
     int bright=ui->lineEdit_28->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_28->setValue(b);
+    ui->verticalSlider_28->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_29_editingFinished()
@@ -655,9 +628,8 @@ void MainWindow::on_lineEdit_29_editingFinished()
         return;
     }
     int bright=ui->lineEdit_29->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_29->setValue(b);
+    ui->verticalSlider_29->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_30_editingFinished()
@@ -668,9 +640,8 @@ void MainWindow::on_lineEdit_30_editingFinished()
         return;
     }
     int bright=ui->lineEdit_30->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_30->setValue(b);
+    ui->verticalSlider_30->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_31_editingFinished()
@@ -681,9 +652,8 @@ void MainWindow::on_lineEdit_31_editingFinished()
         return;
     }
     int bright=ui->lineEdit_31->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_31->setValue(b);
+    ui->verticalSlider_31->setValue(bright);
     return;
 }
 void MainWindow::on_lineEdit_32_editingFinished()
@@ -694,9 +664,8 @@ void MainWindow::on_lineEdit_32_editingFinished()
         return;
     }
     int bright=ui->lineEdit_32->text().toInt();
-    int b=bright;
     entr_bright=1;
-    ui->verticalSlider_32->setValue(b);
+    ui->verticalSlider_32->setValue(bright);
     return;
 }
 
@@ -905,12 +874,12 @@ void MainWindow::on_verticalSlider_valueChanged(int value)
     ch_num=1;
     change_bright_btn(value);
     massive_frame(value);
-    QString bright=QString::number(value);
+//    QString bright=QString::number(value);
     if(value>0)
         ui->pushButton_1->setChecked(true); // Если яркость выше нуля - соответствующая кнопка включается
     if(entr_bright==0){ //блокировка slider-lineEdit
-        ui->lineEdit->setText(bright);
-        lineEdit_background(ch_num);
+//        ui->lineEdit->setText(bright);
+//        lineEdit_background(ch_num);
     }
     else{
         ui->verticalSlider->setFocus();
@@ -1972,70 +1941,167 @@ void MainWindow::rev_ret() // обратная связь
     for(int i=0;i<frame.size();++i){
         QByteArray ba=frame.mid(i,1);
         int k=ba.toHex().toInt(0,16);
-        if(i==0)
+        QString bright=QString::number(k);
+        if(i==0){
             ui->verticalSlider->setValue(k);
-        if(i==1)
+            ui->lineEdit->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==1){
             ui->verticalSlider_2->setValue(k);
-        if(i==2)
+            ui->lineEdit_2->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==2){
             ui->verticalSlider_3->setValue(k);
-        if(i==3)
+            ui->lineEdit_3->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==3){
             ui->verticalSlider_4->setValue(k);
-        if(i==4)
+            ui->lineEdit_4->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==4){
             ui->verticalSlider_5->setValue(k);
-        if(i==5)
+            ui->lineEdit_5->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==5){
             ui->verticalSlider_6->setValue(k);
-        if(i==6)
+            ui->lineEdit_6->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==6){
             ui->verticalSlider_7->setValue(k);
-        if(i==7)
+            ui->lineEdit_7->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==7){
             ui->verticalSlider_8->setValue(k);
-        if(i==8)
+            ui->lineEdit_8->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==8){
             ui->verticalSlider_9->setValue(k);
-        if(i==9)
+            ui->lineEdit_9->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==9){
             ui->verticalSlider_10->setValue(k);
-        if(i==10)
+            ui->lineEdit_10->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==10){
             ui->verticalSlider_11->setValue(k);
-        if(i==11)
+            ui->lineEdit_11->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==11){
             ui->verticalSlider_12->setValue(k);
-        if(i==12)
+            ui->lineEdit_12->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==12){
             ui->verticalSlider_13->setValue(k);
-        if(i==13)
+            ui->lineEdit_13->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==13){
             ui->verticalSlider_14->setValue(k);
-        if(i==14)
+            ui->lineEdit_14->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==14){
             ui->verticalSlider_15->setValue(k);
-        if(i==15)
+            ui->lineEdit_15->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==15){
             ui->verticalSlider_16->setValue(k);
-        if(i==16)
+            ui->lineEdit_16->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==16){
             ui->verticalSlider_17->setValue(k);
-        if(i==17)
+            ui->lineEdit_17->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==17){
             ui->verticalSlider_18->setValue(k);
-        if(i==18)
+            ui->lineEdit_18->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==18){
             ui->verticalSlider_19->setValue(k);
-        if(i==19)
+            ui->lineEdit_19->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==19){
             ui->verticalSlider_20->setValue(k);
-        if(i==20)
+            ui->lineEdit_20->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==20){
             ui->verticalSlider_21->setValue(k);
-        if(i==21)
+            ui->lineEdit_21->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==21){
             ui->verticalSlider_22->setValue(k);
-        if(i==22)
+            ui->lineEdit_22->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==22){
             ui->verticalSlider_23->setValue(k);
-        if(i==23)
+            ui->lineEdit_23->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==23){
             ui->verticalSlider_24->setValue(k);
-        if(i==24)
+            ui->lineEdit_24->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==24){
             ui->verticalSlider_25->setValue(k);
-        if(i==25)
+            ui->lineEdit_25->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==25){
             ui->verticalSlider_26->setValue(k);
-        if(i==26)
+            ui->lineEdit_26->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==26){
             ui->verticalSlider_27->setValue(k);
-        if(i==27)
+            ui->lineEdit_27->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==27){
             ui->verticalSlider_28->setValue(k);
-        if(i==28)
+            ui->lineEdit_28->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==28){
             ui->verticalSlider_29->setValue(k);
-        if(i==29)
+            ui->lineEdit_29->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==29){
             ui->verticalSlider_30->setValue(k);
-        if(i==30)
+            ui->lineEdit_30->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==30){
             ui->verticalSlider_31->setValue(k);
-        if(i==31)
+            ui->lineEdit_31->setText(bright);
+            lineEdit_background(i);
+        }
+        if(i==31){
             ui->verticalSlider_32->setValue(k);
+            ui->lineEdit_32->setText(bright);
+            lineEdit_background(i);
+        }
     }
 }
 
@@ -2326,74 +2392,38 @@ void MainWindow::on_pushButton_inv_clicked() // Inversion
 
 void MainWindow::fix_num_of_lineedits() // fix_num_of_LineEdits
 {
-//       on_lineEdit_editingFinished();
-//       on_lineEdit_2_editingFinished();
-//       on_lineEdit_3_editingFinished();
-//       on_lineEdit_4_editingFinished();
-//       on_lineEdit_5_editingFinished();
-//       on_lineEdit_6_editingFinished();
-//       on_lineEdit_7_editingFinished();
-//       on_lineEdit_8_editingFinished();
-//       on_lineEdit_9_editingFinished();
-//       on_lineEdit_10_editingFinished();
-//       on_lineEdit_11_editingFinished();
-//       on_lineEdit_12_editingFinished();
-//       on_lineEdit_13_editingFinished();
-//       on_lineEdit_14_editingFinished();
-//       on_lineEdit_15_editingFinished();
-//       on_lineEdit_16_editingFinished();
-//       on_lineEdit_17_editingFinished();
-//       on_lineEdit_18_editingFinished();
-//       on_lineEdit_19_editingFinished();
-//       on_lineEdit_20_editingFinished();
-//       on_lineEdit_21_editingFinished();
-//       on_lineEdit_22_editingFinished();
-//       on_lineEdit_23_editingFinished();
-//       on_lineEdit_24_editingFinished();
-//       on_lineEdit_25_editingFinished();
-//       on_lineEdit_26_editingFinished();
-//       on_lineEdit_27_editingFinished();
-//       on_lineEdit_28_editingFinished();
-//       on_lineEdit_29_editingFinished();
-//       on_lineEdit_30_editingFinished();
-//       on_lineEdit_31_editingFinished();
-//       on_lineEdit_32_editingFinished();
-       for(int i=0;i<num_of_ch;++i){
-          int g;
-          if(i==0)
-              g=ui->lineEdit->text().toInt();
-          if(i==1)
-              g=ui->lineEdit_2->text().toInt();
-          if(i==2)
-              g=ui->lineEdit_3->text().toInt();
-          if(i==3)
-              g=ui->lineEdit_4->text().toInt();
-          if(i==4)
-              g=ui->lineEdit_5->text().toInt();
-          if(i==5)
-              g=ui->lineEdit_6->text().toInt();
-          if(i==6)
-              g=ui->lineEdit_7->text().toInt();
-          if(i==7)
-              g=ui->lineEdit_8->text().toInt();
-          if(i==8)
-              g=ui->lineEdit_9->text().toInt();
-          if(i==9)
-              g=ui->lineEdit_10->text().toInt();
-          if(i==10)
-              g=ui->lineEdit_11->text().toInt();
-          if(i==11)
-              g=ui->lineEdit_12->text().toInt();
-          if(i==12)
-              g=ui->lineEdit_13->text().toInt();
-          if(i==13)
-              g=ui->lineEdit_14->text().toInt();
-          if(i==14)
-              g=ui->lineEdit_15->text().toInt();
-          if(i==15)
-              g=ui->lineEdit_16->text().toInt();
-          frame[i]=g;
-   }
+       ui->lineEdit->clearFocus();
+       ui->lineEdit_2->clearFocus();
+       ui->lineEdit_3->clearFocus();
+       ui->lineEdit_4->clearFocus();
+       ui->lineEdit_5->clearFocus();
+       ui->lineEdit_6->clearFocus();
+       ui->lineEdit_7->clearFocus();
+       ui->lineEdit_8->clearFocus();
+       ui->lineEdit_9->clearFocus();
+       ui->lineEdit_10->clearFocus();
+       ui->lineEdit_11->clearFocus();
+       ui->lineEdit_12->clearFocus();
+       ui->lineEdit_13->clearFocus();
+       ui->lineEdit_14->clearFocus();
+       ui->lineEdit_15->clearFocus();
+       ui->lineEdit_16->clearFocus();
+       ui->lineEdit_17->clearFocus();
+       ui->lineEdit_18->clearFocus();
+       ui->lineEdit_19->clearFocus();
+       ui->lineEdit_20->clearFocus();
+       ui->lineEdit_21->clearFocus();
+       ui->lineEdit_22->clearFocus();
+       ui->lineEdit_23->clearFocus();
+       ui->lineEdit_24->clearFocus();
+       ui->lineEdit_25->clearFocus();
+       ui->lineEdit_26->clearFocus();
+       ui->lineEdit_27->clearFocus();
+       ui->lineEdit_28->clearFocus();
+       ui->lineEdit_29->clearFocus();
+       ui->lineEdit_30->clearFocus();
+       ui->lineEdit_31->clearFocus();
+       ui->lineEdit_32->clearFocus();
 }
 
 //======================Animation====================================================
