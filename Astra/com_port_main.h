@@ -21,8 +21,7 @@ signals:
     void disconnect();
     void flag_close_win(bool);
     void import_data_to_project();
-    void times_from_plc(double,int,int);
-    void data_from_plc(QByteArray,int);
+    void times_from_plc(int,int,int);
     void shim_from_plc(QByteArray,int);
 
     
