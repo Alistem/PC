@@ -552,7 +552,8 @@ void com_port::data_plc_read()
         //=======================================================================================
         if(sec_resp==1){
             all_data_from_plc+=for_frame_data.left(for_frame_data.size()-1); // убираем контрольную сумму
-            reading_frames+=1;
+            for(int i=0;i<12;++i) // Этот цикл вообще чисто для красоты
+            reading_frames+=1; // Для типа плавного подсёта кадров (потому что читает по секторам, а там по 12 кадров)
             if(end_read_data_anim==1){
                 command_and_read_data_sector(); // читаем следующий сектор данных с контроллера
                 end_read_data_anim=0;
@@ -676,9 +677,9 @@ void com_port::analise_readed_data(QByteArray dat) // складывание в�
     int n;
     for(n=0;n<num_frames;++n){ // С помощью цикла выделяем из массива данные отдельно ВРЕМЕНИ и ШИМ
 
-        //===========================times============================================
-        times_of_frames+=dat.mid(n*34,2); // складываем время всех кадров в один массив
-
+        //===========================times============================================       
+        int i=dat.mid(n*34,2).toHex().toInt(0,16);
+        times_of_frames+=i; // складываем время всех кадров в один массив
         //===========================SHIM=============================================
         shim_of_frames+=dat.mid(n*34+2,32); // складываем все кадры в массив
         //============================================================================
@@ -690,32 +691,22 @@ void com_port::analise_readed_data(QByteArray dat) // складывание в�
 
 void com_port::data_to_project() //
 {
-    bool ok;
-    QString s_buff;
-    QByteArray buff,buff_data,buff_shim;
-    double buff_dbl;
+//    bool ok;
+//    QString s_buff;
+    QByteArray buff_shim;
+    int time_int;
 
     for(int n=0;n<num_frames;++n){ // отправляем данные покадрово (хотя, конечно надо бы сделать отправку сразу всего, а на том конце разбирать)
         //================================Times=================================
-        buff=times_of_frames.mid(n*2,2); //
-        for(int i=0;i<buff.size();++i){
-            QByteArray buff_1=buff.mid(i,1);
-            QString s=buff_1.toHex();
-            int i_buf=s.toInt(&ok,16);
-            s=s.setNum(i_buf);
-            s_buff=QString("%1").arg(s,4,'0');
-            s_buff.insert(2,",");
-        }
-        buff_dbl=s_buff.toDouble();
-        emit times_from_plc1(buff_dbl,n,num_frames);
-        //================================Data=================================
-        buff_data=data_of_frames.mid(384*n,384);
-        emit data_from_plc1(buff_data,n);
-        buff_data.clear();
+        time_int=times_of_frames.at(n); // Берём время одного кадра
+        emit times_from_plc1(time_int,n,num_frames);
+
         //================================SHIM=================================
-        buff_shim=shim_of_frames.mid(n*16,16);
+        buff_shim=shim_of_frames.mid(n*32,32);
         emit shim_from_plc1(buff_shim,n);
         buff_shim.clear();
     }
+    shim_of_frames.clear();
+    data_of_frames.clear();
 }
 
