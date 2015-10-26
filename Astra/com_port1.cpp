@@ -518,7 +518,6 @@ void com_port::data_plc_read()
             OkCR=1;
         }
         for_frame_data.chop(4); // режем последние 4 символа (RROK) получаем чистый пакет данных + CRC
-
         //===================== Verify Control Sum =============================================
         ctrl_sum_verify(for_frame_data); // верификация контрольной суммы пакета
         if(verify_ctrl_sum==0){
@@ -552,7 +551,7 @@ void com_port::data_plc_read()
 
         //=======================================================================================
         if(sec_resp==1){
-            all_data_from_plc+=for_frame_data.left(for_frame_data.size()-1);
+            all_data_from_plc+=for_frame_data.left(for_frame_data.size()-1); // убираем контрольную сумму
             reading_frames+=1;
             if(end_read_data_anim==1){
                 command_and_read_data_sector(); // читаем следующий сектор данных с контроллера
@@ -565,10 +564,9 @@ void com_port::data_plc_read()
 
 
 //        qDebug()<<for_frame_data.toHex();
-//        std::cout<<for_frame_data.data()<<std::endl;
 
     }else{
-        if(i_stat!=10){ // Если количество попыток запроса меньше 10
+        if(i_stat<10){ // Если количество попыток запроса меньше 10
 //            qDebug()<<"!=RROK"<<readData;
             read_com_port(); // Заново пытаемся получить статус
         }else{
@@ -617,23 +615,14 @@ void com_port::ctrl_sum_xor(QByteArray dat) // вычисление контро
 
 void com_port::plc_data_edit(QByteArray dat)
 {
-    bool ok;
-    QByteArray array_frames;
-    QString str_buff;
-    QString templ;
-    templ="00000000";
-    array_frames=dat.left(4);
-    str_buff=array_frames.toHex(); //преобразование массива данных о количестве кадров в нех(уй)
-    num_sectors=str_buff.toInt(&ok,16); // преобразование стринговой переменной в интеджер
-    num_frames=(num_sectors-512)/512; // вычисляем количество кадров
+    num_sectors=dat.left(4).toHex().toInt(0,16);
+    num_frames=(num_sectors-512)*12/512; // вычисляем количество кадров
     first_resp=0;
     sec_resp=1;
     reading_frames=0;
     command_and_data_sector=1;
     emit frames_label(num_frames); // отправляем на форму
     command_and_read_data_sector();
-//    std::cout<<str_i.data()<<std::endl;
-//    qDebug()<<all_data_from_plc.toHex();
 }
 
 void com_port::command_and_read_data_sector() //
@@ -644,7 +633,7 @@ void com_port::command_and_read_data_sector() //
         qDebug()<<"No RROK"<<readData.toHex();
         return;
     }
-    QByteArray ba;
+    QByteArray ba,ba1;
     QString templ,str_i;
     int ii;
     templ="00000000";
@@ -656,9 +645,9 @@ void com_port::command_and_read_data_sector() //
         str_i=templ;
         templ="00000000";
         post_data="63ff"+str_i+"01";
-//        ba=QByteArray::fromHex(post_data);
-        qDebug()<<ba<<"i_frames";
-        ctrl_sum_xor(ba);
+        ba+=post_data;
+        ctrl_sum_xor(ba1.fromHex(ba));
+        ba=ba1.fromHex(ba);
         ba+=ctrl_sum;
         command_for_read_frame=ba;
         ba.clear();
@@ -686,7 +675,7 @@ void com_port::analise_readed_data(QByteArray dat) // складывание в�
 //    qDebug()<<"===================analise_readed_data====================================================";
     QByteArray data_buff,shim_buff,data_sum,shim_sum;
     int n;
-    for(n=0;n<num_frames;++n){ // С помощью цикла выделяем из массива данные отдельно ВРЕМЕНИ, ДАННЫХ, и ШИМ
+    for(n=0;n<num_frames;++n){ // С помощью цикла выделяем из массива данные отдельно ВРЕМЕНИ и ШИМ
         //===========================times============================================
         times_of_frames+=dat.mid(n*402,2); // складываем время всех кадров в один массив
         //===========================data=============================================
@@ -705,10 +694,10 @@ void com_port::analise_readed_data(QByteArray dat) // складывание в�
         shim_sum.clear();
         //============================================================================
     }
-//    qDebug()<<"Times"<<times_of_frames.toHex();
+    qDebug()<<"Times"<<times_of_frames.toHex();
 //    qDebug()<<"Data"<<data_of_frames.size();
-//    qDebug()<<"SHIM"<<shim_of_frames.toHex();
-//    qDebug()<<"===================analise_readed_data====================================================";
+    qDebug()<<"SHIM"<<shim_of_frames.toHex();
+//  "===================analise_readed_data====================================================";
 }
 
 void com_port::data_to_project() //
