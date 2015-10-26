@@ -39,9 +39,8 @@ com_port_w::com_port_w(QWidget *parent) :
     connect(com_port1,SIGNAL(frames_label(int)),this,SLOT(frames_label_main(int)));
     connect(com_port1,SIGNAL(num_frame_read(int)),this,SLOT(num_readed_frames(int)));
     connect(this,SIGNAL(import_data_to_project()),com_port1,SLOT(data_to_project()));
-    //===========================Данные с контроллера====================================
-    connect(com_port1,SIGNAL(times_from_plc1(double,int,int)),this,SIGNAL(times_from_plc(double,int,int)));
-    connect(com_port1,SIGNAL(data_from_plc1(QByteArray,int)),this,SIGNAL(data_from_plc(QByteArray,int)));
+    //===========================Данные с контроллера в проект====================================
+    connect(com_port1,SIGNAL(times_from_plc1(int,int,int)),this,SIGNAL(times_from_plc(int,int,int)));
     connect(com_port1,SIGNAL(shim_from_plc1(QByteArray,int)),this,SIGNAL(shim_from_plc(QByteArray,int)));
 
 

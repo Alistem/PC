@@ -44,8 +44,7 @@ signals:
     void frames_label(int);
     void status(bool);
     void num_frame_read(int);
-    void times_from_plc1(double,int,int);
-    void data_from_plc1(QByteArray,int);
+    void times_from_plc1(int,int,int);
     void shim_from_plc1(QByteArray,int);
 
 

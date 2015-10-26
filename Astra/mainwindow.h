@@ -126,6 +126,8 @@ private slots:
 
     void save_animation();
     void open_animation();
+    void times_from_astra(int time, int num_of_frame, int all_frames);
+    void shim_from_astra(QByteArray data, int num_of_frame);
 
     void on_action8_triggered(bool checked);
     void on_action16_triggered(bool checked);

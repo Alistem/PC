@@ -2741,6 +2741,8 @@ void MainWindow::on_com_port_Button_clicked()
         com_port_w *com_port = new com_port_w;
         com_port->show();
         connect(com_port,SIGNAL(flag_close_win(bool)),this,SLOT(com_port_window_status(bool)));
+        connect(com_port,SIGNAL(times_from_plc),this,SLOT(times_from_astra()));
+        connect(com_port,SIGNAL(shim_from_plc),this,SLOT(shim_from_astra()));
         com_port_window=true;
     }
     else
@@ -2752,3 +2754,11 @@ void MainWindow::com_port_window_status(bool flag)
     //----------------------------flag----------------------------
 }
 
+void MainWindow::times_from_astra(int time,int num_of_frame,int all_frames)
+{
+
+}
+void MainWindow::shim_from_astra(QByteArray data, int num_of_frame)
+{
+
+}
