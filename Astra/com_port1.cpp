@@ -673,30 +673,18 @@ void com_port::command_and_read_data_sector() //
 void com_port::analise_readed_data(QByteArray dat) // складывание времён кадров в массив
 {
 //    qDebug()<<"===================analise_readed_data====================================================";
-    QByteArray data_buff,shim_buff,data_sum,shim_sum;
     int n;
     for(n=0;n<num_frames;++n){ // С помощью цикла выделяем из массива данные отдельно ВРЕМЕНИ и ШИМ
+
         //===========================times============================================
-        times_of_frames+=dat.mid(n*402,2); // складываем время всех кадров в один массив
-        //===========================data=============================================
-        data_buff=dat.mid(n*402,402); // full frame
-        for(int j=2;j<data_buff.size();j+=25) // после времени (2 байта) идёт 24 байта столбец данных, и так 16 раз
-            data_sum+=data_buff.mid(j,24); // складываем все столбцы в один массив кадра
-        data_of_frames+=data_sum; // складываем все кадры в массив
-        data_buff.clear();
-        data_sum.clear();
+        times_of_frames+=dat.mid(n*34,2); // складываем время всех кадров в один массив
+
         //===========================SHIM=============================================
-        shim_buff=dat.mid(n*402,402); // берём кадр целиком
-        for(int k=26;k<shim_buff.size();k+=25) // ШИМ расположен в конце каждого столбца, поэтому начинаем искать его именно там
-            shim_sum+=shim_buff.mid(k,1); // складываем все ШИМ в один массив кадра
-        shim_of_frames+=shim_sum; // складываем все кадры в массив
-        shim_buff.clear();
-        shim_sum.clear();
+        shim_of_frames+=dat.mid(n*34+2,32); // складываем все кадры в массив
         //============================================================================
     }
-    qDebug()<<"Times"<<times_of_frames.toHex();
-//    qDebug()<<"Data"<<data_of_frames.size();
-    qDebug()<<"SHIM"<<shim_of_frames.toHex();
+//    qDebug()<<"Times"<<times_of_frames.toHex();
+//    qDebug()<<"SHIM"<<shim_of_frames.toHex();
 //  "===================analise_readed_data====================================================";
 }
 
