@@ -55,54 +55,6 @@ com_port_w::~com_port_w()
     delete ui;
 }
 
-//void com_port_w::on_write_line_textChanged(const QString &arg1)
-//{
-////    hex=arg1;
-////    ui->lineEdit_2->setText(str);
-////    ui->lineEdit_3->setText(QString("%1").arg(iVal));
-//}
-//void com_port_w::on_lineEdit_textChanged(const QString &arg1)
-//{
-//    QString str,str1;
-//    int iVal=0;
-//    bool ok;
-//    str=arg1;
-//    iVal = str.toInt(&ok,16);
-//    str1.setNum(iVal,16);
-//    hex=str;
-//    hex_int=iVal;
-////    ui->read_line_2->setText(str);
-////    ui->lineEdit_3->setText(QString("%1").arg(iVal));
-//}
-//void com_port_w::on_pushButton_clicked()
-//{
-//    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "",
-//                                                    tr("Animation Files (*.nmt)"/*"Text Files (*.txt);;C++ Files (*.cpp *.h)"*/));
-//    QFile file(fileName);
-//    if (!file.open(QIODevice::WriteOnly))
-//      return;
-//    else{
-//        cc=QByteArray::fromHex(hex.toAscii());
-//        file.write(ba);
-//        file.close();
-//    }
-//    std::cout<<ba.data()<<std::endl;
-//return;
-//}
-//void com_port_w::on_pushButton_2_clicked()
-//{
-//    unsigned char eee;
-//    QByteArray ba1;
-//    ba1=QByteArray::fromHex(hex.toAscii());
-//    for (int i=0; i<ba1.size(); ++i){
-//        eee = static_cast<unsigned char>(ba1[i]);
-//        ba.append(eee);
-//    }
-
-//        std::cout<<ba1.data()<<std::endl;
-////        one(ba);
-//}
-
 void com_port_w::one(QByteArray basta)
 {
         for (int i=0; i<basta.length(); ++i) {
@@ -209,7 +161,7 @@ void com_port_w::on_pushButton_clicked() // запись данных из ко�
     import_from_plc->setStandardButtons(QMessageBox::Yes|QMessageBox::No|QMessageBox::Escape);
     import_from_plc->setDefaultButton(QMessageBox::No);
     import_from_plc->setButtonText(QMessageBox::Yes,tr("Да, я понимаю"));
-    import_from_plc->setButtonText(QMessageBox::No,tr("Не, пожалуй, сначала сохраню проект"));
+    import_from_plc->setButtonText(QMessageBox::No,tr("Нет, пожалуй, сначала сохраню проект"));
     int n = import_from_plc->exec();
     delete import_from_plc;
     if (n == QMessageBox::Yes)

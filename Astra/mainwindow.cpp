@@ -1901,9 +1901,9 @@ void MainWindow::new_frame() // пишем новый кадр в мап
 void MainWindow::add_frame(int num) // вставляем новый кадр в мапе (врезаем посреди других кадров)
 {
     QByteArray buff;
-    double time_buff;
+    int time_buff;
     buff.fill(0,num_of_ch);
-    time_buff=0.01;
+    time_buff=1;
     frames_list.insert((num-1),buff);
     frames_time.insert((num-1),time_buff);
 }
@@ -2756,9 +2756,23 @@ void MainWindow::com_port_window_status(bool flag)
 
 void MainWindow::times_from_astra(int time,int num_of_frame,int all_frames)
 {
-    qDebug()<<time<<num_of_frame<<all_frames;
+    if(num_of_frame==1){
+//===============================Чистим массивы для нового проекта=============================
+
+            frame.clear(); // очищаем содержимое буфера текущего кадра
+            int size=frames_list.size();
+            for(int i=size-1;i>=0;--i){
+                frames_list.removeAt(i); //чистим массив кадров (удаляем все к чертям)
+                frames_time.removeAt(i); //чистим массив времени кадров
+            }
+//=============================================================================================
+    }
+    frames_time.append(time);
+    num_frame=num_of_frame;
+    num_sum=all_frames;
 }
 void MainWindow::shim_from_astra(QByteArray data, int num_of_frame)
 {
-    qDebug()<<data.toHex()<<num_of_frame;
+    frames_list.append(data);
+    num_frame=num_of_frame;
 }
