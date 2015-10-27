@@ -18,8 +18,6 @@ com_port::com_port(QWidget *parent) :
     connect(&r_timer, SIGNAL(timeout()), SLOT(Read_finish()));
     connect(&stat_timer_2, SIGNAL(timeout()), SLOT(status_new_two()));
     connect(&reset_timer, SIGNAL(timeout()), SLOT(reset_button_3()));
-//    connect(&stat_but_timer, SIGNAL(timeout()), SLOT(status_plc_transmit()));
-//    connect(&stat_timer_read_data, SIGNAL(timeout()), SLOT(data_plc_read()));
 
 //=========================Init================================================
 init();
@@ -100,11 +98,8 @@ void com_port::ReadCOMPort(){
     m_readData.append(com1->readAll());
 //    if (!m_timer.isActive())
     m_timer.start(10);
-//    QString str(m_readData.toHex());
     r_timer.start(10); // ждём, чтобы весь пакет записался в буффер. Очень важный таймаут. Если косяки с чтением данных из контроллера, крутить надо именно его
     readData+=m_readData;
-//    dat=m_readData.size();
-//    qDebug()<<dat;
     m_readData.clear();
     }
 }
@@ -134,7 +129,6 @@ void com_port::readTimeout()
 
 void com_port::readError(QSerialPort::SerialPortError serialPortError)
 {
-//    qDebug()<<serialPortError;
     if (serialPortError == QSerialPort::ReadError) {
         QString errors=QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(com1->portName()).arg(com1->errorString());
         emit error_label(errors);
@@ -689,10 +683,8 @@ void com_port::analise_readed_data(QByteArray dat) // складывание в�
 //  "===================analise_readed_data====================================================";
 }
 
-void com_port::data_to_project() //
+void com_port::data_to_project() // Передача данных анимации из контроллера в программу
 {
-//    bool ok;
-//    QString s_buff;
     QByteArray buff_shim;
     int time_int;
 
@@ -700,7 +692,6 @@ void com_port::data_to_project() //
         //================================Times=================================
         time_int=times_of_frames.at(n); // Берём время одного кадра
         emit times_from_plc1(time_int,n,num_frames);
-
         //================================SHIM=================================
         buff_shim=shim_of_frames.mid(n*32,32);
         emit shim_from_plc1(buff_shim,n);

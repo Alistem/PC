@@ -2544,11 +2544,12 @@ void MainWindow::animation_body() //все кадры анимации (кром
 void MainWindow::on_toolButton_12_clicked(bool checked) //старт анимации***********************
 {
     if (checked){
+        ui->toolButton_12->setIcon(QIcon(":/pause1"));
         if(anim_start==1)  //если анимация уже включена, то ничего не делаем
             return;
         if(anim_pause==1){  //если анимация на паузе
             if(num_frame>1 && num_frame!=frames_list.size()-1){ // защита от out of range при прокрутке на последний и первый кадр при снятии с паузы
-            num_frame-=1;
+                num_frame-=1;
             }
             anim_pause=0; //ставим флаг для паузы анимации
             animation_init(); //инициализация анимации
@@ -2565,12 +2566,14 @@ void MainWindow::on_toolButton_12_clicked(bool checked) //старт анима�
         anim_pause=1; //ставим флаг для паузы анимации
         block_anim=false; // блокировка записи кадров при анимации и переключении кадров
         block_btn_anim(0); //блокировка кнопок навигации и редактирования анимации во время воспроизведения
+        ui->toolButton_12->setIcon(QIcon(":/play"));
         }
     }
 }
 
 void MainWindow::on_toolButton_16_clicked() //Stop animation***********************************
 {
+    ui->toolButton_12->setIcon(QIcon(":/pause"));
     timer->stop();
     anim_stop=1; //ставим флаг для прекращения анимации
     anim_start=0; //ставим готовность для включения анимации
@@ -2756,7 +2759,7 @@ void MainWindow::com_port_window_status(bool flag)
 
 void MainWindow::times_from_astra(int time,int num_of_frame,int all_frames)
 {
-    if(num_of_frame==1){
+    if(num_of_frame==0){
 //===============================Чистим массивы для нового проекта=============================
 
             frame.clear(); // очищаем содержимое буфера текущего кадра
@@ -2768,11 +2771,19 @@ void MainWindow::times_from_astra(int time,int num_of_frame,int all_frames)
 //=============================================================================================
     }
     frames_time.append(time);
-    num_frame=num_of_frame;
+    num_frame=num_of_frame+1;
     num_sum=all_frames;
 }
 void MainWindow::shim_from_astra(QByteArray data, int num_of_frame)
 {
     frames_list.append(data);
     num_frame=num_of_frame;
+    if(num_of_frame+1==num_sum){
+        frame_sum_lcd();
+        num_frame=1;
+        frame_num_lcd();
+        frame=frames_list.at(num_frame-1);
+        rev_ret(); //обратная связь с движка
+        rev_ret_time();
+    }
 }

@@ -14,5 +14,7 @@
         <file alias="sun_on">sun-final.png</file>
         <file alias="sun_off">sun-final-off.png</file>
         <file alias="bkg">LED_1.2_background.png</file>
+        <file alias="pause1">пауза.png</file>
+        <file alias="play">play.png</file>
     </qresource>
 </RCC>
