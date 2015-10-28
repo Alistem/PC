@@ -230,7 +230,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Загрузка/Получение данных из PLC</string>
+          <string>Загрузка/Отправка данных в Астра</string>
          </property>
          <property name="shortcut">
           <string>Ctrl+P</string>

@@ -128,6 +128,7 @@ private slots:
     void open_animation();
     void times_from_astra(int time, int num_of_frame, int all_frames);
     void shim_from_astra(QByteArray data, int num_of_frame);
+    void res_data_to_plc_main();
 
     void on_action8_triggered(bool checked);
     void on_action16_triggered(bool checked);
@@ -181,6 +182,9 @@ private slots:
 
     void on_pushButton_inv_clicked();
 
+signals:
+    void data_to_astra_main(int,QByteArray,int,int);
+
 private:
     Ui::MainWindow *ui;
     int ch_num,color_button,time_current;
@@ -188,8 +192,8 @@ private:
     //==================Animation==============
     QList<QByteArray> frames_list; // массив кадров (каждый элемент которого есть - один кадр (со значени¤ми ¤ркости))
     QByteArray frame,buffer_for_frame; // массив с данными текущего кадра (по всем каналам);
-    double buffer_for_time;
-    QList<int> frames_time;
+    int buffer_for_time;
+    QList<int>frames_time;
 
     //=========================================
 

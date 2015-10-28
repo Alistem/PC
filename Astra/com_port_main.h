@@ -23,16 +23,12 @@ signals:
     void import_data_to_project();
     void times_from_plc(int,int,int);
     void shim_from_plc(QByteArray,int);
-
+    void res_data_to_plc();
+    void data_to_astra(int,QByteArray,int,int);
     
 private slots:
 
-//    void on_lineEdit_textChanged(const QString &arg1);
-//    void on_pushButton_clicked();
-//    void on_pushButton_2_clicked();
-//    void on_write_line_textChanged(const QString &arg1);
     void one(QByteArray basta);
-    void data_com_port_for_post();
     void connect_status(QString status);
     void com_port_num_res();
     void closeEvent(QCloseEvent *ev);
@@ -48,6 +44,7 @@ private slots:
 
     void on_writeButton_clicked(bool checked);
 
+
 private:
     Ui::com_port *ui;
 //    QString hex;
@@ -57,6 +54,8 @@ private:
     QString back_color_none;
     int hex_int,int_num_frames_summ;
     QByteArray cc,ba;
+    QList<QByteArray> frames_list_to_com_port; // массив кадров
+    QList<int> frames_time_to_com_port; //массив времён кадров
 };
 
 #endif // COM_PORT_MAIN_H

@@ -704,3 +704,8 @@ void com_port::data_to_project() // Передача данных анимаци
 }
 
 //=================================================================================================
+
+void com_port::data_to_com_port(int times,QByteArray data_current_frame,int current_frame_num,int sum_frames_num)
+{
+    qDebug()<<times<<data_current_frame.toHex()<<current_frame_num+1<<sum_frames_num;
+}

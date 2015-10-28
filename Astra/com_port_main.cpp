@@ -23,7 +23,10 @@ com_port_w::com_port_w(QWidget *parent) :
 
     connect(this->ui->connectButton,SIGNAL(clicked()),com_port1,SIGNAL(connect_com()));
     connect(this->ui->disconnectButton,SIGNAL(clicked()),com_port1,SIGNAL(disconnect_com()));
-    connect(this->ui->writeButton,SIGNAL(clicked()),this,SLOT(data_com_port_for_post()));
+    //=====================================Write Data===================================================
+    connect(this,SIGNAL(data_to_astra(int,QByteArray,int,int)),com_port1,SLOT(data_to_com_port(int,QByteArray,int,int)));
+    //=========================================================================================
+    connect(this->ui->writeButton,SIGNAL(clicked()),this,SIGNAL(res_data_to_plc()));
     connect(this->ui->readButton,SIGNAL(clicked()),com_port1,SLOT(read_button()));
     connect(this->ui->Status_PLC,SIGNAL(clicked()),com_port1,SLOT(status_button()));
     connect(this->ui->reset,SIGNAL(clicked()),com_port1,SLOT(reset_button()));
@@ -64,12 +67,6 @@ void com_port_w::one(QByteArray basta)
 //    qDebug()<<cc.at(0);
 //    QString strq=cc;
 return;
-}
-
-void com_port_w::data_com_port_for_post()
-{
-//    QString str=ui->write_line->text();
-//    emit data_com_port_ext(str);
 }
 
 void com_port_w::connect_status(QString status)
@@ -137,7 +134,6 @@ void com_port_w::frames_label_main(int frames)
     int_num_frames_summ=frames;
     frames_reading.setNum(frames);
     ui->label_num_frames->setText(frames_reading);
-//    ui->label_num_frames_2->setText(str);
 }
 
 void com_port_w::num_readed_frames(int num_frame)
@@ -148,9 +144,7 @@ void com_port_w::num_readed_frames(int num_frame)
     ui->label_num_frames_2->setText(frames_reading);
     ui->progressBar_frames->show();
     ui->progressBar_frames->setValue(100*num_frame/int_num_frames_summ);
-//    ui->label_num_frames_2->setText(str);
 }
-
 void com_port_w::on_pushButton_clicked() // запись данных из контроллера в проект
 {
     QMessageBox *import_from_plc= new QMessageBox(this);
@@ -182,9 +176,6 @@ void com_port_w::on_readButton_clicked(bool checked)
         ui->pushButton->setEnabled(true);
         ui->writeButton->setEnabled(true);
 }
-
-
-
 void com_port_w::on_writeButton_clicked(bool checked)
 {
     if(checked){
