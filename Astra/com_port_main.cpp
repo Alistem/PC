@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <iostream>
 #include "com_port1.h"
+#include "mainwindow.h"
 //#include <QApplication>
 #include <QCloseEvent>
 
@@ -20,7 +21,6 @@ com_port_w::com_port_w(QWidget *parent) :
     com_port1->hide(); // скрываем объект с формы, а то он меню загораживает
     ui->progressBar_frames->hide();
     ui->connectButton->setDefault(true);
-
     connect(this->ui->connectButton,SIGNAL(clicked()),com_port1,SIGNAL(connect_com()));
     connect(this->ui->disconnectButton,SIGNAL(clicked()),com_port1,SIGNAL(disconnect_com()));
     //=====================================Write Data===================================================

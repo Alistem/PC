@@ -32,6 +32,7 @@ void com_port::init()
     read_but_flag=0;
     block_press_status=0;  // блокировка от двойного нажатия
     block_press_read=0; // блокировка от двойного нажатия
+    block_press_write=0;
     block_press_reset=0; // блокировка от двойного нажатия
     reset_butt=0;
     res_stat_plc=0;
@@ -180,8 +181,10 @@ void com_port::reset_button_2() // сброс контроллера
         res_data_from_plc=0;
         status_but_flag=0;
         read_but_flag=0;
+        write_but_flag=0;
         block_press_status=0;
         block_press_read=0;
+        block_press_write=0;
 
         //============================================================================
         post_data.clear();
@@ -314,6 +317,8 @@ void com_port::status_new_two()//подготовка контроллера к 
                 status_button_2();
             if(read_but_flag==1)
                 read_com_port();
+            if(write_but_flag==1)
+                write_to_com_port();
             return;
         }
         else{
@@ -705,7 +710,55 @@ void com_port::data_to_project() // Передача данных анимаци
 
 //=================================================================================================
 
+
+//=============================================Write Data to com-port==========================================
+
 void com_port::data_to_com_port(int times,QByteArray data_current_frame,int current_frame_num,int sum_frames_num)
 {
-    qDebug()<<times<<data_current_frame.toHex()<<current_frame_num+1<<sum_frames_num;
+    all_data_to_plc.clear();
+    all_time_to_plc.clear();
+    all_data_to_plc.append(data_current_frame);
+    all_time_to_plc.append(times);
+    if(current_frame_num+1==sum_frames_num){
+        write_button();
+    }
+
+}
+
+void com_port::write_button() // чтение анимации из контроллера
+{
+    if(block_press_write!=1){
+        block_press_write=1;
+        write_to_com_port();
+    }
+    else
+        return;
+}
+void com_port::write_to_com_port() // чтение анимации из контроллера
+{
+    //==========================закрытие соединения====================================================
+    if(connect_close==1) // если отсоединил вручнную от com_port-а, то прекращаем все действия
+        return;
+    //=================================================================================================
+    if(ready!=1){
+        write_but_flag=1;
+        if(sec_resp!=1)
+        first_resp=1; // первый запрос (в нулевой кадр) нужен для того, чтобы при обращении
+        // к следующим кадрам через эту функцию не было путаницы в командах
+        status_new_one();
+        readData.clear();
+        return;
+    }
+    else{ // готовность к приёму команды
+        if(first_resp==1){
+            post_data="63ff000000000207";
+        }
+        else
+            post_data=command_for_read_frame.toHex();
+        readData.clear(); // чистим буфер
+        read_end=0;
+        res_data_from_plc=1;
+        WriteToCOMPort(); // пишем данные в ком-порт
+        qDebug()<<readData;
+    }
 }

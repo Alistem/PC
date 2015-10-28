@@ -20,11 +20,13 @@ private:
     QByteArray  m_readData,readData;
     QByteArray  all_data_from_plc;
     QByteArray for_frame_data,command_for_read_frame;
+    QList <int> all_time_to_plc;
+    QList <QByteArray>all_data_to_plc;
     QTimer m_timer,r_timer,stat_timer,stat_timer_2,stat_timer_read_data,stat_but_timer;
     QTimer reset_timer;
     bool connect_close;
     bool read_end,res_stat_plc,status_butt,res_data_from_plc,status_controller,ready;
-    bool block_press_read,block_press_status,verify_ctrl_sum,status_but_flag,read_but_flag;
+    bool block_press_read,block_press_write,block_press_status,verify_ctrl_sum,status_but_flag,read_but_flag,write_but_flag;
     bool block_press_reset,reset_but_flag,reset_butt,reset;
     bool first_resp,sec_resp,command_and_data_sector,OkCR;
     int i_stat,ctrl_sum_errors,i_frames,num_frames;
@@ -66,6 +68,8 @@ private slots:
     void data_plc_read();
     void read_com_port();
     void read_button();
+    void write_to_com_port();
+    void write_button();
     void status_button();
     void status_button_2();
     void reset_button();

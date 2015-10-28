@@ -96,6 +96,7 @@ MainWindow::MainWindow(QWidget *parent) :
     anim_start=0;
     block_anim=0;
     com_port_window=false; // при инициализации задаём флаг окна передачи данных в ноль. Окно не создано
+    com_port_window_was_make=false; // Окно когда-либо было создано
 
     timer = new QTimer(this); // таймер для анимации
     connect(timer, SIGNAL(timeout()), SLOT(animation_body())); // коннект для таймера анимации
@@ -2738,40 +2739,37 @@ void MainWindow::on_pushButton_paste_clicked()
 
 //=========================================     Работа с ком-портом    ==========================
 
-void MainWindow::on_com_port_Button_clicked()
-{
-    com_port_window_make("make");
+void MainWindow::on_com_port_Button_clicked() // Создать окно!
+{    
+    com_port_window_make();
+    com_port_window_was_make=true;
 }
 
 void MainWindow::com_port_window_status(bool flag)
 {
+    com_port_window_make();
     com_port_window=flag;
     //----------------------------flag----------------------------
 }
 
-void MainWindow::com_port_window_make(QString stat)
+void MainWindow::com_port_window_make()
 {
-    if(com_port_window==false && stat=="make"){
+    if(com_port_window==false){
         com_port_w *com_port = new com_port_w;
         com_port->show();
         connect(com_port,SIGNAL(flag_close_win(bool)),this,SLOT(com_port_window_status(bool)));
         connect(com_port,SIGNAL(times_from_plc(int,int,int)),this,SLOT(times_from_astra(int,int,int)));
         connect(com_port,SIGNAL(shim_from_plc(QByteArray,int)),this,SLOT(shim_from_astra(QByteArray,int)));
         connect(com_port,SIGNAL(res_data_to_plc()),this,SLOT(res_data_to_plc_main()));
+        if(com_port_window_was_make==false){
         connect(this,SIGNAL(data_to_astra_main(int,QByteArray,int,int)),com_port,SIGNAL(data_to_astra(int,QByteArray,int,int)));
+        }
         com_port_window=true;
     }
     else{
-        if(com_port_window==true && stat=="make")
+        if(com_port_window==true)
         return;
-        if(com_port_window==false && stat=="close"){
-            disconnect(com_port,SIGNAL(flag_close_win(bool)),this,SLOT(com_port_window_status(bool)));
-            disconnect(com_port,SIGNAL(times_from_plc(int,int,int)),this,SLOT(times_from_astra(int,int,int)));
-            disconnect(com_port,SIGNAL(shim_from_plc(QByteArray,int)),this,SLOT(shim_from_astra(QByteArray,int)));
-            disconnect(com_port,SIGNAL(res_data_to_plc()),this,SLOT(res_data_to_plc_main()));
-            disconnect(this,SIGNAL(data_to_astra_main(int,QByteArray,int,int)),com_port,SIGNAL(data_to_astra(int,QByteArray,int,int)));
 
-        }
     }
 }
 
@@ -2811,7 +2809,6 @@ void MainWindow::res_data_to_plc_main()
     rev_ret();
     rev_ret_time();
     for(int i=0;i<frames_time.size();++i){
-
     emit data_to_astra_main(frames_time.at(i),frames_list.at(i),i,num_sum);
     }
 }

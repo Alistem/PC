@@ -173,6 +173,7 @@ private slots:
     void on_action_blue_triggered();
     void on_com_port_Button_clicked();
     void com_port_window_status(bool);
+    void com_port_window_make();
 
 
     void on_toolButton_all_time_clicked();
@@ -223,7 +224,7 @@ private:
     bool block_anim,anim_stop,anim_pause,repeat,anim_start;
     QTimer *timer;
     //==================com-port-==============
-    bool com_port_window;
+    bool com_port_window,com_port_window_was_make;
 };
 
 #endif // MAINWINDOW_H
