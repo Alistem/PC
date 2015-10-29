@@ -25,7 +25,7 @@ private:
     QTimer m_timer,r_timer,stat_timer,stat_timer_2,stat_timer_read_data,stat_but_timer;
     QTimer reset_timer;
     bool connect_close;
-    bool read_end,res_stat_plc,status_butt,res_data_from_plc,status_controller,ready;
+    bool read_end,write_end,res_stat_plc,status_butt,res_data_from_plc,data_to_plc,status_controller,ready;
     bool block_press_read,block_press_write,block_press_status,verify_ctrl_sum,status_but_flag,read_but_flag,write_but_flag;
     bool block_press_reset,reset_but_flag,reset_butt,reset;
     bool first_resp,sec_resp,command_and_data_sector,OkCR;
@@ -66,6 +66,7 @@ private slots:
     void Read_finish();
     void status_plc_transmit();
     void data_plc_read();
+    void data_plc_write();
     void read_com_port();
     void read_button();
     void write_to_com_port();
