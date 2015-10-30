@@ -739,6 +739,15 @@ void com_port::write_button() // чтение анимации из контро
         return;
 }
 
+void com_port::packet_to_plc() // подготовка пакета к отправке
+{
+    if(i_write==0)
+        first_sector();
+    else
+        other_sector();
+}
+
+
 void com_port::write_to_com_port() // чтение анимации из контроллера
 {
 //    qDebug()<<all_data_to_plc;
