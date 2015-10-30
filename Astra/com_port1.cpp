@@ -716,13 +716,14 @@ void com_port::data_to_project() // Передача данных анимаци
 //=============================================Write Data to com-port==========================================
 
 void com_port::data_to_com_port(int times,QByteArray data_current_frame,int current_frame_num,int sum_frames_num)
-{
+{if(current_frame_num==0){
     all_data_to_plc.clear();
     all_time_to_plc.clear();
+    }
     all_data_to_plc.append(data_current_frame);
     all_time_to_plc.append(times);
     if(current_frame_num+1==sum_frames_num){
-        write_button();
+       write_button();
     }
 
 }
@@ -738,6 +739,7 @@ void com_port::write_button() // чтение анимации из контро
 }
 void com_port::write_to_com_port() // чтение анимации из контроллера
 {
+//    qDebug()<<all_data_to_plc;
     //==========================закрытие соединения====================================================
     if(connect_close==1) // если отсоединил вручнную от com_port-а, то прекращаем все действия
         return;
@@ -765,7 +767,6 @@ void com_port::write_to_com_port() // чтение анимации из кон�
 }
 void com_port::data_plc_write()
 {
-    qDebug()<<readData<<"data_plc_write";
     control_buff=readData;
     //==========================закрытие соединения====================================================
 
@@ -773,7 +774,9 @@ void com_port::data_plc_write()
         return;
     //=================================================================================================
     bool st;
-    i_stat+=1; // счётчик попыток установить положительный статус ПЛК
+    if()
+    i_write=0;
+
 
     //===================================Errors========================================================
     if(readData.contains("ErCM") || readData.contains("ErCR")){
@@ -789,11 +792,14 @@ void com_port::data_plc_write()
     //=================================================================================================
 
 
-    if(readData.endsWith("OkWR")){ // Если ответ OkWR, Значит приём данных успешно завершён
-//        qDebug()<<readData.right(4);
-        i_stat=0; // счётчик запросов обнуляем
+    if(readData.endsWith("OkWR"))
+    { // Если ответ OkWR, Значит контроллер готов к записи данных
+        qDebug()<<readData.right(4);
+//        i_stat=0; // счётчик запросов обнуляем
         ready=0; // флаг готовности к приёму команды обнуляем (но именно здесь, в конце) что значит, что логика выполнена
-//        res_data_from_plc=0; // запрос статуса обнуляем, поскольку результат получен
+        data_to_plc=0; // запрос статуса обнуляем, поскольку результат получен
+        first_sector();
+        i_stat+=1; // счётчик попыток установить положительный статус ПЛК
 //        for_frame_data.clear();
 //        for_frame_data=readData; // копируем из одного буфера в другой
 //        readData.clear(); // чистим буфер
@@ -874,5 +880,31 @@ void com_port::data_plc_write()
 //           emit error_label("No communication with the controller, most likely");
 //           return;
 //        }
-//    }
+    }
+}
+
+void com_port::first_sector()
+{
+    QByteArray ba,ba1;
+    QString templ,str_i;
+    int ii;
+    templ="00000000";
+
+    num_sectors=all_data_to_plc.size()/12;
+    str_i.setNum(num_sectors*512+512,16);
+    for(ii=0;ii<str_i.size();++ii){
+        templ.replace(templ.size()-1-ii,1,str_i.at(str_i.size()-1-ii));
+    }
+    str_i=templ;
+    templ="00000000";
+    post_data="63ff"+str_i+"02";
+    ba+=post_data;
+    ctrl_sum_xor(ba1.fromHex(ba));
+    ba=ba1.fromHex(ba);
+    ba+=ctrl_sum;
+    command_for_write_frame=ba;
+    ba.clear();
+//        qDebug()<<command_for_read_frame.toHex();
+    write_to_com_port();
+
 }

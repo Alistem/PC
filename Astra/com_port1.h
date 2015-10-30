@@ -20,6 +20,7 @@ private:
     QByteArray  m_readData,readData;
     QByteArray  all_data_from_plc;
     QByteArray for_frame_data,command_for_read_frame;
+
     QList <int> all_time_to_plc;
     QList <QByteArray>all_data_to_plc;
     QTimer m_timer,r_timer,stat_timer,stat_timer_2,stat_timer_read_data,stat_but_timer;
@@ -85,6 +86,7 @@ private slots:
     void analise_readed_data(QByteArray dat);
     void data_to_project();
     void data_to_com_port(int,QByteArray,int,int);
+    void first_sector();
 };
 
 #endif // COM_PORT1_H
