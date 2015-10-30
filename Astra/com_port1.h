@@ -86,6 +86,7 @@ private slots:
     void analise_readed_data(QByteArray dat);
     void data_to_project();
     void data_to_com_port(int,QByteArray,int,int);
+    void packet_to_plc();
     void first_sector();
     void other_sector();
 };
