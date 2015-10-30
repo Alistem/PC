@@ -733,10 +733,12 @@ void com_port::write_button() // чтение анимации из контро
     if(block_press_write!=1){
         block_press_write=1;
         write_to_com_port();
+        i_write=0; // Счётчик для количества кадров, отправленных на запись
     }
     else
         return;
 }
+
 void com_port::write_to_com_port() // чтение анимации из контроллера
 {
 //    qDebug()<<all_data_to_plc;
@@ -755,7 +757,7 @@ void com_port::write_to_com_port() // чтение анимации из кон�
     }
     else{ // готовность к приёму команды
         if(first_resp==1){
-            post_data="63ff00000000029e";
+            post_data="63ff00000000029e";      
         }
         else
             post_data=command_for_read_frame.toHex();
@@ -765,19 +767,13 @@ void com_port::write_to_com_port() // чтение анимации из кон�
         WriteToCOMPort(); // пишем данные в ком-порт  
     }
 }
+
 void com_port::data_plc_write()
-{
-    control_buff=readData;
+{  
     //==========================закрытие соединения====================================================
 
     if(connect_close==1) // если отсоединил вручнную от com_port-а, то прекращаем все действия
         return;
-    //=================================================================================================
-    bool st;
-    if()
-    i_write=0;
-
-
     //===================================Errors========================================================
     if(readData.contains("ErCM") || readData.contains("ErCR")){
         qDebug()<<"data_plc_write-error"<<readData.right(4);
@@ -791,99 +787,55 @@ void com_port::data_plc_write()
     }
     //=================================================================================================
 
+    bool st;
+
+//    control_buff=readData;
 
     if(readData.endsWith("OkWR"))
     { // Если ответ OkWR, Значит контроллер готов к записи данных
-        qDebug()<<readData.right(4);
-//        i_stat=0; // счётчик запросов обнуляем
+        qDebug()<<readData;
         ready=0; // флаг готовности к приёму команды обнуляем (но именно здесь, в конце) что значит, что логика выполнена
         data_to_plc=0; // запрос статуса обнуляем, поскольку результат получен
-        first_sector();
-        i_stat+=1; // счётчик попыток установить положительный статус ПЛК
-//        for_frame_data.clear();
-//        for_frame_data=readData; // копируем из одного буфера в другой
-//        readData.clear(); // чистим буфер
-//        post_data.clear();
-//        read_but_flag=0;
-//        block_press_read=0; // блокировка от двойного нажатия
-//        OkCR=0;
-
-//        if(for_frame_data.left(4)=="OkCR"){
-//            for_frame_data.remove(0,4); // режем всякие OkCR-ы
-//            OkCR=1;
-//        }
-//        for_frame_data.chop(4); // режем последние 4 символа (RROK) получаем чистый пакет данных + CRC
-//        //===================== Verify Control Sum =============================================
-//        ctrl_sum_verify(for_frame_data); // верификация контрольной суммы пакета
-//        if(verify_ctrl_sum==0){
-//            if(ctrl_sum_errors!=10){ // Если количество попыток запроса меньше 10
-//                qDebug()<<"ctrl_sum_errors";
-//                read_com_port(); // Заново пытаемся прочесть данные
-//            }else{
-//                res_data_from_plc=0; //если число запросов превысило лимит, то прекращаем попытки
-//                i_stat=0; // счётчик запросов тоже обнуляем
-//                ctrl_sum_errors=0;
-//                ready=0;
-//                read_but_flag=0;
-//                block_press_read=0; // блокировка от двойного нажатия
-//                post_data.clear();
-//                readData.clear();
-//                status_controller=0;
-//                OkCR=0;
-//                emit status(st=false); //отправка флага о статусе в мэйнвиндоу
-//                emit error_label("No communication with the controller, most likely");
-//                return;
-//            }
-//        }
-//        //=======================================================================================
-//        emit data_from_com(for_frame_data);
-//        //=======================================================================================
-
-//        if(first_resp==1){
-//            plc_data_edit(for_frame_data); // Обработка данных нулевого сектора
-//            return;
-//        }
-
-//        //=======================================================================================
-//        if(sec_resp==1){
-//            all_data_from_plc+=for_frame_data.left(for_frame_data.size()-1); // убираем контрольную сумму
-//            for(int i=0;i<12;++i) // Этот цикл вообще чисто для красоты
-//            reading_frames+=1; // Для типа плавного подсёта кадров (потому что читает по секторам, а там по 12 кадров)
-//            if(end_read_data_anim==1){
-//                command_and_read_data_sector(); // читаем следующий сектор данных с контроллера
-//                end_read_data_anim=0;
-//            }
-//            emit num_frame_read(reading_frames);
-////            qDebug()<<"data_frames"<<all_data_from_plc.toHex();
-//            return;
-//        }
-
-
-////        qDebug()<<for_frame_data.toHex();
-
-//    }else{
-//        if(i_stat<10){ // Если количество попыток запроса меньше 10
-////            qDebug()<<"!=RROK"<<readData;
-//            read_com_port(); // Заново пытаемся получить статус
-//        }else{
-//           res_data_from_plc=0; //если число запросов превысило лимит, то прекращаем попытки
-//           i_stat=0; // счётчик запросов тоже обнуляем
-//           ctrl_sum_errors=0;
-//           ready=0;
-//           read_but_flag=0;
-//           block_press_read=0; // блокировка от двойного нажатия
-//           post_data.clear();
-//           readData.clear();
-//           status_controller=0;
-//           OkCR=0;
-//           emit status(st=false); //отправка флага о статусе в мэйнвиндоу
-//           emit error_label("No communication with the controller, most likely");
-//           return;
-//        }
+        if(i_write==0)
+            first_sector();
+        else
+            other_sector();
+    }
+    i_write+=1;
+    if(readData.endsWith("??????????????????"))
+        write_button();
+    if(i_write==all_data_to_plc.size()-1){
+        i_write=0;
+        reset_button();
     }
 }
 
 void com_port::first_sector()
+{
+    QByteArray ba,ba1;
+    QString templ,str_i;
+    int ii;
+    templ="00000000";
+
+    num_sectors=all_data_to_plc.size()/12;
+    str_i.setNum(num_sectors*512+512,16);
+    for(ii=0;ii<str_i.size();++ii){
+        templ.replace(templ.size()-1-ii,1,str_i.at(str_i.size()-1-ii));
+    }
+    str_i=templ;
+    templ="00000000";
+    post_data="63ff"+str_i+"02";
+    ba+=post_data;
+    ctrl_sum_xor(ba1.fromHex(ba));
+    ba=ba1.fromHex(ba);
+    ba+=ctrl_sum;
+    command_for_write_frame=ba;
+    ba.clear();
+//        qDebug()<<command_for_read_frame.toHex();
+    write_to_com_port();
+}
+
+void com_port::other_sector()
 {
     QByteArray ba,ba1;
     QString templ,str_i;

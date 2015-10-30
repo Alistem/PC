@@ -19,7 +19,7 @@ private:
     int num_com_port;
     QByteArray  m_readData,readData;
     QByteArray  all_data_from_plc;
-    QByteArray for_frame_data,command_for_read_frame;
+    QByteArray for_frame_data,command_for_read_frame,command_for_write_frame;
 
     QList <int> all_time_to_plc;
     QList <QByteArray>all_data_to_plc;
@@ -30,7 +30,7 @@ private:
     bool block_press_read,block_press_write,block_press_status,verify_ctrl_sum,status_but_flag,read_but_flag,write_but_flag;
     bool block_press_reset,reset_but_flag,reset_butt,reset;
     bool first_resp,sec_resp,command_and_data_sector,OkCR,OkWR;
-    int i_stat,ctrl_sum_errors,i_frames,num_frames;
+    int i_stat,i_write,ctrl_sum_errors,i_frames,num_frames;
     int num_sectors,reading_frames,end_read_data_anim;
     QByteArray ctrl_sum,frames_from_plc,control_buff,all_data_plc;
     QByteArray times_of_frames,data_of_frames,shim_of_frames;
@@ -87,6 +87,7 @@ private slots:
     void data_to_project();
     void data_to_com_port(int,QByteArray,int,int);
     void first_sector();
+    void other_sector();
 };
 
 #endif // COM_PORT1_H
