@@ -77,7 +77,6 @@ void com_port::COMConnector(){
 
 void com_port::WriteToCOMPort(){
     if(stop==true){
-
         QByteArray ba,ba1;
         ba+=post_data; //==========!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=============
         qint64 num=com1->write(ba1.fromHex(ba)); // тут мы пишем данные в ком-порт и !!! после записи сравниваем количество байт записанных с отправленными. Если всё ок - рапортуем в письменном виде об успешной передаче данных
@@ -138,6 +137,7 @@ void com_port::readError(QSerialPort::SerialPortError serialPortError)
 
 void com_port::Read_finish()
 {
+
     if(connect_close==1) // если отсоединил вручнную от com_port-а, то прекращаем все действия
         return;
     r_timer.stop();
@@ -152,8 +152,9 @@ void com_port::Read_finish()
         end_read_data_anim=1; // читаем следующий сектор данных с контроллера
     if(res_data_from_plc==1)// условие, что функция чтения данных запущена
         data_plc_read();  
-    if(data_to_plc==1)// условие, что функция чтения данных запущена
+    if(data_to_plc==1){// условие, что функция чтения данных запущена
         data_plc_write();
+    }
 }
 
 //===============================================================================================
@@ -728,7 +729,7 @@ void com_port::data_to_com_port(int times,QByteArray data_current_frame,int curr
 
 }
 
-void com_port::write_button() // чтение анимации из контроллера
+void com_port::write_button() // отправка данных в контроллер
 {
     if(block_press_write!=1){
         block_press_write=1;
@@ -741,16 +742,15 @@ void com_port::write_button() // чтение анимации из контро
 
 void com_port::packet_to_plc() // подготовка пакета к отправке
 {
-    if(i_write==0)
-        first_sector();
-    else
-        other_sector();
+//    if(i_write==0)
+//        first_sector();
+//    else
+//        other_sector();
 }
 
 
-void com_port::write_to_com_port() // чтение анимации из контроллера
+void com_port::write_to_com_port() // клманда на запись данных в i-тый сектор
 {
-//    qDebug()<<all_data_to_plc;
     //==========================закрытие соединения====================================================
     if(connect_close==1) // если отсоединил вручнную от com_port-а, то прекращаем все действия
         return;
@@ -759,75 +759,114 @@ void com_port::write_to_com_port() // чтение анимации из кон�
         write_but_flag=1;
         if(sec_resp!=1)
         first_resp=1; // первый запрос (в нулевой кадр) нужен для того, чтобы при обращении
-        // к следующим кадрам через эту функцию не было путаницы в командах
-        status_new_one();
         readData.clear();
+        // к следующим кадрам через эту функцию не было путаницы в командах
+        status_new_one(); // Сначала определяем, подключен ли контроллер
         return;
     }
-    else{ // готовность к приёму команды
-        if(first_resp==1){
-            post_data="63ff00000000029e";      
-        }
-        else
-            post_data=command_for_read_frame.toHex();
+    else{ // готовность к приёму команды  
         readData.clear(); // чистим буфер
         write_end=0;
         data_to_plc=1;
-        WriteToCOMPort(); // пишем данные в ком-порт  
+        data_plc_write();
     }
 }
 
 void com_port::data_plc_write()
 {  
+    qDebug()<<readData;
     //==========================закрытие соединения====================================================
-
     if(connect_close==1) // если отсоединил вручнную от com_port-а, то прекращаем все действия
         return;
     //===================================Errors========================================================
-    if(readData.contains("ErCM") || readData.contains("ErCR")){
+    if(readData.contains("ErCM") || readData.contains("ErCR")|| readData.contains("ErWC")){
         qDebug()<<"data_plc_write-error"<<readData.right(4);
         ready=0;
         write_but_flag=0;
         data_to_plc=0;
         OkWR=0;
         emit error_label(readData.right(4));
+        readData.clear();
         write_to_com_port();
+        i_stat+=1;
         return;
     }
     //=================================================================================================
 
     bool st;
-
-//    control_buff=readData;
-
-    if(readData.endsWith("OkWR"))
-    { // Если ответ OkWR, Значит контроллер готов к записи данных
+    if(readData.endsWith("OkWR")){ // Если ответ OkWR, Значит контроллер готов к записи данных
         qDebug()<<readData;
-        ready=0; // флаг готовности к приёму команды обнуляем (но именно здесь, в конце) что значит, что логика выполнена
-        data_to_plc=0; // запрос статуса обнуляем, поскольку результат получен
-        if(i_write==0)
-            first_sector();
-        else
-            other_sector();
+        OkWR=1;
+        readData.clear();
+        if(i_write==0){
+            first_sector_data();
+            i_write+=1;
+            OkWR=0;
+            WriteToCOMPort(); // пишем данные в ком-порт
+            return;
+        }
+        else{
+            other_sector_data();
+            i_write+=1;
+            OkWR=0;
+            WriteToCOMPort(); // пишем данные в ком-порт
+            return;
+        }
     }
-    i_write+=1;
-    if(readData.endsWith("??????????????????"))
-        write_button();
-    if(i_write==all_data_to_plc.size()-1){
+
+    if(i_write==all_data_to_plc.size()+1){
+        qDebug()<<"i_write==all_data_to_plc.size()";
         i_write=0;
+        data_to_plc=0; //если число запросов превысило лимит, то прекращаем попытки
+        readData.clear();
         reset_button();
+        return;
     }
+
+//    if(OkWR==0){ // Если команду на запись не отправляли, то отправляем
+//        command_write_sector();
+//        WriteToCOMPort(); // пишем данные в ком-порт
+//        return;
+//    }
+
+    if(readData.endsWith("WWOK")) // данные успешно записались
+
+
+
+        //        write_button();
+//    else{
+//        if(i_stat<10){ // Если количество попыток запроса меньше 10
+//            qDebug()<<"!=RROK"<<readData<<i_stat;
+//            write_to_com_port(); // Заново пытаемся получить статус
+//        }else{
+//            qDebug()<<"i_stat>10";
+//           data_to_plc=0; //если число запросов превысило лимит, то прекращаем попытки
+//           i_stat=0; // счётчик запросов тоже обнуляем
+//           ctrl_sum_errors=0;
+//           ready=0;
+//           write_but_flag=0;
+//           block_press_write=0; // блокировка от двойного нажатия
+//           post_data.clear();
+//           readData.clear();
+//           status_controller=0;
+//           OkWR=0;
+//           emit status(st=false); //отправка флага о статусе в мэйнвиндоу
+//           emit error_label("No communication with the controller, most likely");
+//           return;
+//        }
+//    }
+
 }
 
-void com_port::first_sector()
+
+void com_port::command_write_sector()
 {
     QByteArray ba,ba1;
     QString templ,str_i;
     int ii;
     templ="00000000";
 
-    num_sectors=all_data_to_plc.size()/12;
-    str_i.setNum(num_sectors*512+512,16);
+    str_i.setNum(i_write*512,16);
     for(ii=0;ii<str_i.size();++ii){
         templ.replace(templ.size()-1-ii,1,str_i.at(str_i.size()-1-ii));
     }
@@ -840,32 +879,43 @@ void com_port::first_sector()
     ba+=ctrl_sum;
     command_for_write_frame=ba;
     ba.clear();
-//        qDebug()<<command_for_read_frame.toHex();
-    write_to_com_port();
+    post_data=command_for_write_frame.toHex();
+        qDebug()<<post_data;
 }
 
-void com_port::other_sector()
+void com_port::first_sector_data()
 {
-    QByteArray ba,ba1;
+//    QByteArray buff;
+//    buff+=addr_last_sector;
+//    qDebug()<<buff<<"first_sector_data()";
+    QByteArray ba,ba1,data;
     QString templ,str_i;
     int ii;
     templ="00000000";
 
     num_sectors=all_data_to_plc.size()/12;
     str_i.setNum(num_sectors*512+512,16);
-    for(ii=0;ii<str_i.size();++ii){
+    for(ii=0;ii<str_i.size();++ii)
         templ.replace(templ.size()-1-ii,1,str_i.at(str_i.size()-1-ii));
-    }
     str_i=templ;
     templ="00000000";
-    post_data="63ff"+str_i+"02";
-    ba+=post_data;
-    ctrl_sum_xor(ba1.fromHex(ba));
+    ba+=str_i;
     ba=ba1.fromHex(ba);
+    data.resize(396);
+    data.fill(0);
+    ba+=data;
+    ctrl_sum_xor(ba);
+//    qDebug()<<ctrl_sum.toHex();
     ba+=ctrl_sum;
-    command_for_write_frame=ba;
+    post_data.clear();
+    post_data=ba.toHex();
     ba.clear();
-//        qDebug()<<command_for_read_frame.toHex();
-    write_to_com_port();
-
+    ctrl_sum.clear();
+//        qDebug()<<post_data.size()/2<<post_data;
 }
+void com_port::other_sector_data()
+{
+qDebug()<<"вот и второй сектор";
+}
+
+

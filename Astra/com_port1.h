@@ -87,8 +87,9 @@ private slots:
     void data_to_project();
     void data_to_com_port(int,QByteArray,int,int);
     void packet_to_plc();
-    void first_sector();
-    void other_sector();
+    void first_sector_data();
+    void other_sector_data();
+    void command_write_sector();
 };
 
 #endif // COM_PORT1_H
