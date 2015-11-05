@@ -961,8 +961,6 @@ void com_port::other_sector_data()
             for(int i=0;i<h;++i)
                 packet.append(255);
         }
-        if(k==packet.size())
-            return;
     }
     qDebug()<<packet.toHex();
 }
