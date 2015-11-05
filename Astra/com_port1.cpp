@@ -835,7 +835,7 @@ void com_port::data_plc_write()
         }
     }
 
-    if(i_write==all_data_to_plc.size()+1){
+    if(i_write>all_data_to_plc.size()){
         qDebug()<<"i_write==all_data_to_plc.size()";
         i_write=0;
         i_stat=0; // счётчик запросов тоже обнуляем
@@ -889,7 +889,6 @@ void com_port::data_plc_write()
     }
 }
 
-
 void com_port::command_write_sector()
 {
     QByteArray ba,ba1;
@@ -941,7 +940,31 @@ void com_port::first_sector_data()
 }
 void com_port::other_sector_data()
 {
-qDebug()<<"вот и второй сектор";
+    QByteArray packet;
+    for(int k=0;k<409;k+=34){
+        QByteArray ba,ba1;
+        QString str("0000"),str1;
+        if(i_write<all_data_to_plc.size()+1){
+        str1.setNum(all_time_to_plc[i_write-1],16);
+        for(int i=str1.size()-1;i>=0;--i){
+            str.replace(str.size()-i-1,1,str1.at(i));
+        }
+        ba+=str;
+        ba=ba1.fromHex(ba);
+        ba+=all_data_to_plc[i_write-1];
+        packet+=ba;
+        i_write+=1;
+        }
+        else{
+            int h=408-packet.size();
+            qDebug()<<"i_write>size"<<h;
+            for(int i=0;i<h;++i)
+                packet.append(255);
+        }
+        if(k==packet.size())
+            return;
+    }
+    qDebug()<<packet.toHex();
 }
 
 

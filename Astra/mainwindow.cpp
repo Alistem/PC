@@ -1893,7 +1893,7 @@ void MainWindow::new_frame() // пишем новый кадр в мап
     QByteArray buff;
     double time_buff;
     buff.fill(0,num_of_ch);
-    time_buff=0.01;
+    time_buff=1;
     frames_list.append(buff);
     frames_time.append(time_buff);
     frame_text(num_frame-1,buff);
@@ -2743,6 +2743,8 @@ void MainWindow::on_com_port_Button_clicked() // Создать окно!
 {    
     com_port_window_make();
     com_port_window_was_make=true;
+    rev_ret();
+    rev_ret_time();
 }
 
 void MainWindow::com_port_window_status(bool flag)
