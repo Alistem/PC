@@ -311,7 +311,7 @@ void com_port::status_new_two()//подготовка контроллера к 
             ready=1; // готовность к приёму команды // Флаг ставится в 1 когда от контроллера получен сигнал "ОкОк"
             res_stat_plc=0;
             stat_timer_2.stop();
-            i_stat=0;
+//            i_stat=0;
             readData.clear(); // чистим буфер
             post_data.clear();
             if(reset_but_flag==1)
@@ -325,7 +325,7 @@ void com_port::status_new_two()//подготовка контроллера к 
             return;
         }
         else{
-            if(i_stat!=10){ // Если количество попыток запроса меньше 10
+            if(i_stat<10){ // Если количество попыток запроса меньше 10
                 emit status(st=false);//отправка флага о статусе в мэйнвиндоу
                 if(ready!=1) // блокировка от отправки запроса при положительном ответе от контроллера
                 status_new_one(); // Отправляем флаг в контроллер
@@ -711,6 +711,9 @@ void com_port::data_to_project() // Передача данных анимаци
     data_of_frames.clear();
 }
 
+
+
+
 //=================================================================================================
 
 
@@ -751,6 +754,7 @@ void com_port::packet_to_plc() // подготовка пакета к отпр�
 
 void com_port::write_to_com_port() // клманда на запись данных в i-тый сектор
 {
+//    qDebug()<<"write_to_com_port";
     //==========================закрытие соединения====================================================
     if(connect_close==1) // если отсоединил вручнную от com_port-а, то прекращаем все действия
         return;
@@ -768,32 +772,49 @@ void com_port::write_to_com_port() // клманда на запись данн�
         readData.clear(); // чистим буфер
         write_end=0;
         data_to_plc=1;
-        data_plc_write();
     }
 }
 
 void com_port::data_plc_write()
 {  
-    qDebug()<<readData;
+    bool st;
+    i_stat+=1;
     //==========================закрытие соединения====================================================
     if(connect_close==1) // если отсоединил вручнную от com_port-а, то прекращаем все действия
         return;
     //===================================Errors========================================================
     if(readData.contains("ErCM") || readData.contains("ErCR")|| readData.contains("ErWC")){
         qDebug()<<"data_plc_write-error"<<readData.right(4);
-        ready=0;
-        write_but_flag=0;
-        data_to_plc=0;
-        OkWR=0;
-        emit error_label(readData.right(4));
-        readData.clear();
-        write_to_com_port();
-        i_stat+=1;
-        return;
+        if(i_stat<10){ // Если количество попыток запроса меньше 10
+            qDebug()<<readData<<i_stat;
+            ready=0;
+            write_but_flag=0;
+            data_to_plc=0;
+            OkWR=0;
+            i_write-=1;
+            emit error_label(readData.right(4));
+            readData.clear();
+            write_to_com_port(); // Заново пытаемся получить статус
+            return;
+        }else{
+            qDebug()<<"i_stat>10";
+            data_to_plc=0; //если число запросов превысило лимит, то прекращаем попытки
+            i_stat=0; // счётчик запросов тоже обнуляем
+            ctrl_sum_errors=0;
+            ready=0;
+            write_but_flag=0;
+            block_press_write=0; // блокировка от двойного нажатия
+            post_data.clear();
+            readData.clear();
+            status_controller=0;
+            OkWR=0;
+            emit status(st=false); //отправка флага о статусе в мэйнвиндоу
+            emit error_label("No communication with the controller, most likely");
+            return;
+        }
     }
     //=================================================================================================
 
-    bool st;
     if(readData.endsWith("OkWR")){ // Если ответ OkWR, Значит контроллер готов к записи данных
         qDebug()<<readData;
         OkWR=1;
@@ -801,14 +822,14 @@ void com_port::data_plc_write()
         if(i_write==0){
             first_sector_data();
             i_write+=1;
-            OkWR=0;
+            readData.clear();
             WriteToCOMPort(); // пишем данные в ком-порт
             return;
         }
         else{
             other_sector_data();
             i_write+=1;
-            OkWR=0;
+            readData.clear();
             WriteToCOMPort(); // пишем данные в ком-порт
             return;
         }
@@ -817,45 +838,55 @@ void com_port::data_plc_write()
     if(i_write==all_data_to_plc.size()+1){
         qDebug()<<"i_write==all_data_to_plc.size()";
         i_write=0;
+        i_stat=0; // счётчик запросов тоже обнуляем
+        ready=0;
         data_to_plc=0; //если число запросов превысило лимит, то прекращаем попытки
+        post_data.clear();
         readData.clear();
+        OkWR=0;
+        write_but_flag=0;
         reset_button();
         return;
     }
 
-//    if(OkWR==0){ // Если команду на запись не отправляли, то отправляем
-//        command_write_sector();
-//        WriteToCOMPort(); // пишем данные в ком-порт
-//        return;
-//    }
+    if(OkWR==0){ // Если команду на запись не отправляли, то отправляем
+//        qDebug()<<readData<<"command_write_sector";
+        command_write_sector();
+        WriteToCOMPort(); // пишем данные в ком-порт
+        return;
+    }
 
-    if(readData.endsWith("WWOK")) // данные успешно записались
-
-
-
-        //        write_button();
-//    else{
-//        if(i_stat<10){ // Если количество попыток запроса меньше 10
-//            qDebug()<<"!=RROK"<<readData<<i_stat;
-//            write_to_com_port(); // Заново пытаемся получить статус
-//        }else{
-//            qDebug()<<"i_stat>10";
-//           data_to_plc=0; //если число запросов превысило лимит, то прекращаем попытки
-//           i_stat=0; // счётчик запросов тоже обнуляем
-//           ctrl_sum_errors=0;
-//           ready=0;
-//           write_but_flag=0;
-//           block_press_write=0; // блокировка от двойного нажатия
-//           post_data.clear();
-//           readData.clear();
-//           status_controller=0;
-//           OkWR=0;
-//           emit status(st=false); //отправка флага о статусе в мэйнвиндоу
-//           emit error_label("No communication with the controller, most likely");
-//           return;
-//        }
-//    }
-
+    if(readData.endsWith("WWOK")){// данные успешно записались
+        qDebug()<<readData.right(4);
+        post_data.clear();
+        readData.clear();
+        ready=0;
+        OkWR=0;
+        write_to_com_port();
+        return;
+    }
+    else{
+        if(i_stat<10){ // Если количество попыток запроса меньше 10
+            qDebug()<<"!=RROK"<<readData<<i_stat;
+            i_stat+=1;
+            write_to_com_port(); // Заново пытаемся получить статус
+        }else{
+            qDebug()<<"i_stat>10";
+            data_to_plc=0; //если число запросов превысило лимит, то прекращаем попытки
+            i_stat=0; // счётчик запросов тоже обнуляем
+            ctrl_sum_errors=0;
+            ready=0;
+            write_but_flag=0;
+            block_press_write=0; // блокировка от двойного нажатия
+            post_data.clear();
+            readData.clear();
+            status_controller=0;
+            OkWR=0;
+            emit status(st=false); //отправка флага о статусе в мэйнвиндоу
+            emit error_label("No communication with the controller, most likely");
+            return;
+        }
+    }
 }
 
 
@@ -885,9 +916,6 @@ void com_port::command_write_sector()
 
 void com_port::first_sector_data()
 {
-//    QByteArray buff;
-//    buff+=addr_last_sector;
-//    qDebug()<<buff<<"first_sector_data()";
     QByteArray ba,ba1,data;
     QString templ,str_i;
     int ii;
@@ -901,17 +929,15 @@ void com_port::first_sector_data()
     templ="00000000";
     ba+=str_i;
     ba=ba1.fromHex(ba);
-    data.resize(396);
+    data.resize(404);
     data.fill(0);
     ba+=data;
     ctrl_sum_xor(ba);
-//    qDebug()<<ctrl_sum.toHex();
     ba+=ctrl_sum;
     post_data.clear();
     post_data=ba.toHex();
     ba.clear();
     ctrl_sum.clear();
-//        qDebug()<<post_data.size()/2<<post_data;
 }
 void com_port::other_sector_data()
 {
