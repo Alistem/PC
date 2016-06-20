@@ -16,11 +16,13 @@ QT+= serialport
 SOURCES += main.cpp\
         mainwindow.cpp \
     com_port_main.cpp \
-    com_port1.cpp
+    com_port1.cpp \
+    comport.cpp
 
 HEADERS  += mainwindow.h \
     com_port_main.h \
-    com_port1.h
+    com_port1.h \
+    comport.h
 
 FORMS    += mainwindow.ui \
     com_port1.ui
