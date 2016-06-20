@@ -17,12 +17,21 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     com_port_main.cpp \
     com_port1.cpp \
-    comport.cpp
+    comport.cpp \
+    srw.cpp \
+    splay.cpp \
+    slisten.cpp \
+    proccommand.cpp
 
 HEADERS  += mainwindow.h \
     com_port_main.h \
     com_port1.h \
-    comport.h
+    comport.h \
+    state.h \
+    srw.h \
+    splay.h \
+    slisten.h \
+    proccommand.h
 
 FORMS    += mainwindow.ui \
     com_port1.ui

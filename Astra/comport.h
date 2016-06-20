@@ -7,12 +7,14 @@
 class ComPort
 {
 public:
-    explicit ComPort(int numer);
+    explicit ComPort(int number);
 	~ComPort();
-	void read();
-    void write();
+    QByteArray read();
+    int write(QByteArray data);
 protected:
 	ComPort();
+    ComPort(const ComPort &);
+    operator= (const ComPort);
 private:
     void connector();
     void close();
