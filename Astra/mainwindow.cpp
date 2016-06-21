@@ -2764,7 +2764,9 @@ void MainWindow::com_port_window_make()
         connect(com_port,SIGNAL(shim_from_plc(QByteArray,int)),this,SLOT(shim_from_astra(QByteArray,int)));
         connect(com_port,SIGNAL(res_data_to_plc()),this,SLOT(res_data_to_plc_main()));
         if(com_port_window_was_make==false){
-        connect(this,SIGNAL(data_to_astra_main(int,QByteArray,int,int)),com_port,SIGNAL(data_to_astra(int,QByteArray,int,int)));
+        connect(this,SIGNAL(data_to_astra_main(QList<
+
+                                               >)),com_port,SIGNAL(data_to_astra(QList<FrameInfo>)));
         }
         com_port_window=true;
     }
@@ -2808,9 +2810,12 @@ void MainWindow::shim_from_astra(QByteArray data, int num_of_frame)
 
 void MainWindow::res_data_to_plc_main()
 {
+    QList<FrameInfo> animation;
     rev_ret();
     rev_ret_time();
     for(int i=0;i<frames_time.size();++i){
-    emit data_to_astra_main(frames_time.at(i),frames_list.at(i),i,num_sum);
+        FrameInfo frame = {frames_time.at(i), frames_list.at(i), i, num_sum};
+        animation.append(frame);
     }
+    emit data_to_astra_main(animation);
 }

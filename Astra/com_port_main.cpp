@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <iostream>
 #include "com_port1.h"
+#include "proccommand.h"
 #include "mainwindow.h"
 //#include <QApplication>
 #include <QCloseEvent>
@@ -19,12 +20,13 @@ com_port_w::com_port_w(QWidget *parent) :
     ui->setupUi(this);
     com_port *com_port1 = new com_port(this); // создаём объект класса com_port. Для реализации ком-порта
     com_port1->hide(); // скрываем объект с формы, а то он меню загораживает
+    ProcCommand *proccommand = new ProcCommand(this);
     ui->progressBar_frames->hide();
     ui->connectButton->setDefault(true);
-    connect(this->ui->connectButton,SIGNAL(clicked()),com_port1,SIGNAL(connect_com()));
+    connect(this->ui->connectButton,SIGNAL(clicked()),this,SLOT(connect_to_proccommand()));
     connect(this->ui->disconnectButton,SIGNAL(clicked()),com_port1,SIGNAL(disconnect_com()));
     //=====================================Write Data===================================================
-    connect(this,SIGNAL(data_to_astra(int,QByteArray,int,int)),com_port1,SLOT(data_to_com_port(int,QByteArray,int,int)));
+    connect(this,SIGNAL(data_to_astra(QList<FrameInfo>)),proccommand,SLOT(slot_write(QList<FrameInfo>)));
     //=========================================================================================
     connect(this->ui->writeButton,SIGNAL(clicked()),this,SIGNAL(res_data_to_plc()));
     connect(this->ui->readButton,SIGNAL(clicked()),com_port1,SLOT(read_button()));
@@ -36,7 +38,7 @@ com_port_w::com_port_w(QWidget *parent) :
     connect(com_port1,SIGNAL(connect_label(QString)),this,SLOT(connect_status(QString)));
     connect(com_port1,SIGNAL(data_from_com(QByteArray)),this,SLOT(read_data(QByteArray)));
     connect(com_port1,SIGNAL(com_port_num()),this,SLOT(com_port_num_res()));
-    connect(this,SIGNAL(num_com_port(int)),com_port1,SLOT(num_com_port_com(int)));
+    connect(this,SIGNAL(num_com_proccommand(int)),proccommand,SLOT(slot_connect(int)));
     connect(com_port1,SIGNAL(error_label(QString)),this,SLOT(error_label_main(QString))); 
     connect(com_port1,SIGNAL(status(bool)),this,SLOT(status_plc(bool)));
     connect(com_port1,SIGNAL(frames_label(int)),this,SLOT(frames_label_main(int)));
@@ -117,6 +119,13 @@ void com_port_w::com_port_num_res()
     int num=ui->comboBox->currentIndex();
     emit num_com_port(num);
 }
+
+void com_port_w::connect_to_proccommand()
+{
+    int num=ui->comboBox->currentIndex();
+    emit num_com_proccommand(num);
+}
+
 void com_port_w::closeEvent(QCloseEvent *ev)
  {
     bool flag=false;

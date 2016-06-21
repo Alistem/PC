@@ -7,7 +7,7 @@ class ReadFlash : public Operation
 public:
     ReadFlash();
 
-    QByteArray sendCommandToPort(ComPort, QString);
+    QByteArray sendCommandToPort(ComPort*, QString);
 };
 
 #endif // READFLASH_H

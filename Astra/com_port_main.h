@@ -25,11 +25,13 @@ signals:
     void shim_from_plc(QByteArray,int);
     void res_data_to_plc();
     void data_to_astra(int,QByteArray,int,int);
+    void num_com_proccommand(int);
     
 private slots:
 
     void one(QByteArray basta);
     void connect_status(QString status);
+    void connect_to_proccommand();
     void com_port_num_res();
     void closeEvent(QCloseEvent *ev);
     void error_label_main(QString error);

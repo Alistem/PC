@@ -3,13 +3,13 @@
 #include <QtCore>
 #include "comport.h"
 
-class Operation
+class Operation : public QObject
 {
 public:
     Operation() {}
     virtual ~Operation () {}
 
-    virtual QByteArray sendCommandToPort(ComPort,QString) = 0;
+    virtual QByteArray sendCommandToPort(ComPort*, QString) = 0;
 };
 
 #endif // OPERATION

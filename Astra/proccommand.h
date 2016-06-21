@@ -2,7 +2,8 @@
 #define PROCCOMMAND_H
 
 #include <QObject>
-#include "state.h"
+#include "operation.h"
+#include "mainwindow.h"
 
 class ProcCommand : public QObject
 {
@@ -12,17 +13,19 @@ public:
 
 signals:
     void signal_status();
+    void com_port_num();
 
 public slots:
-    //void slot_connect();
-    //void slot_disconnect();
+    void slot_connect(int num);
+    void slot_disconnect();
     void slot_status();
-    //void slot_reset();
-    //void slot_read();
-    //void slot_write();
+    void slot_reset();
+    void slot_read();
+    void slot_write(QList<FrameInfo> animation);
 
 private:
-    State *state;
+    Operation *operation;
+    ComPort *com_port;
 };
 
 #endif // PROCCOMMAND_H

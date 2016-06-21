@@ -9,6 +9,14 @@ namespace Ui {
 class MainWindow;
 }
 
+struct FrameInfo
+{
+    int ftime;
+    QByteArray flist;
+    int fnum;
+    int fsum_num;
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -184,7 +192,7 @@ private slots:
     void on_pushButton_inv_clicked();
 
 signals:
-    void data_to_astra_main(int,QByteArray,int,int);
+    void data_to_astra_main(QList<FrameInfo>);
 
 private:
     Ui::MainWindow *ui;
