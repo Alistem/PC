@@ -7,7 +7,7 @@ class Reset : public Operation
 public:
     Reset();
 
-    QByteArray sendCommandToPort(ComPort*, QString);
+    QByteArray operation(ComPort*, QString);
 };
 
 #endif // RESET_H

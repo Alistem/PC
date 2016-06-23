@@ -24,7 +24,6 @@ public slots:
     void slot_write(QList<FrameInfo> animation);
 
 private:
-    Operation *operation;
     ComPort *com_port;
 };
 

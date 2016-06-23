@@ -7,7 +7,7 @@ class WriteFlash : public Operation
 public:
     WriteFlash();
 
-    QByteArray sendCommandToPort(ComPort*, QString);
+    QByteArray operation(ComPort*, QString);
 };
 
 #endif // WRITEFLASH_H

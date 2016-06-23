@@ -11,22 +11,26 @@ class ComPort : public QObject
 public:
     explicit ComPort(int number);
 	~ComPort();
-    void ReadCOMPort();
-    void Read_finish();
+
+    bool dataRecived();
+    QByteArray read();
     int write(QByteArray data);
-    QByteArray  m_readData;
+
 protected:
 	ComPort();
     ComPort(const ComPort &);
     operator= (const ComPort);
-private:
+
+private slots:
+    void slot_readFromSerialPort();
     void connector();
     void close();
-    QTimer r_timer;
+
 private:
+    QByteArray  read_data;
+    QTimer timer;
     QSerialPort *serial_port;
-    QSerialPortInfo *port_info;
-	
+    QSerialPortInfo *port_info;	
 };
 
 #endif // COMPORT_H

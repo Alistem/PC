@@ -5,10 +5,10 @@ Reset::Reset()
 
 }
 
-void Reset::sendCommandToPort(ComPort *serial_port, QString data)
+QByteArray Reset::operation(ComPort* port, QString string)
 {
-    QString listen = "63";
+    QString listen = "63ff00000000039f";
     QByteArray buffer;
     buffer+=listen;
-    serial_port->write(buffer);
+    port->write(buffer);
 }

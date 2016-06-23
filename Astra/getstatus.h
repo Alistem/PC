@@ -6,7 +6,8 @@ class GetStatus : public Operation
 {
 public:
     GetStatus();
-    QByteArray sendCommandToPort(ComPort*, QString);
+
+    QByteArray operation(ComPort*, QString);
 };
 
 #endif // GETSTATUS_H
