@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "ui_com_port1.h"
+#include "proccommand.h"
 
 class com_port_w : public QWidget
 {
@@ -24,7 +25,7 @@ signals:
     void times_from_plc(int,int,int);
     void shim_from_plc(QByteArray,int);
     void res_data_to_plc();
-    void data_to_astra(int,QByteArray,int,int);
+    void data_to_astra(QList<FrameInfo>);
     void num_com_proccommand(int);
     
 private slots:
