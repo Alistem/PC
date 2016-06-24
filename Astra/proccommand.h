@@ -2,8 +2,10 @@
 #define PROCCOMMAND_H
 
 #include <QObject>
-#include "operation.h"
-#include "mainwindow.h"
+#include "comport.h"
+
+
+class Gui;
 
 class ProcCommand : public QObject
 {
@@ -21,10 +23,11 @@ public slots:
     void slot_status();
     void slot_reset();
     void slot_read();
-    void slot_write(QList<FrameInfo> animation);
+    void slot_write(QList<QString> animation);
 
 private:
     ComPort *com_port;
+
 };
 
 #endif // PROCCOMMAND_H

@@ -1,30 +1,23 @@
 #ifndef COMPORT_H
 #define COMPORT_H
 
+#include <QtCore>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QTimer>
-#include <QtCore>
 
 class ComPort : public QObject
 {
 public:
-    explicit ComPort(int number);
+    ComPort(QString port, QObject *obj = 0);
 	~ComPort();
 
     bool dataRecived();
     QByteArray read();
     int write(QByteArray data);
 
-protected:
-	ComPort();
-    ComPort(const ComPort &);
-    operator= (const ComPort);
-
-private slots:
+public slots:
     void slot_readFromSerialPort();
-    void connector();
-    void close();
 
 private:
     QByteArray  read_data;

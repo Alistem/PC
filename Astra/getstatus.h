@@ -1,5 +1,6 @@
 #ifndef GETSTATUS_H
 #define GETSTATUS_H
+
 #include "operation.h"
 
 class GetStatus : public Operation

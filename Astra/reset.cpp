@@ -10,5 +10,7 @@ QByteArray Reset::operation(ComPort* port, QString string)
     QString listen = "63ff00000000039f";
     QByteArray buffer;
     buffer+=listen;
-    port->write(buffer);
+    uint res = port->write(buffer);
+
+    return buffer;
 }

@@ -1,6 +1,7 @@
 #ifndef OPERATION
 #define OPERATION
 #include <QtCore>
+
 #include "comport.h"
 
 class Operation : public QObject
@@ -14,10 +15,12 @@ public:
         QString listen = "63";
         QByteArray buffer;
         buffer+=listen;
-        port->write(buffer);
+        uint res = port->write(buffer);
         // Проверка возврата OkOk
 
-        return operation(port, string);
+        QByteArray res2 = operation(port, string);
+        return res2;
+
     }
 
     virtual QByteArray operation(ComPort*, QString) = 0;

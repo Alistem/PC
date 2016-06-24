@@ -1,24 +1,28 @@
+#include <QDebug>
+
 #include "proccommand.h"
 #include "getstatus.h"
 #include "reset.h"
 #include "readflash.h"
 #include "writeflash.h"
-#include "mainwindow.h"
 
 
-ProcCommand::ProcCommand(QObject *parent) : QObject(parent)
+ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
 {
-
+    com_port = NULL;
 }
 
 void ProcCommand::slot_connect(int num)
 {
-    com_port = new ComPort(num);
+    if(!com_port)
+        com_port = new ComPort(QString("%1%2").arg("COM").arg(num));
 }
 
 void ProcCommand::slot_disconnect()
 {
-    delete com_port;
+    if(com_port)
+        delete com_port;
+    com_port = NULL;
 }
 
 void ProcCommand::slot_status()
@@ -36,10 +40,12 @@ void ProcCommand::slot_reset()
 void ProcCommand::slot_read()
 {
     Operation *read_flash = new ReadFlash();
-    read_flash->sendCommandToPort(com_port, "");
+    QByteArray qbarr = read_flash->sendCommandToPort(com_port, "");
+    QString qstr = qbarr;
+    qDebug() << qstr;
 }
 
-void ProcCommand::slot_write(QList<FrameInfo> animation)
+void ProcCommand::slot_write(QList<QString> animation)
 {
     Operation *write_flash = new WriteFlash();
     write_flash->sendCommandToPort(com_port, "");

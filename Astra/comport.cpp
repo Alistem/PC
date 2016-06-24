@@ -1,21 +1,22 @@
 #include "comport.h"
 #include "operation.h"
 
-ComPort::ComPort(int number)
-{ 
-    QString port_num=QString("%1%2").arg("COM").arg(number);
-    serial_port = new QSerialPort(port_num); //для Win
+
+ComPort::ComPort(QString port, QObject *obj): QObject(obj)
+{
+    serial_port = new QSerialPort(port);
+    qDebug() << port;
     if(serial_port->open(QIODevice::ReadWrite) == false){
-        // Обработка ошибки соединения
+        qDebug() << "Error connect";
     }
-    const unsigned int BAUDRATE = 57600;
-    serial_port->setBaudRate(BAUDRATE);
+
+    serial_port->setBaudRate(QSerialPort::Baud9600);
     serial_port->setFlowControl(QSerialPort::NoFlowControl);
     serial_port->setParity(QSerialPort::NoParity);
     serial_port->setDataBits(QSerialPort::Data8);
     serial_port->setStopBits(QSerialPort::OneStop);
 
-    connect(serial_port,SIGNAL(readyRead()),this,SLOT(slot_readFromSerialPort()));
+    //connect(serial_port, SIGNAL(readyRead()), this, SLOT(slot_readFromSerialPort()));
 }
 
 ComPort::~ComPort()
@@ -29,6 +30,7 @@ void ComPort::slot_readFromSerialPort()
     data.append(serial_port->readAll());
     read_data+=data;
     timer.start(10);
+    qDebug() << "Data exist!!!";
 }
 
 int ComPort::write(QByteArray data)
@@ -45,9 +47,10 @@ bool ComPort::dataRecived()
 QByteArray ComPort::read()
 {
     QByteArray data;
-    if (dataRecived()){
-        data = read_data;
-        read_data.clear();
-    }
+    //if (dataRecived()){
+    //    data = read_data;
+    //    read_data.clear();
+    //}
+    data = serial_port->readAll();
     return data;
 }

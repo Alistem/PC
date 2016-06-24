@@ -2764,9 +2764,7 @@ void MainWindow::com_port_window_make()
         connect(com_port,SIGNAL(shim_from_plc(QByteArray,int)),this,SLOT(shim_from_astra(QByteArray,int)));
         connect(com_port,SIGNAL(res_data_to_plc()),this,SLOT(res_data_to_plc_main()));
         if(com_port_window_was_make==false){
-        connect(this,SIGNAL(data_to_astra_main(QList<
-
-                                               >)),com_port,SIGNAL(data_to_astra(QList<FrameInfo>)));
+        connect(this,SIGNAL(data_to_astra_main(QList<FrameInfo>)),com_port,SIGNAL(data_to_astra(QList<FrameInfo>)));
         }
         com_port_window=true;
     }

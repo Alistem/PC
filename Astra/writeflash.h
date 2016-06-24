@@ -2,6 +2,7 @@
 #define WRITEFLASH_H
 #include "operation.h"
 
+
 class WriteFlash : public Operation
 {
 public:

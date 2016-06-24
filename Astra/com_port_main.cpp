@@ -24,15 +24,15 @@ com_port_w::com_port_w(QWidget *parent) :
     ui->progressBar_frames->hide();
     ui->connectButton->setDefault(true);
     connect(this->ui->connectButton,SIGNAL(clicked()),this,SLOT(connect_to_proccommand()));
-    connect(this->ui->disconnectButton,SIGNAL(clicked()),com_port1,SIGNAL(disconnect_com()));
+    connect(this->ui->disconnectButton,SIGNAL(clicked()),proccommand,SLOT(slot_disconnect()));
     //=====================================Write Data===================================================
     connect(this,SIGNAL(data_to_astra(QList<FrameInfo>)),proccommand,SLOT(slot_write(QList<FrameInfo>)));
     //=========================================================================================
     connect(this->ui->writeButton,SIGNAL(clicked()),this,SIGNAL(res_data_to_plc()));
-    connect(this->ui->readButton,SIGNAL(clicked()),com_port1,SLOT(read_button()));
-    connect(this->ui->Status_PLC,SIGNAL(clicked()),com_port1,SLOT(status_button()));
-    connect(this->ui->reset,SIGNAL(clicked()),com_port1,SLOT(reset_button()));
-    connect(this,SIGNAL(disconnect()),com_port1,SIGNAL(disconnect_com()));
+    connect(this->ui->readButton,SIGNAL(clicked()),proccommand,SLOT(slot_read()));
+    connect(this->ui->Status_PLC,SIGNAL(clicked()),proccommand,SLOT(slot_status()));
+    connect(this->ui->reset,SIGNAL(clicked()),proccommand,SLOT(slot_reset()));
+    connect(this,SIGNAL(disconnect()),proccommand,SLOT(slot_disconnect()));
     connect(this,SIGNAL(data_com_port_ext(QString)),com_port1,SLOT(data_com_port_post(QString)));
     connect(com_port1,SIGNAL(connect_label(QString)),this->ui->connect_color,SLOT(setText(QString)));
     connect(com_port1,SIGNAL(connect_label(QString)),this,SLOT(connect_status(QString)));
