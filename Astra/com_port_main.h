@@ -2,8 +2,10 @@
 #define COM_PORT_MAIN_H
 
 #include <QDialog>
+
 #include "ui_com_port1.h"
 #include "proccommand.h"
+#include "frameinfo.h"
 
 class com_port_w : public QWidget
 {

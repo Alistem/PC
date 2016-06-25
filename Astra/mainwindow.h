@@ -5,17 +5,12 @@
 #include <QMap>
 #include <QTimer>
 
+#include "frameinfo.h"
+
+
 namespace Ui {
 class MainWindow;
 }
-
-struct FrameInfo
-{
-    int ftime;
-    QByteArray flist;
-    int fnum;
-    int fsum_num;
-};
 
 class MainWindow : public QMainWindow
 {

@@ -2,11 +2,12 @@
 #include "operation.h"
 
 
-ComPort::ComPort(QString port, QObject *obj): QObject(obj)
+ComPort::ComPort(QString port, QObject *obj): QObject(obj), port_open(false)
 {
     serial_port = new QSerialPort(port);
     qDebug() << port;
-    if(serial_port->open(QIODevice::ReadWrite) == false){
+    port_open = serial_port->open(QIODevice::ReadWrite);
+    if(portOpen() == false){
         qDebug() << "Error connect";
     }
 
@@ -21,7 +22,9 @@ ComPort::ComPort(QString port, QObject *obj): QObject(obj)
 
 ComPort::~ComPort()
 {
-    serial_port->close();
+    if (portOpen())
+        serial_port->close();
+    delete serial_port;
 }
 
 void ComPort::slot_readFromSerialPort()
@@ -53,4 +56,9 @@ QByteArray ComPort::read()
     //}
     data = serial_port->readAll();
     return data;
+}
+
+bool ComPort::portOpen()
+{
+    return port_open;
 }

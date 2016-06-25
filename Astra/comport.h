@@ -15,6 +15,7 @@ public:
     bool dataRecived();
     QByteArray read();
     int write(QByteArray data);
+    bool portOpen();
 
 public slots:
     void slot_readFromSerialPort();
@@ -23,7 +24,8 @@ private:
     QByteArray  read_data;
     QTimer timer;
     QSerialPort *serial_port;
-    QSerialPortInfo *port_info;	
+    QSerialPortInfo *port_info;
+    bool port_open;
 };
 
 #endif // COMPORT_H

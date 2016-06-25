@@ -33,7 +33,8 @@ HEADERS  += mainwindow.h \
     getstatus.h \
     readflash.h \
     writeflash.h \
-    reset.h
+    reset.h \
+    frameinfo.h
 
 FORMS    += mainwindow.ui \
     com_port1.ui
