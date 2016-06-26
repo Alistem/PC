@@ -6,19 +6,16 @@
 #include <QtSerialPort/QSerialPortInfo>
 #include <QTimer>
 
-class ComPort : public QObject
+class ComPort
 {
 public:
-    ComPort(QString port, QObject *obj = 0);
+    explicit ComPort(QString port);
 	~ComPort();
 
     bool dataRecived();
     QByteArray read();
     int write(QByteArray data);
     bool portOpen();
-
-public slots:
-    void slot_readFromSerialPort();
 
 private:
     QByteArray  read_data;
