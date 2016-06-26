@@ -4,7 +4,7 @@
 
 #include "comport.h"
 
-class Operation : public QObject
+class Operation
 {
 public:
     Operation() {}
@@ -19,7 +19,7 @@ public:
 
         QString listen = "63";
         buffer+=listen;
-        uint res = port->write(buffer);
+        port->write(buffer);
         // Проверка возврата OkOk
 
         QByteArray res2 = operation(port, string);
