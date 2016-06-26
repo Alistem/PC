@@ -179,11 +179,11 @@ void com_port_w::on_readButton_clicked(bool checked)
         ui->Status_PLC->setEnabled(false);
         ui->pushButton->setEnabled(false);
         ui->writeButton->setEnabled(false);
-    }
-    else
+    }else{
         ui->Status_PLC->setEnabled(true);
         ui->pushButton->setEnabled(true);
         ui->writeButton->setEnabled(true);
+    }
 }
 void com_port_w::on_writeButton_clicked(bool checked)
 {
@@ -191,9 +191,9 @@ void com_port_w::on_writeButton_clicked(bool checked)
         ui->Status_PLC->setEnabled(false);
         ui->pushButton->setEnabled(false);
         ui->readButton->setEnabled(false);
-    }
-    else
+    }else{
         ui->Status_PLC->setEnabled(true);
         ui->pushButton->setEnabled(true);
         ui->readButton->setEnabled(true);
+    }
 }
