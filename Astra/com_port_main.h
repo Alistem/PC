@@ -61,6 +61,7 @@ private:
     QByteArray cc,ba;
     QList<QByteArray> frames_list_to_com_port; // массив кадров
     QList<int> frames_time_to_com_port; //массив времён кадров
+    ProcCommand *proccommand;
 };
 
 #endif // COM_PORT_MAIN_H

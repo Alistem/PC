@@ -13,14 +13,14 @@
 
 QT_USE_NAMESPACE
 
-com_port_w::com_port_w(QWidget *parent) :
-    QWidget(parent),
-  ui(new Ui::com_port)
+com_port_w::com_port_w(QWidget *parent)
+    : QWidget(parent)
+    , proccommand(new ProcCommand(this))
+    , ui(new Ui::com_port)
 {
     ui->setupUi(this);
     com_port *com_port1 = new com_port(this); // создаём объект класса com_port. Для реализации ком-порта
     com_port1->hide(); // скрываем объект с формы, а то он меню загораживает
-    ProcCommand *proccommand = new ProcCommand(this);
     ui->progressBar_frames->hide();
     ui->connectButton->setDefault(true);
     connect(this->ui->connectButton,SIGNAL(clicked()),this,SLOT(connect_to_proccommand()));
