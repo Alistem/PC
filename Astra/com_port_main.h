@@ -1,4 +1,4 @@
-#ifndef COM_PORT_MAIN_H
+п»ї#ifndef COM_PORT_MAIN_H
 #define COM_PORT_MAIN_H
 
 #include <QDialog>
@@ -59,8 +59,8 @@ private:
     QString back_color_none;
     int hex_int,int_num_frames_summ;
     QByteArray cc,ba;
-    QList<QByteArray> frames_list_to_com_port; // массив кадров
-    QList<int> frames_time_to_com_port; //массив времён кадров
+    QList<QByteArray> frames_list_to_com_port; // РјР°СЃСЃРёРІ РєР°РґСЂРѕРІ
+    QList<int> frames_time_to_com_port; //РјР°СЃСЃРёРІ РІСЂРµРјС‘РЅ РєР°РґСЂРѕРІ
     ProcCommand *proccommand;
 };
 
