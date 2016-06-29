@@ -11,7 +11,7 @@ ComPort::ComPort(QString port): port_open(false)
         qDebug() << "Error connect";
     }
 
-    serial_port->setBaudRate(QSerialPort::Baud9600);
+    serial_port->setBaudRate(QSerialPort::Baud57600);
     serial_port->setFlowControl(QSerialPort::NoFlowControl);
     serial_port->setParity(QSerialPort::NoParity);
     serial_port->setDataBits(QSerialPort::Data8);
