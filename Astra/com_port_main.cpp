@@ -25,7 +25,7 @@ com_port_w::com_port_w(QWidget *parent)
     ui->connectButton->setDefault(true);
     connect(this->ui->connectButton,SIGNAL(clicked()),this,SLOT(connect_to_proccommand()));
     connect(this,SIGNAL(num_com_proccommand(int)),proccommand,SLOT(slot_connect(int)));
-    connect(proccommand,SIGNAL(connection()),this,SLOT(slot_connect()));
+    connect(proccommand,SIGNAL(connection(QString)),this,SLOT(connect_status(QString)));
 
     connect(this->ui->disconnectButton,SIGNAL(clicked()),proccommand,SLOT(slot_disconnect()));
     //=====================================Write Data===================================================
@@ -38,7 +38,6 @@ com_port_w::com_port_w(QWidget *parent)
     connect(this,SIGNAL(disconnect()),proccommand,SLOT(slot_disconnect()));
     connect(this,SIGNAL(data_com_port_ext(QString)),com_port1,SLOT(data_com_port_post(QString)));
     connect(com_port1,SIGNAL(connect_label(QString)),this->ui->connect_color,SLOT(setText(QString)));
-    connect(com_port1,SIGNAL(connect_label(QString)),this,SLOT(connect_status(QString)));
     connect(com_port1,SIGNAL(data_from_com(QByteArray)),this,SLOT(read_data(QByteArray)));
     connect(com_port1,SIGNAL(com_port_num()),this,SLOT(com_port_num_res()));
 
