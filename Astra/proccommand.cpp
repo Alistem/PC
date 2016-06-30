@@ -19,7 +19,9 @@ void ProcCommand::slot_connect(int num)
 {
     if (!com_port){
         com_port = new ComPort(QString("%1%2").arg("COM").arg(num));
-        emit connection("Connected");
+
+        //connect(com_port,SIGNAL(error(QSerialPort::SerialPortError)),this,SLOT(readError(QSerialPort::SerialPortError)));
+        //emit connection("Connected");
     }
 }
 
@@ -66,4 +68,12 @@ void ProcCommand::slot_write(QList<QString> animation)
     unique_ptr<Operation> write_flash(new WriteFlash());
 
     write_flash->sendCommandToPort(com_port, "");
+}
+
+void ProcCommand::readError(QSerialPort::SerialPortError serialPortError)
+{
+    if (serialPortError == QSerialPort::ReadError) {
+        QString errors;/*=QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(com1->portName()).arg(com1->errorString());*/
+        emit error_label(errors);
+        }
 }

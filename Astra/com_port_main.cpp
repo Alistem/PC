@@ -36,6 +36,8 @@ com_port_w::com_port_w(QWidget *parent)
     //=====================================Write Data===================================================
     connect(this,SIGNAL(data_to_astra(QList<FrameInfo>)),proccommand,SLOT(slot_write(QList<FrameInfo>)));
     //=========================================================================================
+    connect(proccommand,SIGNAL(error_label(QString)),this,SLOT(error_label_main(QString)));
+
     connect(this->ui->writeButton,SIGNAL(clicked()),this,SIGNAL(res_data_to_plc()));
     connect(this->ui->readButton,SIGNAL(clicked()),proccommand,SLOT(slot_read()));
     connect(this->ui->Status_PLC,SIGNAL(clicked()),proccommand,SLOT(slot_status()));
@@ -46,7 +48,7 @@ com_port_w::com_port_w(QWidget *parent)
     connect(com_port1,SIGNAL(data_from_com(QByteArray)),this,SLOT(read_data(QByteArray)));
     connect(com_port1,SIGNAL(com_port_num()),this,SLOT(com_port_num_res()));
 
-    connect(com_port1,SIGNAL(error_label(QString)),this,SLOT(error_label_main(QString))); 
+
 
     connect(com_port1,SIGNAL(frames_label(int)),this,SLOT(frames_label_main(int)));
     connect(com_port1,SIGNAL(num_frame_read(int)),this,SLOT(num_readed_frames(int)));
