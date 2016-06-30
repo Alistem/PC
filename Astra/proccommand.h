@@ -17,6 +17,7 @@ signals:
     void signal_status();
     void com_port_num();
     void connection(QString);
+    void status(bool);
 
 public slots:
     void slot_connect(int num);
@@ -28,6 +29,7 @@ public slots:
 
 private:
     ComPort *com_port;
+    QByteArray BufferReadData;
 
 };
 

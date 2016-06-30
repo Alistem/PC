@@ -1,14 +1,17 @@
 #include "comport.h"
 #include "operation.h"
+#include <QtCore>
+
 
 
 ComPort::ComPort(QString port): port_open(false)
 {
     serial_port = new QSerialPort(port);
-    qDebug() << port;
+    //qDebug() << port;
     port_open = serial_port->open(QIODevice::ReadWrite);
     if(portOpen() == false){
         qDebug() << "Error connect";
+        //connect(serial_port,SIGNAL(readyRead()),this,SLOT(slot_reset()));
     }
 
     serial_port->setBaudRate(QSerialPort::Baud57600);

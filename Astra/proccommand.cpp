@@ -36,6 +36,13 @@ void ProcCommand::slot_status()
     unique_ptr<Operation> get_status(new GetStatus());
 
     get_status->sendCommandToPort(com_port, "");
+
+    slot_read();
+
+    if(BufferReadData.contains("OKOB"))
+        emit status(true);
+    else
+        emit status(false);
 }
 
 void ProcCommand::slot_reset()
@@ -49,8 +56,8 @@ void ProcCommand::slot_read()
 {
     unique_ptr<Operation> read_flash(new ReadFlash());
 
-    QByteArray qbarr = read_flash->sendCommandToPort(com_port, "");
-    QString qstr = qbarr;
+    BufferReadData = read_flash->sendCommandToPort(com_port, "");
+    QString qstr = BufferReadData;
     qDebug() << qstr;
 }
 
