@@ -17,8 +17,10 @@ ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
 
 void ProcCommand::slot_connect(int num)
 {
-    if (!com_port)
+    if (!com_port){
         com_port = new ComPort(QString("%1%2").arg("COM").arg(num));
+        emit connection("Connected");
+    }
 }
 
 void ProcCommand::slot_disconnect()
@@ -26,6 +28,7 @@ void ProcCommand::slot_disconnect()
     if (com_port)
         delete com_port;
     com_port = NULL;
+    emit connection("Disconnected");
 }
 
 void ProcCommand::slot_status()

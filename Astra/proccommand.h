@@ -16,6 +16,7 @@ public:
 signals:
     void signal_status();
     void com_port_num();
+    void connection(QString);
 
 public slots:
     void slot_connect(int num);
