@@ -22,7 +22,7 @@ public:
         port->write(buffer);
         // Проверка возврата OkOk
         //buffer_read=port->read();
-        qDebug()<<port->read();
+        //qDebug()<<port->read();
         //if(!res2.endsWith("OkOk"))
         //    return res2;
 
