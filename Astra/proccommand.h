@@ -18,6 +18,7 @@ signals:
     void com_port_num();
     void connection(QString);
     void status(bool);
+    void error_label(QString);
 
 public slots:
     void slot_connect(int num);
@@ -26,6 +27,7 @@ public slots:
     void slot_reset();
     void slot_read();
     void slot_write(QList<QString> animation);
+    void readError(QSerialPort::SerialPortError);
 
 private:
     ComPort *com_port;
