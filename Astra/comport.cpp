@@ -11,7 +11,7 @@ ComPort::ComPort(QString port): port_open(false)
     port_open = serial_port->open(QIODevice::ReadWrite);
     if(portOpen() == false){
         qDebug() << "Error connect";
-        //connect(serial_port,SIGNAL(readyRead()),this,SLOT(slot_reset()));
+        connect(serial_port,SIGNAL(readyRead()),this,SLOT(read()));
     }
 
     serial_port->setBaudRate(QSerialPort::Baud57600);

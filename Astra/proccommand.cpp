@@ -19,9 +19,10 @@ void ProcCommand::slot_connect(int num)
 {
     if (!com_port){
         com_port = new ComPort(QString("%1%2").arg("COM").arg(num));
-
+        if(com_port->portOpen())
+            emit connection("Connected");
         //connect(com_port,SIGNAL(error(QSerialPort::SerialPortError)),this,SLOT(readError(QSerialPort::SerialPortError)));
-        //emit connection("Connected");
+
     }
 }
 
