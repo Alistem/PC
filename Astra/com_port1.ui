@@ -131,7 +131,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Write animation to PLC</string>
+         <string>Write animation to Astra</string>
         </property>
        </widget>
       </item>
@@ -144,7 +144,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Read animation from PLC</string>
+         <string>Read animation from Astra</string>
         </property>
        </widget>
       </item>
@@ -204,7 +204,7 @@
       <item row="3" column="3">
        <widget class="QPushButton" name="Status_PLC">
         <property name="text">
-         <string>Статус PLC</string>
+         <string>Статус Astra</string>
         </property>
        </widget>
       </item>

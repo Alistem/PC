@@ -24,6 +24,11 @@ com_port_w::com_port_w(QWidget *parent)
     ui->progressBar_frames->hide();
     ui->connectButton->setDefault(true);
 
+    ui->Status_PLC->setEnabled(false);
+    ui->reset->setEnabled(false);
+    ui->readButton->setEnabled(false);
+    ui->writeButton->setEnabled(false);
+
     //=====================================Connect===================================================
     connect(this->ui->connectButton,SIGNAL(clicked()),this,SLOT(connect_to_proccommand()));
     connect(this,SIGNAL(num_com_proccommand(int)),proccommand,SLOT(slot_connect(int)));
@@ -87,6 +92,10 @@ void com_port_w::connect_status(QString status)
         ui->connect_color->setStyleSheet(back_color_on);
         ui->connectButton->setEnabled(false);// блокировка кнопки
         ui->comboBox->setEnabled(false); // блокировка комбобокса
+        ui->Status_PLC->setEnabled(true);
+        ui->reset->setEnabled(true);
+        ui->readButton->setEnabled(true);
+        ui->writeButton->setEnabled(true);
     }
     if (status=="Disconnected"){
         ui->progressBar_frames->hide();
@@ -97,6 +106,10 @@ void com_port_w::connect_status(QString status)
         ui->label_num_frames->setText("");
         ui->label_num_frames_2->setText("");
         ui->num_current_frame->setText("");
+        ui->Status_PLC->setEnabled(false);
+        ui->reset->setEnabled(false);
+        ui->readButton->setEnabled(false);
+        ui->writeButton->setEnabled(false);
     }
     if (status!="Disconnected" && status!="Connected"){
         ui->progressBar_frames->hide();
@@ -105,6 +118,10 @@ void com_port_w::connect_status(QString status)
         ui->label_num_frames->setText("");
         ui->label_num_frames_2->setText("");
         ui->num_current_frame->setText("");
+        ui->Status_PLC->setEnabled(false);
+        ui->reset->setEnabled(false);
+        ui->readButton->setEnabled(false);
+        ui->writeButton->setEnabled(false);
     }
 }
 

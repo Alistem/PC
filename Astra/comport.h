@@ -16,22 +16,28 @@ public:
     ~ComPort();
 
     bool dataRecived();
-    QByteArray read();
+    QByteArray read(),errorComPort();
     int write(QByteArray data);
     bool portOpen();
     bool portReaded();
+    bool read_finish;
 
 private:
-    QByteArray  read_data;
+    QByteArray  read_data,port_error;
     QTimer r_timer;
     QSerialPort *serial_port;
     QSerialPortInfo *port_info;
-    bool port_open,read_finish;
+    bool port_open;
 
 
 private slots:
     void readComPort();
     void readFinish();
+    void readError(QSerialPort::SerialPortError serialPortError);
+
+signals:
+    void finish_read();
+
 };
 
 #endif // COMPORT_H

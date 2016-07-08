@@ -12,25 +12,21 @@ public:
 
     QByteArray sendCommandToPort(ComPort* port, QString string)
     {
-        QByteArray buffer,buffer_read;
+        QByteArray buffer;
         // Работает только с успешно подключенным COM портом
         if (! port->portOpen())
-            return buffer;
+            return port->errorComPort();
+        if(!port->read().endsWith("OkOk")){
+            QString listen = "63";
+            buffer+=listen;
+            port->write(buffer);
+        }
+        if(port->read().endsWith("OkOk")){
+            QByteArray res2 = operation(port, string);
+            return res2;
+        }
 
-        QString listen = "63";
-        buffer+=listen;
-        port->write(buffer);
-        // Проверка возврата OkOk
-        while(!port->portReaded())
-            buffer_read=port->read();
-        qDebug()<<port->read();
-        //if(!res2.endsWith("OkOk"))
-        //    return res2;
-
-        QByteArray res2 = operation(port, string);
-        return res2;
-
-
+        return buffer;
     }
 
     virtual QByteArray operation(ComPort*, QString) = 0;

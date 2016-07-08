@@ -2,6 +2,7 @@
 #define PROCCOMMAND_H
 
 #include <QObject>
+#include <QTimer>
 #include "comport.h"
 
 
@@ -27,11 +28,13 @@ public slots:
     void slot_reset();
     void slot_read();
     void slot_write(QList<QString> animation);
-    void readError(QSerialPort::SerialPortError);
+    void comPortError();
+    void listen_on_off();
 
 private:
     ComPort *com_port;
-    QByteArray BufferReadData;
+    QByteArray BufferReadData,TempReadData;
+    int flag_command;
 
 };
 

@@ -15,6 +15,7 @@ ComPort::ComPort(QString port, QObject *parent): port_open(false),
 
     connect(serial_port,SIGNAL(readyRead()),SLOT(readComPort()));
     connect(&r_timer, SIGNAL(timeout()),SLOT(readFinish()));
+    connect(serial_port,SIGNAL(error(QSerialPort::SerialPortError)),this,SLOT(readError(QSerialPort::SerialPortError)));
 
     serial_port->setBaudRate(QSerialPort::Baud57600);
     serial_port->setFlowControl(QSerialPort::NoFlowControl);
@@ -22,7 +23,7 @@ ComPort::ComPort(QString port, QObject *parent): port_open(false),
     serial_port->setDataBits(QSerialPort::Data8);
     serial_port->setStopBits(QSerialPort::OneStop);
 
-    if(portOpen() == false)
+    if(!portOpen())
         qDebug() << "Error connect";
     else
         qDebug() << port;
@@ -48,30 +49,26 @@ bool ComPort::dataRecived()
 
 QByteArray ComPort::read()
 {
-    //QByteArray data;
-    //if (dataRecived()){
-    //    data = read_data;
-    //    read_data.clear();
-    //}
-    //data = serial_port->readAll();
     read_finish=false;
+
     return read_data;
 }
 
 void ComPort::readComPort()
 {
+    read_data.clear();
     QByteArray m_readData;
     m_readData.append(serial_port->readAll());
     read_data+=m_readData;
     m_readData.clear();
-    r_timer.start(50);
+    r_timer.start(100);
 }
 
 void ComPort::readFinish()
 {
     r_timer.stop();
     read_finish=true;
-    qDebug()<<"Read_finish";
+    emit finish_read();
 }
 
 bool ComPort::portOpen()
@@ -81,5 +78,18 @@ bool ComPort::portOpen()
 bool ComPort::portReaded()
 {
     return read_finish;
+}
+
+void ComPort::readError(QSerialPort::SerialPortError serialPortError)
+{
+    if(serialPortError == QSerialPort::ReadError) {
+        QString errors=QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(serial_port->portName()).arg(serial_port->errorString());
+        port_error+=errors;
+    }
+}
+
+QByteArray ComPort::errorComPort()
+{
+    return port_error;
 }
 
