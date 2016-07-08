@@ -15,7 +15,7 @@ public:
         QByteArray buffer;
         // Работает только с успешно подключенным COM портом
         if (! port->portOpen())
-            return port->errorComPort();
+            return buffer;
         if(!port->read().endsWith("OkOk")){
             QString listen = "63";
             buffer+=listen;

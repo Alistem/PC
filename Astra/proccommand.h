@@ -28,7 +28,7 @@ public slots:
     void slot_reset();
     void slot_read();
     void slot_write(QList<QString> animation);
-    void comPortError();
+    void comPortError(QByteArray com_port_error);
     void listen_on_off();
 
 private:

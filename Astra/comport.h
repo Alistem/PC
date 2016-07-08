@@ -16,7 +16,7 @@ public:
     ~ComPort();
 
     bool dataRecived();
-    QByteArray read(),errorComPort();
+    QByteArray read();
     int write(QByteArray data);
     bool portOpen();
     bool portReaded();
@@ -37,6 +37,7 @@ private slots:
 
 signals:
     void finish_read();
+    void PortError(QByteArray);
 
 };
 

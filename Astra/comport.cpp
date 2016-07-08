@@ -85,11 +85,8 @@ void ComPort::readError(QSerialPort::SerialPortError serialPortError)
     if(serialPortError == QSerialPort::ReadError) {
         QString errors=QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(serial_port->portName()).arg(serial_port->errorString());
         port_error+=errors;
+        emit PortError(port_error);
     }
-}
-
-QByteArray ComPort::errorComPort()
-{
-    return port_error;
+    emit PortError("other com port error");
 }
 

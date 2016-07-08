@@ -20,7 +20,7 @@ void ProcCommand::slot_connect(int num)
     if (!com_port){
         com_port = new ComPort(QString("%1%2").arg("COM").arg(num));
         connect(com_port,SIGNAL(finish_read()),SLOT(listen_on_off()));
-        //connect(com_port,SIGNAL(finish_read()),SLOT(listen_on_off()));
+        connect(com_port,SIGNAL(PortError(QByteArray)),SLOT(comPortError(QByteArray)));
         if(com_port->portOpen()){
             emit connection("Connected");
             slot_status();
@@ -59,8 +59,6 @@ void ProcCommand::slot_reset()
     unique_ptr<Operation> reset(new Reset());
 
     reset->sendCommandToPort(com_port, "");
-
-
 }
 
 void ProcCommand::slot_read()
@@ -69,7 +67,7 @@ void ProcCommand::slot_read()
 
     unique_ptr<Operation> read_flash(new ReadFlash());
 
-    BufferReadData = read_flash->sendCommandToPort(com_port, "");
+    BufferReadData = read_flash->sendCommandToPort(com_port, "read");
     //QString qstr = BufferReadData;
     //qDebug() << qstr;
 
@@ -84,9 +82,9 @@ void ProcCommand::slot_write(QList<QString> animation)
     write_flash->sendCommandToPort(com_port, "");
 }
 
-void ProcCommand::comPortError()
+void ProcCommand::comPortError(QByteArray com_port_error)
 {
-    qDebug()<<"comPortError";
+    qDebug()<<com_port_error;
 }
 
 void ProcCommand::listen_on_off()
@@ -102,6 +100,7 @@ void ProcCommand::listen_on_off()
             break;
         case 3:
             slot_read();
+            qDebug()<<"slot_read";
             break;
         case 4:
             //slot_write(QList<QString> animation);
@@ -120,4 +119,6 @@ void ProcCommand::listen_on_off()
     else if(TempReadData.contains("ErCM") || TempReadData.contains("ErCR")){
         qDebug()<<"data_plc_read-error"<<TempReadData.right(4);
     }
+    else if(TempReadData.left(4) == ("OkCR"))
+            qDebug()<<"data_plc_read-error";
 }

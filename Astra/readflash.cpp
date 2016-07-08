@@ -7,14 +7,13 @@ ReadFlash::ReadFlash()
 
 QByteArray ReadFlash::operation(ComPort *port, QString string)
 {
+
+    qDebug()<<string;
     QString listen = "63ff00000000019d";
     QByteArray buffer;
     buffer+=listen;
     uint res = port->write(buffer);
-
-    //if (port->dataRecived()){
-        buffer = port->read();
-    //}
+    buffer = port->read();
 
     return buffer;
 }
