@@ -41,6 +41,13 @@ com_port_w::com_port_w(QWidget *parent)
     //=====================================Write Data===================================================
     connect(this,SIGNAL(data_to_astra(QList<FrameInfo>)),proccommand,SLOT(slot_write(QList<FrameInfo>)));
     //=========================================================================================
+
+    //======================================Read Data==========================================
+    connect(proccommand,SIGNAL(frames_label(int)),this,SLOT(frames_label_main(int)));
+
+    //=========================================================================================
+
+
     connect(proccommand,SIGNAL(error_label(QString)),this,SLOT(error_label_main(QString)));
 
     connect(this->ui->writeButton,SIGNAL(clicked()),this,SIGNAL(res_data_to_plc()));
@@ -55,7 +62,7 @@ com_port_w::com_port_w(QWidget *parent)
 
 
 
-    connect(com_port1,SIGNAL(frames_label(int)),this,SLOT(frames_label_main(int)));
+
     connect(com_port1,SIGNAL(num_frame_read(int)),this,SLOT(num_readed_frames(int)));
     connect(this,SIGNAL(import_data_to_project()),com_port1,SLOT(data_to_project()));
     //===========================Данные с контроллера в проект====================================

@@ -6,6 +6,7 @@ class ReadFlash : public Operation
 {
 public:
     ReadFlash();
+    QByteArray ctrl_sum_xor(QByteArray);
 
     QByteArray operation(ComPort*, QString);
 };

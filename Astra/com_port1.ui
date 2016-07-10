@@ -204,7 +204,7 @@
       <item row="3" column="3">
        <widget class="QPushButton" name="Status_PLC">
         <property name="text">
-         <string>Статус Astra</string>
+         <string>Статус Астра</string>
         </property>
        </widget>
       </item>

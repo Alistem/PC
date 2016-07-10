@@ -61,16 +61,22 @@ void ProcCommand::slot_reset()
     reset->sendCommandToPort(com_port, "");
 }
 
-void ProcCommand::slot_read()
+void ProcCommand::slot_read() // вычисление количества кадров анимации в контроллере
+{
+    int nums = nums_all_frames();
+    emit frames_label(nums); // отправляем на форму
+
+}
+
+void ProcCommand::command_read(QString command)
 {
     flag_command = 3;
 
+    sector = command;
+
     unique_ptr<Operation> read_flash(new ReadFlash());
 
-    BufferReadData = read_flash->sendCommandToPort(com_port, "read");
-    //QString qstr = BufferReadData;
-    //qDebug() << qstr;
-
+    BufferReadData = read_flash->sendCommandToPort(com_port, command);
 }
 
 void ProcCommand::slot_write(QList<QString> animation)
@@ -99,7 +105,8 @@ void ProcCommand::listen_on_off()
             slot_reset();
             break;
         case 3:
-            slot_read();
+            command_read(sector);
+            sector.clear();
             qDebug()<<"slot_read";
             break;
         case 4:
@@ -114,11 +121,57 @@ void ProcCommand::listen_on_off()
         emit status(true);
     }
     else if (TempReadData.endsWith("RROK")){
+        if(nums_all_frames_flag){
+            nums_all_frames();
+        }
         //qDebug()<<TempReadData.toHex();
     }
     else if(TempReadData.contains("ErCM") || TempReadData.contains("ErCR")){
-        qDebug()<<"data_plc_read-error"<<TempReadData.right(4);
+        qDebug()<<"control_sum_error"<<TempReadData.right(4);
     }
     else if(TempReadData.left(4) == ("OkCR"))
-            qDebug()<<"data_plc_read-error";
+            qDebug()<<"control_sum_ok";
+}
+
+bool ProcCommand::ctrl_sum_verify(QByteArray dat) // верификация контрольной суммы пакета
+{
+    QByteArray ctrl_sum;
+    QByteArray ctrl_sum_from_package=dat.right(1);// складываем контрольную сумму в буфер для сравнения
+    dat.chop(1); // отрезаем контрольную сумму и получаем чистые данные
+    ctrl_sum = ctrl_sum_xor(dat); // вычисляем контрольную сумму пакета данных
+    if(ctrl_sum_from_package==ctrl_sum){
+        emit error_label("Ctrl sum is valid");
+        ctrl_sum_errors=0;
+        return true;
+    }
+    else{
+        emit error_label("Ctrl sum is not valid");
+        ctrl_sum_errors+=1;
+        return false;
+    }
+}
+QByteArray ProcCommand::ctrl_sum_xor(QByteArray dat) // вычисление контрольной суммы
+{
+    int i;
+    QByteArray ctrl_sum;
+    char LRC=dat.at(0);
+    for(i=1;i<dat.size();++i)
+    LRC=(LRC^dat.at(i));
+    ctrl_sum.resize(1);
+    ctrl_sum[0]=LRC;
+    return ctrl_sum;
+}
+
+int ProcCommand::nums_all_frames() // вычисление количества кадров анимации в контроллере
+{
+    if(!nums_all_frames_flag){
+        nums_all_frames_flag = true;
+        command_read("00000000");
+    }
+    else{
+        nums_all_frames_flag = false;
+        int num_sectors=TempReadData.mid(4,4).toHex().toInt(0,16);
+        int num_frames=(num_sectors-512)*12/512; // вычисляем количество кадров
+        return num_frames;
+    }
 }
