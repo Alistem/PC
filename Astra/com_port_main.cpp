@@ -29,41 +29,52 @@ com_port_w::com_port_w(QWidget *parent)
     ui->readButton->setEnabled(false);
     ui->writeButton->setEnabled(false);
 
-    //=====================================Connect===================================================
+    //======================================Buttons============================================
+    connect(this->ui->writeButton,SIGNAL(clicked()),this,SIGNAL(res_data_to_plc()));
+    connect(this->ui->readButton,SIGNAL(clicked()),proccommand,SLOT(slot_read()));
+    connect(this->ui->Status_PLC,SIGNAL(clicked()),proccommand,SLOT(slot_status()));
+    connect(this->ui->reset,SIGNAL(clicked()),proccommand,SLOT(slot_reset()));
+    //=========================================================================================
+
+    //=====================================Connect=============================================
     connect(this->ui->connectButton,SIGNAL(clicked()),this,SLOT(connect_to_proccommand()));
     connect(this,SIGNAL(num_com_proccommand(int)),proccommand,SLOT(slot_connect(int)));
     connect(proccommand,SIGNAL(connection(QString)),this,SLOT(connect_status(QString)));
 
+    connect(this,SIGNAL(disconnect()),proccommand,SLOT(slot_disconnect()));
     connect(this->ui->disconnectButton,SIGNAL(clicked()),proccommand,SLOT(slot_disconnect()));
+    connect(proccommand,SIGNAL(connect_label(QString)),this->ui->connect_color,SLOT(setText(QString)));
+    //=========================================================================================
 
-    //=====================================Status===================================================
+    //=====================================Status==============================================
     connect(proccommand,SIGNAL(status(bool)),this,SLOT(status_plc(bool)));
-    //=====================================Write Data===================================================
+    //=========================================================================================
+
+    //=====================================Write Data==========================================
     connect(this,SIGNAL(data_to_astra(QList<FrameInfo>)),proccommand,SLOT(slot_write(QList<FrameInfo>)));
     //=========================================================================================
 
     //======================================Read Data==========================================
     connect(proccommand,SIGNAL(frames_label(int)),this,SLOT(frames_label_main(int)));
+    connect(proccommand,SIGNAL(num_frame_read(int)),this,SLOT(num_readed_frames(int)));
 
     //=========================================================================================
 
 
     connect(proccommand,SIGNAL(error_label(QString)),this,SLOT(error_label_main(QString)));
 
-    connect(this->ui->writeButton,SIGNAL(clicked()),this,SIGNAL(res_data_to_plc()));
-    connect(this->ui->readButton,SIGNAL(clicked()),proccommand,SLOT(slot_read()));
-    connect(this->ui->Status_PLC,SIGNAL(clicked()),proccommand,SLOT(slot_status()));
-    connect(this->ui->reset,SIGNAL(clicked()),proccommand,SLOT(slot_reset()));
-    connect(this,SIGNAL(disconnect()),proccommand,SLOT(slot_disconnect()));
+
+
+
     connect(this,SIGNAL(data_com_port_ext(QString)),com_port1,SLOT(data_com_port_post(QString)));
-    connect(com_port1,SIGNAL(connect_label(QString)),this->ui->connect_color,SLOT(setText(QString)));
+
     connect(com_port1,SIGNAL(data_from_com(QByteArray)),this,SLOT(read_data(QByteArray)));
     connect(com_port1,SIGNAL(com_port_num()),this,SLOT(com_port_num_res()));
 
 
 
 
-    connect(com_port1,SIGNAL(num_frame_read(int)),this,SLOT(num_readed_frames(int)));
+
     connect(this,SIGNAL(import_data_to_project()),com_port1,SLOT(data_to_project()));
     //===========================Данные с контроллера в проект====================================
     connect(com_port1,SIGNAL(times_from_plc1(int,int,int)),this,SIGNAL(times_from_plc(int,int,int)));

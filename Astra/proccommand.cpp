@@ -13,6 +13,10 @@ using namespace std;
 ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
 {
     flag_command = 0;
+    read_stage = 0;
+    errors = 0;
+    nums_all_frames_flag = false;
+    data_all_frames_flag = false;
 }
 
 void ProcCommand::slot_connect(int num)
@@ -23,10 +27,12 @@ void ProcCommand::slot_connect(int num)
         connect(com_port,SIGNAL(PortError(QByteArray)),SLOT(comPortError(QByteArray)));
         if(com_port->portOpen()){
             emit connection("Connected");
+            emit connect_label("onLine");
             slot_status();
         }
         else{
             emit connection("Disconnected");
+            emit connect_label("offLine");
             slot_disconnect();
         }
     }
@@ -38,6 +44,7 @@ void ProcCommand::slot_disconnect()
         delete com_port;
     com_port = NULL;
     emit connection("Disconnected");
+    emit connect_label("offLine");
 }
 
 void ProcCommand::slot_status()
@@ -61,11 +68,25 @@ void ProcCommand::slot_reset()
     reset->sendCommandToPort(com_port, "");
 }
 
-void ProcCommand::slot_read() // вычисление количества кадров анимации в контроллере
+void ProcCommand::slot_read()
 {
-    int nums = nums_all_frames();
-    emit frames_label(nums); // отправляем на форму
+    switch (read_stage) {
+    case 0:
+        qDebug()<<read_stage<<"read_stage";
+        nums_all_frames(); // вычисление количества кадров анимации в контроллере
+        break;
+    case 1:
+        qDebug()<<read_stage<<"read_stage";
+        emit frames_label(num_frames); // отправляем на форму
+        data_all_frames(); // чтение данных анимации c контроллерa
+        break;
+    case 2:
+        qDebug()<<read_stage<<"read_stage";
+        break;
 
+    default:
+        break;
+    }
 }
 
 void ProcCommand::command_read(QString command)
@@ -76,7 +97,7 @@ void ProcCommand::command_read(QString command)
 
     unique_ptr<Operation> read_flash(new ReadFlash());
 
-    BufferReadData = read_flash->sendCommandToPort(com_port, command);
+    read_flash->sendCommandToPort(com_port, command);
 }
 
 void ProcCommand::slot_write(QList<QString> animation)
@@ -107,7 +128,6 @@ void ProcCommand::listen_on_off()
         case 3:
             command_read(sector);
             sector.clear();
-            qDebug()<<"slot_read";
             break;
         case 4:
             //slot_write(QList<QString> animation);
@@ -123,14 +143,32 @@ void ProcCommand::listen_on_off()
     else if (TempReadData.endsWith("RROK")){
         if(nums_all_frames_flag){
             nums_all_frames();
+            return;
         }
-        //qDebug()<<TempReadData.toHex();
+        if(data_all_frames_flag){
+            data_all_frames();
+            return;
+        }
     }
     else if(TempReadData.contains("ErCM") || TempReadData.contains("ErCR")){
         qDebug()<<"control_sum_error"<<TempReadData.right(4);
+        if(errors<10){
+            if(nums_all_frames_flag){
+                //nums_all_frames();
+            }
+            if(data_all_frames_flag){
+                //data_all_frames();
+            }
+        }
+        else{
+            nums_all_frames_flag = false;
+            data_all_frames_flag = false;
+            read_stage = 0;
+            errors = 0;
+        }
     }
     else if(TempReadData.left(4) == ("OkCR"))
-            qDebug()<<"control_sum_ok";
+        qDebug()<<"control_sum_ok";
 }
 
 bool ProcCommand::ctrl_sum_verify(QByteArray dat) // верификация контрольной суммы пакета
@@ -162,16 +200,66 @@ QByteArray ProcCommand::ctrl_sum_xor(QByteArray dat) // вычисление к�
     return ctrl_sum;
 }
 
-int ProcCommand::nums_all_frames() // вычисление количества кадров анимации в контроллере
+void ProcCommand::nums_all_frames() // вычисление количества кадров анимации в контроллере
 {
+    int num_sectors = 0;
+    num_frames = 0;
     if(!nums_all_frames_flag){
         nums_all_frames_flag = true;
-        command_read("00000000");
+        command_read("0"); // читаем нулевой сектор
     }
     else{
         nums_all_frames_flag = false;
-        int num_sectors=TempReadData.mid(4,4).toHex().toInt(0,16);
-        int num_frames=(num_sectors-512)*12/512; // вычисляем количество кадров
-        return num_frames;
+        num_sectors=TempReadData.mid(0,4).toHex().toInt(0,16);
+        num_frames=(num_sectors-512)*12/512; // вычисляем количество кадров
+
+        read_stage = 1; // Этап выполнения алгоритма чтения данных из контроллера
+
+        slot_read();
+    }
+}
+
+void ProcCommand::data_all_frames() // чтение данных анимации c контроллерa
+{
+    if(!data_all_frames_flag){
+        data_all_frames_flag = true;
+        current_frame = 0; //в начале обнуляем счётчик уже считанных кадров
+        command_read("0"); // читаем нулевой сектор
+    }
+    else{
+        current_frame+=1; // счётчик уже считанных кадров
+        int reading_frames = 0;
+        if(num_frames>current_frame){
+            if(ctrl_sum_verify(TempReadData.left(TempReadData.size()-4))){
+
+                all_data_from_plc+=TempReadData.left(TempReadData.size()-5); // убираем контрольную сумму
+
+                qDebug()<<TempReadData.toHex();
+
+                for(int i=0;i<12;++i){ // Этот цикл вообще чисто для красоты
+                    reading_frames+=1; // Для типа плавного подсёта кадров (потому что читает по секторам, а там по 12 кадров)
+                emit num_frame_read(reading_frames);
+                }
+
+                QString set_num;
+                command_read(set_num.setNum(current_frame)); // читаем n - ый сектор
+
+            }
+            else{
+                comPortError("control sum is incorrect");
+                errors+=1;
+                data_all_frames_flag = false;
+                read_stage = 0;
+                slot_read();
+                return;
+            }
+        }
+        else{
+            data_all_frames_flag = false;
+            read_stage = 0;
+            read_stage = 2; // Этап выполнения алгоритма чтения данных из контроллера
+            slot_read();
+            return;
+        }
     }
 }
