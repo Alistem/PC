@@ -168,7 +168,7 @@ void ProcCommand::listen_on_off()
         }
     }
     else if(TempReadData.left(4) == ("OkCR"))
-        qDebug()<<"control_sum_ok";
+        qDebug()<<TempReadData;
 }
 
 bool ProcCommand::ctrl_sum_verify(QByteArray dat) // верификация контрольной суммы пакета
@@ -177,6 +177,7 @@ bool ProcCommand::ctrl_sum_verify(QByteArray dat) // верификация ко
     QByteArray ctrl_sum_from_package=dat.right(1);// складываем контрольную сумму в буфер для сравнения
     dat.chop(1); // отрезаем контрольную сумму и получаем чистые данные
     ctrl_sum = ctrl_sum_xor(dat); // вычисляем контрольную сумму пакета данных
+    //qDebug()<<ctrl_sum.toHex()<<"ctrl_sum"<<ctrl_sum_from_package.toHex()<<"ctrl_sum_from_package";
     if(ctrl_sum_from_package==ctrl_sum){
         emit error_label("Ctrl sum is valid");
         ctrl_sum_errors=0;
@@ -228,38 +229,45 @@ void ProcCommand::data_all_frames() // чтение данных анимаци�
     }
     else{
         current_frame+=1; // счётчик уже считанных кадров
-        int reading_frames = 0;
+
+
+        //int reading_frames = 0;
+
         if(num_frames>current_frame){
+
             if(ctrl_sum_verify(TempReadData.left(TempReadData.size()-4))){
 
                 all_data_from_plc+=TempReadData.left(TempReadData.size()-5); // убираем контрольную сумму
 
-                qDebug()<<TempReadData.toHex();
-
-                for(int i=0;i<12;++i){ // Этот цикл вообще чисто для красоты
-                    reading_frames+=1; // Для типа плавного подсёта кадров (потому что читает по секторам, а там по 12 кадров)
-                emit num_frame_read(reading_frames);
-                }
-
-                QString set_num;
-                command_read(set_num.setNum(current_frame)); // читаем n - ый сектор
-
+//                for(int i=0;i<12;++i){ // Этот цикл вообще чисто для красоты
+//                    reading_frames+=1; // Для типа плавного подсёта кадров (потому что читает по секторам, а там по 12 кадров)
+//                emit num_frame_read(reading_frames);
+//                }
             }
             else{
                 comPortError("control sum is incorrect");
                 errors+=1;
-                data_all_frames_flag = false;
-                read_stage = 0;
-                slot_read();
-                return;
+                if(errors<10){
+                    current_frame-=1;
+                    //data_all_frames_flag = false;
+                    slot_read();
+                    return;
+                }
+                else{
+                    data_all_frames_flag = false;
+                    read_stage = 0; // Этап выполнения алгоритма чтения данных из контроллера
+                    errors = 0;
+                    return;
+                }
             }
         }
         else{
             data_all_frames_flag = false;
-            read_stage = 0;
             read_stage = 2; // Этап выполнения алгоритма чтения данных из контроллера
             slot_read();
             return;
         }
+        QString set_num;
+        command_read(set_num.setNum(current_frame)); // читаем n - ый сектор
     }
 }

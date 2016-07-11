@@ -17,16 +17,21 @@ QByteArray ReadFlash::operation(ComPort *port, QString string)
     sector.setNum(m,16);
 
     for(i=0;i<sector.size();++i){
+
         templ.replace(templ.size()-1-i,1,sector.at(sector.size()-1-i));
     }
+
     sector = templ;
+
     templ="00000000";
 
     QString listen = "63ff"+sector+"01"; //"63ff00000000019d"
+
     ba+=listen;
     buff = ctrl_sum_xor(ba1.fromHex(ba));
     listen=listen+buff.toHex();
     buffer+=listen;
+    qDebug()<<buffer;
     port->write(buffer);
     //buffer = port->read();
 

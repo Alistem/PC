@@ -61,7 +61,7 @@ void ComPort::readComPort()
     m_readData.append(serial_port->readAll());
     read_data+=m_readData;
     m_readData.clear();
-    r_timer.start(100);
+    r_timer.start(50);
 }
 
 void ComPort::readFinish()
