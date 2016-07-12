@@ -6,6 +6,7 @@
 #include "reset.h"
 #include "readflash.h"
 #include "writeflash.h"
+#include "frameinfo.h"
 
 using namespace std;
 
@@ -14,6 +15,7 @@ ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
 {
     flag_command = 0;
     read_stage = 0;
+    write_stage = 0;
     errors = 0;
     nums_all_frames_flag = false;
     data_all_frames_flag = false;
@@ -70,6 +72,8 @@ void ProcCommand::slot_reset()
 
 void ProcCommand::slot_read()
 {
+    flag_command = 3;
+
     switch (read_stage) {
     case 0:
         qDebug()<<read_stage<<"read_stage";
@@ -84,7 +88,6 @@ void ProcCommand::slot_read()
         qDebug()<<read_stage<<"read_stage";
         analise_reading_data();
         break;
-
     default:
         break;
     }
@@ -92,27 +95,11 @@ void ProcCommand::slot_read()
 
 void ProcCommand::command_read(QString command)
 {
-    flag_command = 3;
-
     sector = command;
 
     unique_ptr<Operation> read_flash(new ReadFlash());
 
     read_flash->sendCommandToPort(com_port, command);
-}
-
-void ProcCommand::slot_write(QList<QString> animation)
-{
-    flag_command = 4;
-
-    unique_ptr<Operation> write_flash(new WriteFlash());
-
-    write_flash->sendCommandToPort(com_port, "");
-}
-
-void ProcCommand::comPortError(QByteArray com_port_error)
-{
-    qDebug()<<com_port_error;
 }
 
 void ProcCommand::listen_on_off()
@@ -131,7 +118,8 @@ void ProcCommand::listen_on_off()
             sector.clear();
             break;
         case 4:
-            //slot_write(QList<QString> animation);
+            command_write(sector);
+            sector.clear();
             break;
         default:
             break;
@@ -294,7 +282,7 @@ void ProcCommand::analise_reading_data() // вычисление контрол�
         //============================================================================
     }
 
-    read_stage = 3; // Этап выполнения алгоритма чтения данных из контроллера
+    read_stage = 0; // Этап выполнения алгоритма чтения данных из контроллера
     //===================analise_readed_data========================================
 }
 
@@ -316,3 +304,83 @@ void ProcCommand::data_to_project() // Передача данных анима�
     times_of_frames.clear();
 }
 
+
+//===================================Write Data to com-port==============================
+
+void ProcCommand::data_from_project(QList<FrameInfo> animations){
+    animation = animations;
+    slot_write();
+}
+
+
+void ProcCommand::slot_write()
+{
+    flag_command = 4;
+
+    switch (write_stage) {
+    case 0:
+        qDebug()<<write_stage<<"write_stage";
+        data_to_zero_sector(animation); // вычисление количества кадров анимации в контроллере
+        break;
+    case 1:
+        qDebug()<<write_stage<<"write_stage";
+        //emit frames_label(num_frames); // отправляем на форму
+        //data_all_frames(); // чтение данных анимации c контроллерa
+        break;
+    case 2:
+        qDebug()<<write_stage<<"write_stage";
+        //analise_reading_data();
+        break;
+    default:
+        break;
+    }
+}
+
+void ProcCommand::command_write(QString command)
+{
+    sector = command;
+
+    unique_ptr<Operation> write_flash(new WriteFlash());
+
+    write_flash->sendCommandToPort(com_port, "");
+}
+
+
+
+void ProcCommand::comPortError(QByteArray com_port_error)
+{
+    qDebug()<<com_port_error;
+}
+
+void ProcCommand::data_to_zero_sector(QList<FrameInfo> animation)
+{
+    QByteArray ba,ba1,data;
+    QString templ,str_i;
+    int ii;
+    templ="00000000";
+
+    FrameInfo sum_num = animation.at(0);
+    int sectors = sum_num.fsum_num/12;
+
+    str_i.setNum(sectors*512+512,16);
+    for(ii=0;ii<str_i.size();++ii)
+        templ.replace(templ.size()-1-ii,1,str_i.at(str_i.size()-1-ii));
+    str_i=templ;
+    templ="00000000";
+    ba += str_i;
+    ba=ba1.fromHex(ba);
+    data.resize(404);
+    data.fill(0);
+    ba += data;
+    ba += ctrl_sum_xor(ba);
+
+//    post_data=ba.toHex();
+//    ba.clear();
+//    ctrl_sum.clear();
+
+
+
+    qDebug()<<sectors;
+    write_stage = 1;
+    //slot_write();
+}

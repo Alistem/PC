@@ -1843,7 +1843,7 @@ void MainWindow::massive_frame(int value)
 }
 
 
-// =====================================Debugging on displey====================================
+// =====================================Debugging on display====================================
 
 void MainWindow::frame_text(int value, QByteArray fra) // Текущий кадр в 16-тиричном формате (In the textEdit)
 {

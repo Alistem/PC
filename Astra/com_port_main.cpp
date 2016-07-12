@@ -50,7 +50,7 @@ com_port_w::com_port_w(QWidget *parent)
     //=========================================================================================
 
     //=====================================Write Data==========================================
-    connect(this,SIGNAL(data_to_astra(QList<FrameInfo>)),proccommand,SLOT(slot_write(QList<FrameInfo>)));
+    connect(this,SIGNAL(data_to_astra(QList<FrameInfo>)),proccommand,SLOT(data_from_project(QList<FrameInfo>)));
     //=========================================================================================
 
     //======================================Read Data==========================================

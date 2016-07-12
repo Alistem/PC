@@ -27,7 +27,6 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     com_port_main.h \
-    com_port1.h \
     comport.h \
     proccommand.h \
     operation.h \
@@ -35,7 +34,8 @@ HEADERS  += mainwindow.h \
     readflash.h \
     writeflash.h \
     reset.h \
-    frameinfo.h
+    frameinfo.h \
+    com_port1.h
 
 FORMS    += mainwindow.ui \
     com_port1.ui
