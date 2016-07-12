@@ -162,6 +162,9 @@ void ProcCommand::listen_on_off()
     else if(TempReadData.contains("HELLO")){
         //emit error_label(TempReadData);
     }
+    else if(TempReadData.left(4)==("OkWR")){
+        slot_write();
+    }
 
 }
 
@@ -312,7 +315,6 @@ void ProcCommand::data_from_project(QList<FrameInfo> animations){
     slot_write();
 }
 
-
 void ProcCommand::slot_write()
 {
     flag_command = 4;
@@ -320,12 +322,21 @@ void ProcCommand::slot_write()
     switch (write_stage) {
     case 0:
         qDebug()<<write_stage<<"write_stage";
-        data_to_zero_sector(animation); // вычисление количества кадров анимации в контроллере
+
+        if(TempReadData.left(4)==("OkWR"))
+            data_to_zero_sector(animation); // вычисление количества кадров анимации в контроллере
+        else
+            command_write("0");
+
         break;
     case 1:
         qDebug()<<write_stage<<"write_stage";
-        //emit frames_label(num_frames); // отправляем на форму
-        //data_all_frames(); // чтение данных анимации c контроллерa
+
+        if(TempReadData.left(4)==("OkWR"))
+            data_to_other_sector(animation); // вычисление количества кадров анимации в контроллере
+        else
+            command_write("0");
+
         break;
     case 2:
         qDebug()<<write_stage<<"write_stage";
@@ -342,10 +353,8 @@ void ProcCommand::command_write(QString command)
 
     unique_ptr<Operation> write_flash(new WriteFlash());
 
-    write_flash->sendCommandToPort(com_port, "");
+    write_flash->sendCommandToPort(com_port, command);
 }
-
-
 
 void ProcCommand::comPortError(QByteArray com_port_error)
 {
@@ -374,13 +383,42 @@ void ProcCommand::data_to_zero_sector(QList<FrameInfo> animation)
     ba += data;
     ba += ctrl_sum_xor(ba);
 
-//    post_data=ba.toHex();
-//    ba.clear();
-//    ctrl_sum.clear();
+    command_write(ba.toHex());
 
-
-
-    qDebug()<<sectors;
     write_stage = 1;
-    //slot_write();
+
+    slot_write();
+}
+
+void ProcCommand::data_to_other_sector(QList<FrameInfo> animation)
+{
+    QByteArray packet;
+    for(int k=0;k<409;k+=34){
+        QByteArray ba,ba1;
+        QString str("0000"),str1;
+        if(i_write<all_data_to_plc.size()+1){
+        str1.setNum(all_time_to_plc[i_write-1],16);
+        for(int i=str1.size()-1;i>=0;--i){
+            str.replace(str.size()-i-1,1,str1.at(i));
+        }
+        ba+=str;
+        ba=ba1.fromHex(ba);
+        ba+=all_data_to_plc[i_write-1];
+        packet+=ba;
+        i_write+=1;
+        }
+        else{
+            int h=408-packet.size();
+            qDebug()<<"i_write>size"<<h;
+            for(int i=0;i<h;++i)
+                packet.append(255);
+        }
+    }
+    qDebug()<<packet.toHex();
+
+    command_write(ba.toHex());
+
+    write_stage = 2;
+
+    slot_write();
 }
