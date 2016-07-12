@@ -55,6 +55,7 @@ private:
     void command_read(QString command);
     void command_write(QString command);
     void data_to_zero_sector(QList<FrameInfo>);
+    void data_to_other_sector(QList<FrameInfo>);
     QList<FrameInfo> animation;
 };
 
