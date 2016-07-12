@@ -31,7 +31,6 @@ QByteArray ReadFlash::operation(ComPort *port, QString string)
     buff = ctrl_sum_xor(ba1.fromHex(ba));
     listen=listen+buff.toHex();
     buffer+=listen;
-    qDebug()<<buffer;
     port->write(buffer);
     //buffer = port->read();
 

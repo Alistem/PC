@@ -19,15 +19,14 @@ com_port_w::com_port_w(QWidget *parent)
     , ui(new Ui::com_port)
 {
     ui->setupUi(this);
-    com_port *com_port1 = new com_port(this); // создаём объект класса com_port. Для реализации ком-порта
-    com_port1->hide(); // скрываем объект с формы, а то он меню загораживает
-    ui->progressBar_frames->hide();
+
     ui->connectButton->setDefault(true);
 
     ui->Status_PLC->setEnabled(false);
     ui->reset->setEnabled(false);
     ui->readButton->setEnabled(false);
     ui->writeButton->setEnabled(false);
+    ui->progressBar_frames->hide();
 
     //======================================Buttons============================================
     connect(this->ui->writeButton,SIGNAL(clicked()),this,SIGNAL(res_data_to_plc()));
@@ -57,28 +56,20 @@ com_port_w::com_port_w(QWidget *parent)
     //======================================Read Data==========================================
     connect(proccommand,SIGNAL(frames_label(int)),this,SLOT(frames_label_main(int)));
     connect(proccommand,SIGNAL(num_frame_read(int)),this,SLOT(num_readed_frames(int)));
+    connect(proccommand,SIGNAL(data_from_com(QByteArray)),this,SLOT(read_data(QByteArray)));
 
+    //===========================Данные с контроллера в проект=================================
+    connect(proccommand,SIGNAL(times_from_plc1(int,int,int)),this,SIGNAL(times_from_plc(int,int,int)));
+    connect(proccommand,SIGNAL(shim_from_plc1(QByteArray,int)),this,SIGNAL(shim_from_plc(QByteArray,int)));
+
+    //===========================Запрос импорта данных в проект================================
+    connect(this,SIGNAL(import_data_to_project()),proccommand,SLOT(data_to_project()));
     //=========================================================================================
 
 
     connect(proccommand,SIGNAL(error_label(QString)),this,SLOT(error_label_main(QString)));
 
 
-
-
-    connect(this,SIGNAL(data_com_port_ext(QString)),com_port1,SLOT(data_com_port_post(QString)));
-
-    connect(com_port1,SIGNAL(data_from_com(QByteArray)),this,SLOT(read_data(QByteArray)));
-    connect(com_port1,SIGNAL(com_port_num()),this,SLOT(com_port_num_res()));
-
-
-
-
-
-    connect(this,SIGNAL(import_data_to_project()),com_port1,SLOT(data_to_project()));
-    //===========================Данные с контроллера в проект====================================
-    connect(com_port1,SIGNAL(times_from_plc1(int,int,int)),this,SIGNAL(times_from_plc(int,int,int)));
-    connect(com_port1,SIGNAL(shim_from_plc1(QByteArray,int)),this,SIGNAL(shim_from_plc(QByteArray,int)));
 
 
     back_color_on="QLabel{background-color: rgb(0, 255, 0);}";
@@ -197,6 +188,8 @@ void com_port_w::num_readed_frames(int num_frame)
     ui->label_num_frames_2->setText(frames_reading);
     ui->progressBar_frames->show();
     ui->progressBar_frames->setValue(100*num_frame/int_num_frames_summ);
+    if(num_frame==int_num_frames_summ)
+        ui->progressBar_frames->hide();
 }
 void com_port_w::on_pushButton_clicked() // запись данных из контроллера в проект
 {

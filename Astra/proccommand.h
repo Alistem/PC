@@ -23,6 +23,9 @@ signals:
     void error_label(QString);
     void frames_label(int);
     void num_frame_read(int);
+    void data_from_com(QByteArray);
+    void times_from_plc1(int,int,int);
+    void shim_from_plc1(QByteArray,int);
 
 public slots:
     void slot_connect(int num);
@@ -34,15 +37,17 @@ public slots:
     void slot_write(QList<QString> animation);
     void comPortError(QByteArray com_port_error);
     void listen_on_off();
+    void data_to_project();
 
 private:
     ComPort *com_port;
-    QByteArray BufferReadData,TempReadData,all_data_from_plc;
-    int flag_command,read_stage,ctrl_sum_errors,num_frames,current_frame,errors;
+    QByteArray BufferReadData,TempReadData,all_data_from_plc,times_of_frames,shim_of_frames;
+    int flag_command,read_stage,ctrl_sum_errors,num_frames,current_sector,errors;
     bool ctrl_sum_verify(QByteArray);
     QByteArray ctrl_sum_xor(QByteArray);
     void nums_all_frames();
     void data_all_frames();
+    void analise_reading_data();
     QString sector;
     bool nums_all_frames_flag,data_all_frames_flag;
 
