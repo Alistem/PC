@@ -88,6 +88,7 @@ void ProcCommand::slot_read()
     case 2:
         qDebug()<<read_stage<<"read_stage";
         analise_reading_data();
+        slot_reset();
         break;
     default:
         break;
@@ -350,7 +351,7 @@ void ProcCommand::slot_write()
     case 2:
         qDebug()<<write_stage<<"write_stage";
         write_stage = 0;
-        //analise_reading_data();
+        slot_reset();
         break;
     default:
         break;
@@ -398,10 +399,11 @@ void ProcCommand::data_to_zero_sector(QList<FrameInfo> animation)
 void ProcCommand::data_to_other_sector(QList<FrameInfo> animation)
 {
     QByteArray packet;
-    if(i_write<=animation.size()/512+1){
-
+    if(i_write<animation.size()/12+1){
+        qDebug()<<"animation.size()/12"<<animation.size()/12;
         for(int k=0;k<12;k+=1){
-            if(animation.size() == k)
+
+            if(animation.size() < (i_write-1)*12+k)
                 break;
             QByteArray ba,ba1;
             QString str("0000"),str1;
@@ -418,21 +420,22 @@ void ProcCommand::data_to_other_sector(QList<FrameInfo> animation)
         }
         if(packet.size() < 408){
             int h=408-packet.size();
-            qDebug()<<"h=408-packet.size()"<<h;
             for(int i=0;i<h;++i)
                 packet.append(255);
         }
-        qDebug()<<packet.toHex();
+        packet += ctrl_sum_xor(packet);
+        qDebug()<<packet.toHex()<<"packet.size()"<<packet.size();
         i_write += 1;
+        if(i_write == animation.size()/12+1)
+            write_stage = 2;
         command_write(packet.toHex());
-
         return;
     }
     else{
-
+        qDebug()<<"end of write";
         write_stage = 2;
 
-        slot_write();
+        //slot_write();
 
     }
 }

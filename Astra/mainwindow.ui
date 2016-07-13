@@ -5763,7 +5763,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>580</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -5826,7 +5826,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="action_open_animation">
    <property name="text">
-    <string>Загрузить анимацию</string>
+    <string>Открыть анимацию</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
