@@ -44,7 +44,7 @@ public slots:
 private:
     ComPort *com_port;
     QByteArray BufferReadData,TempReadData,all_data_from_plc,times_of_frames,shim_of_frames;
-    int flag_command,read_stage,write_stage,ctrl_sum_errors,num_frames,current_sector,errors;
+    int flag_command,read_stage,write_stage,ctrl_sum_errors,num_frames,current_sector,errors,i_write;
     bool ctrl_sum_verify(QByteArray);
     QByteArray ctrl_sum_xor(QByteArray);
     void nums_all_frames();

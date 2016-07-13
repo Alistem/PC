@@ -16,6 +16,7 @@ ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
     flag_command = 0;
     read_stage = 0;
     write_stage = 0;
+    i_write = 0;
     errors = 0;
     nums_all_frames_flag = false;
     data_all_frames_flag = false;
@@ -163,6 +164,10 @@ void ProcCommand::listen_on_off()
         //emit error_label(TempReadData);
     }
     else if(TempReadData.left(4)==("OkWR")){
+        slot_write();
+    }
+    else if(TempReadData.left(4)==("WWOK")){
+        qDebug()<<TempReadData;
         slot_write();
     }
 
@@ -313,18 +318,20 @@ void ProcCommand::data_to_project() // Передача данных анима�
 void ProcCommand::data_from_project(QList<FrameInfo> animations){
     animation = animations;
     slot_write();
+    write_stage = 0;
 }
 
 void ProcCommand::slot_write()
 {
     flag_command = 4;
 
-    switch (write_stage) {
+    switch (write_stage){
     case 0:
         qDebug()<<write_stage<<"write_stage";
 
-        if(TempReadData.left(4)==("OkWR"))
-            data_to_zero_sector(animation); // вычисление количества кадров анимации в контроллере
+        if(TempReadData.left(4)==("OkWR")){
+            data_to_zero_sector(animation); // вычисление количества кадров анимации в контроллере  
+        }
         else
             command_write("0");
 
@@ -334,12 +341,15 @@ void ProcCommand::slot_write()
 
         if(TempReadData.left(4)==("OkWR"))
             data_to_other_sector(animation); // вычисление количества кадров анимации в контроллере
-        else
-            command_write("0");
+        else{
+            QString buffer(QString::number(i_write));
+            command_write(buffer);
+        }
 
         break;
     case 2:
         qDebug()<<write_stage<<"write_stage";
+        write_stage = 0;
         //analise_reading_data();
         break;
     default:
@@ -364,61 +374,65 @@ void ProcCommand::comPortError(QByteArray com_port_error)
 void ProcCommand::data_to_zero_sector(QList<FrameInfo> animation)
 {
     QByteArray ba,ba1,data;
-    QString templ,str_i;
+    QString templ("00000000"),str_i;
     int ii;
-    templ="00000000";
 
     FrameInfo sum_num = animation.at(0);
-    int sectors = sum_num.fsum_num/12;
-
-    str_i.setNum(sectors*512+512,16);
+    int sectors = sum_num.fsum_num/12+1;
+    qDebug()<<sectors<<"sectors";
+    str_i.setNum(sectors*512,16);
     for(ii=0;ii<str_i.size();++ii)
         templ.replace(templ.size()-1-ii,1,str_i.at(str_i.size()-1-ii));
     str_i=templ;
-    templ="00000000";
     ba += str_i;
     ba=ba1.fromHex(ba);
     data.resize(404);
     data.fill(0);
     ba += data;
     ba += ctrl_sum_xor(ba);
-
-    command_write(ba.toHex());
-
     write_stage = 1;
-
-    slot_write();
+    i_write = 1;
+    command_write(ba.toHex());
 }
 
 void ProcCommand::data_to_other_sector(QList<FrameInfo> animation)
 {
     QByteArray packet;
-    for(int k=0;k<409;k+=34){
-        QByteArray ba,ba1;
-        QString str("0000"),str1;
-        if(i_write<all_data_to_plc.size()+1){
-        str1.setNum(all_time_to_plc[i_write-1],16);
-        for(int i=str1.size()-1;i>=0;--i){
-            str.replace(str.size()-i-1,1,str1.at(i));
+    if(i_write<=animation.size()/512+1){
+
+        for(int k=0;k<12;k+=1){
+            if(animation.size() > k)
+                break;
+            QByteArray ba,ba1;
+            QString str("0000"),str1;
+
+            FrameInfo current_data = animation.at((i_write-1)*12+k);
+            str1.setNum(current_data.ftime,16);
+            for(int i=str1.size()-1;i>=0;--i){
+                str.replace(str.size()-i-1,1,str1.at(i));
+            }
+            ba+=str;
+            ba=ba1.fromHex(ba);
+            ba+=current_data.flist;
+            packet+=ba;
         }
-        ba+=str;
-        ba=ba1.fromHex(ba);
-        ba+=all_data_to_plc[i_write-1];
-        packet+=ba;
-        i_write+=1;
-        }
-        else{
+        if(packet.size() < 408){
             int h=408-packet.size();
-            qDebug()<<"i_write>size"<<h;
+            qDebug()<<"h=408-packet.size()"<<h;
             for(int i=0;i<h;++i)
                 packet.append(255);
         }
+        qDebug()<<packet.toHex();
+        i_write += 1;
+        command_write(packet.toHex());
+
+        return;
     }
-    qDebug()<<packet.toHex();
+    else{
 
-    command_write(ba.toHex());
+        write_stage = 2;
 
-    write_stage = 2;
+        slot_write();
 
-    slot_write();
+    }
 }

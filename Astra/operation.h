@@ -16,14 +16,19 @@ public:
         // Работает только с успешно подключенным COM портом
         if (! port->portOpen())
             return buffer;
-        if(!port->read().endsWith("OkOk") || !port->read().endsWith("OkWR")){
+//        if(!port->read().endsWith("OkOk") /*|| !port->read().endsWith("OkWR")*/){
+
+//        }
+        if(port->read().endsWith("OkOk") || port->read().endsWith("OkWR")){
+            qDebug()<<port->read().right(4);
+            QByteArray res2 = operation(port, string);
+            return res2;
+        }
+        else{
+            qDebug()<<"63";
             QString listen = "63";
             buffer+=listen;
             port->write(buffer);
-        }
-        if(port->read().endsWith("OkOk") || port->read().endsWith("OkWR")){
-            QByteArray res2 = operation(port, string);
-            return res2;
         }
 
         return buffer;

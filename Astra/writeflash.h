@@ -8,6 +8,8 @@ class WriteFlash : public Operation
 public:
     WriteFlash();
 
+    QByteArray ctrl_sum_xor(QByteArray);
+
     QByteArray operation(ComPort*, QString);
 };
 

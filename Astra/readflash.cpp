@@ -7,8 +7,6 @@ ReadFlash::ReadFlash()
 
 QByteArray ReadFlash::operation(ComPort *port, QString string)
 {
-
-
     QByteArray buffer,ba,ba1,buff;
     QString sector,templ;
     int i,m;
