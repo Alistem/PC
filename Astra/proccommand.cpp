@@ -401,7 +401,7 @@ void ProcCommand::data_to_other_sector(QList<FrameInfo> animation)
     if(i_write<=animation.size()/512+1){
 
         for(int k=0;k<12;k+=1){
-            if(animation.size() > k)
+            if(animation.size() == k)
                 break;
             QByteArray ba,ba1;
             QString str("0000"),str1;
