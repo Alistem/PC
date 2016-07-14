@@ -331,10 +331,13 @@ void ProcCommand::slot_write()
         qDebug()<<write_stage<<"write_stage";
 
         if(TempReadData.left(4)==("OkWR")){
+            qDebug()<<"TempReadData.left(4)==(OkWR)";
             data_to_zero_sector(animation); // вычисление количества кадров анимации в контроллере  
         }
-        else
+        else{
             command_write("0");
+           qDebug()<<"command_write(0)";
+        }
 
         break;
     case 1:
@@ -351,6 +354,7 @@ void ProcCommand::slot_write()
     case 2:
         qDebug()<<write_stage<<"write_stage";
         write_stage = 0;
+        emit error_label("Анимация загружена успешно!");
         slot_reset();
         break;
     default:
@@ -378,10 +382,11 @@ void ProcCommand::data_to_zero_sector(QList<FrameInfo> animation)
     QString templ("00000000"),str_i;
     int ii;
 
-    FrameInfo sum_num = animation.at(0);
+    FrameInfo sum_num = animation.at(i_write);
+    qDebug()<<i_write;
     int sectors = sum_num.fsum_num/12+1;
     qDebug()<<sectors<<"sectors";
-    str_i.setNum(sectors*512,16);
+    str_i.setNum(sectors*512+512,16);
     for(ii=0;ii<str_i.size();++ii)
         templ.replace(templ.size()-1-ii,1,str_i.at(str_i.size()-1-ii));
     str_i=templ;
@@ -399,12 +404,11 @@ void ProcCommand::data_to_zero_sector(QList<FrameInfo> animation)
 void ProcCommand::data_to_other_sector(QList<FrameInfo> animation)
 {
     QByteArray packet;
-    if(i_write<animation.size()/12+1){
-        qDebug()<<"animation.size()/12"<<animation.size()/12;
         for(int k=0;k<12;k+=1){
 
-            if(animation.size() < (i_write-1)*12+k)
+            if(animation.size() < (i_write-1)*12+k+1)
                 break;
+
             QByteArray ba,ba1;
             QString str("0000"),str1;
 
@@ -421,21 +425,16 @@ void ProcCommand::data_to_other_sector(QList<FrameInfo> animation)
         if(packet.size() < 408){
             int h=408-packet.size();
             for(int i=0;i<h;++i)
-                packet.append(255);
+                packet.append(1);
         }
         packet += ctrl_sum_xor(packet);
-        qDebug()<<packet.toHex()<<"packet.size()"<<packet.size();
-        i_write += 1;
-        if(i_write == animation.size()/12+1)
+        qDebug()<<packet.toHex();
+
+        if(i_write == animation.size()/12+1){
             write_stage = 2;
+            qDebug()<<i_write<<"i_write"<<animation.size()/12+1<<"animation.size()/12+1";
+            qDebug()<<"end of write";
+        }
+        i_write += 1;
         command_write(packet.toHex());
-        return;
-    }
-    else{
-        qDebug()<<"end of write";
-        write_stage = 2;
-
-        //slot_write();
-
-    }
 }
