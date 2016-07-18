@@ -386,7 +386,7 @@ void ProcCommand::data_to_zero_sector(QList<FrameInfo> animation)
     qDebug()<<i_write;
     int sectors = sum_num.fsum_num/12+1;
     qDebug()<<sectors<<"sectors";
-    str_i.setNum(sectors*512+512,16);
+    str_i.setNum(sectors*512,16);
     for(ii=0;ii<str_i.size();++ii)
         templ.replace(templ.size()-1-ii,1,str_i.at(str_i.size()-1-ii));
     str_i=templ;
@@ -432,8 +432,6 @@ void ProcCommand::data_to_other_sector(QList<FrameInfo> animation)
 
         if(i_write == animation.size()/12+1){
             write_stage = 2;
-            qDebug()<<i_write<<"i_write"<<animation.size()/12+1<<"animation.size()/12+1";
-            qDebug()<<"end of write";
         }
         i_write += 1;
         command_write(packet.toHex());

@@ -17,7 +17,6 @@ CONFIG +=C++11
 SOURCES += main.cpp\
         mainwindow.cpp \
     com_port_main.cpp \
-    com_port1.cpp \
     comport.cpp \
     proccommand.cpp \
     getstatus.cpp \
@@ -34,8 +33,7 @@ HEADERS  += mainwindow.h \
     readflash.h \
     writeflash.h \
     reset.h \
-    frameinfo.h \
-    com_port1.h
+    frameinfo.h
 
 FORMS    += mainwindow.ui \
     com_port1.ui
