@@ -5,7 +5,6 @@
 #include <QBuffer>
 #include <QMessageBox>
 #include <iostream>
-#include "com_port1.h"
 #include "proccommand.h"
 #include "mainwindow.h"
 //#include <QApplication>

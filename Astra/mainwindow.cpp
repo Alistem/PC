@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     stylesheet_switch(); // Меняем цвет кнопок при инициализации на красный (по-умолчанию)
 
     ui->tabWidget->hide();
-//    ui->centralWidget->updateGeometry();
+    //    ui->centralWidget->updateGeometry();
 
     ui->lineEdit->setText("0");
     ui->lineEdit_2->setText("0");
@@ -57,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lineEdit_31->setText("0");
     ui->lineEdit_32->setText("0");
     ui->lineEdit_time->setText("0.01");
-//=====================================================================
+    //=====================================================================
     ui->action8->triggered(true); // Один контроллер (при инициализации)
     ui->action8->setChecked(true);// Один контроллер (при инициализации)
     //====================================================================
@@ -81,8 +81,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //=========================================================================================================
     num_frame=1;
     num_sum=1;
-    new_frame(); 
-    frame_num_lcd();
+    new_frame();
+    frame_num_lcd(num_frame);
     frame_sum_lcd();
     //====================Инициализация массивов кадров и времени================================
     time_current=1;
@@ -120,19 +120,20 @@ void MainWindow::stylesheet_switch()
     init_style_red="QPushButton{border-image: url(:/led_my_super); background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba(120, 0, 0, 255), stop:0.463277 rgba(100, 0, 0, 255), stop:0.564246 rgba(70, 0, 0, 255), stop:0.672 rgba(40, 0, 0, 255), stop:0.7 rgba(255, 255, 255, 0));}";
     init_style_green="QPushButton{border-image: url(:/led_my_super); background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba(0, 120, 0, 255), stop:0.463277 rgba(0, 100, 0, 255), stop:0.564246 rgba(0, 70, 0, 255), stop:0.672 rgba(0, 40, 0, 255), stop:0.7 rgba(255, 255, 255, 0));}";
     init_style_blue="QPushButton{border-image: url(:/led_my_super); background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba(0, 50, 120, 255), stop:0.463277 rgba(0, 50, 100, 255), stop:0.564246 rgba(0, 50, 70, 255), stop:0.672 rgba(0, 50, 40, 255), stop:0.7 rgba(255, 255, 255, 0));}";
-    if (color_button==1){
+    switch (color_button) {
+    case 1:
         init_style=init_style_red;
+        break;
+    case 2:
+        init_style=init_style_green;
+        break;
+    case 3:
+        init_style=init_style_blue;
+        break;
+    default:
+        break;
     }
-    else{
-        if (color_button==2){
-            init_style=init_style_green;
-        }
-        else{
-            if (color_button==3){
-                init_style=init_style_blue;
-            }
-        }
-    }
+
     ui->pushButton_1->setStyleSheet(init_style);
     ui->pushButton_2->setStyleSheet(init_style);
     ui->pushButton_3->setStyleSheet(init_style);
@@ -203,85 +204,123 @@ void MainWindow::change_bright_btn(int bright) // слот для изменен
     back_color_green="QPushButton{border-image: url(:/led_my_super);}""QPushButton{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba(10,"+grad_one_str+", 0, 255), stop:0.463277 rgba(42,"+grad_two_str+", 22, 255), stop:0.564246 rgba(16,"+grad_three_str+", 16, 255), stop:0.672 rgba(1,"+grad_four_str+", 1, 255), stop:0.701 rgba(255, 255, 255, 0));}";
     back_color_blue="QPushButton{border-image: url(:/led_my_super);}""QPushButton{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba(0, 50,"+grad_one_str+",  255), stop:0.463277 rgba(0, 50,"+grad_two_str+", 255), stop:0.564246 rgba(0, 50,"+grad_three_str+", 255), stop:0.672 rgba(0, 50,"+grad_four_str+", 255), stop:0.701 rgba(255, 255, 255, 0));}";
 
-    if (color_button==1){
+    switch (color_button) {
+    case 1:
         back_color=back_color_red;
+        break;
+    case 2:
+        back_color=back_color_green;
+        break;
+    case 3:
+        back_color=back_color_blue;
+        break;
+    default:
+        break;
     }
-    else{
-        if (color_button==2){
-            back_color=back_color_green;
-        }
-        else{
-            if (color_button==3){
-                back_color=back_color_blue;
-            }
-        }
-    }
-//    back_color="QPushButton{border-image: url(:/led_my_super);}""QPushButton{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba("+grad_one_str+", 72, 0, 255), stop:0.463277 rgba("+grad_two_str+", 42, 22, 255), stop:0.564246 rgba("+grad_three_str+", 16, 16, 255), stop:0.672 rgba("+grad_four_str+", 1, 1, 255), stop:0.701 rgba(255, 255, 255, 0));}";
 
-    if(ch_num==1)
+    //    back_color="QPushButton{border-image: url(:/led_my_super);}""QPushButton{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.63, fx:0.5, fy:0.5, stop:0.225989 rgba("+grad_one_str+", 72, 0, 255), stop:0.463277 rgba("+grad_two_str+", 42, 22, 255), stop:0.564246 rgba("+grad_three_str+", 16, 16, 255), stop:0.672 rgba("+grad_four_str+", 1, 1, 255), stop:0.701 rgba(255, 255, 255, 0));}";
+
+    switch (ch_num) {
+    case 1:
         ui->pushButton_1->setStyleSheet(back_color);
-    if(ch_num==2)
-        ui->pushButton_2->setStyleSheet((back_color));
-    if(ch_num==3)
-        ui->pushButton_3->setStyleSheet((back_color));
-    if(ch_num==4)
-        ui->pushButton_4->setStyleSheet((back_color));
-    if(ch_num==5)
-        ui->pushButton_5->setStyleSheet((back_color));
-    if(ch_num==6)
-        ui->pushButton_6->setStyleSheet((back_color));
-    if(ch_num==7)
-        ui->pushButton_7->setStyleSheet((back_color));
-    if(ch_num==8)
-        ui->pushButton_8->setStyleSheet((back_color));
-    if(ch_num==9)
-        ui->pushButton_9->setStyleSheet((back_color));
-    if(ch_num==10)
-        ui->pushButton_10->setStyleSheet((back_color));
-    if(ch_num==11)
-        ui->pushButton_11->setStyleSheet((back_color));
-    if(ch_num==12)
-        ui->pushButton_12->setStyleSheet((back_color));
-    if(ch_num==13)
-        ui->pushButton_13->setStyleSheet((back_color));
-    if(ch_num==14)
-        ui->pushButton_14->setStyleSheet((back_color));
-    if(ch_num==15)
-        ui->pushButton_15->setStyleSheet((back_color));
-    if(ch_num==16)
-        ui->pushButton_16->setStyleSheet((back_color));
-    if(ch_num==17)
-        ui->pushButton_17->setStyleSheet((back_color));
-    if(ch_num==18)
-        ui->pushButton_18->setStyleSheet((back_color));
-    if(ch_num==19)
-        ui->pushButton_19->setStyleSheet((back_color));
-    if(ch_num==20)
-        ui->pushButton_20->setStyleSheet((back_color));
-    if(ch_num==21)
-        ui->pushButton_21->setStyleSheet((back_color));
-    if(ch_num==22)
-        ui->pushButton_22->setStyleSheet((back_color));
-    if(ch_num==23)
-        ui->pushButton_23->setStyleSheet((back_color));
-    if(ch_num==24)
-        ui->pushButton_24->setStyleSheet((back_color));
-    if(ch_num==25)
-        ui->pushButton_25->setStyleSheet((back_color));
-    if(ch_num==26)
-        ui->pushButton_26->setStyleSheet((back_color));
-    if(ch_num==27)
-        ui->pushButton_27->setStyleSheet((back_color));
-    if(ch_num==28)
-        ui->pushButton_28->setStyleSheet((back_color));
-    if(ch_num==29)
-        ui->pushButton_29->setStyleSheet((back_color));
-    if(ch_num==30)
-        ui->pushButton_30->setStyleSheet((back_color));
-    if(ch_num==31)
-        ui->pushButton_31->setStyleSheet((back_color));
-    if(ch_num==32)
-        ui->pushButton_32->setStyleSheet((back_color));
+        break;
+    case 2:
+        ui->pushButton_2->setStyleSheet(back_color);
+        break;
+    case 3:
+        ui->pushButton_3->setStyleSheet(back_color);
+        break;
+    case 4:
+        ui->pushButton_4->setStyleSheet(back_color);
+        break;
+    case 5:
+        ui->pushButton_5->setStyleSheet(back_color);
+        break;
+    case 6:
+        ui->pushButton_6->setStyleSheet(back_color);
+        break;
+    case 7:
+        ui->pushButton_7->setStyleSheet(back_color);
+        break;
+    case 8:
+        ui->pushButton_8->setStyleSheet(back_color);
+        break;
+    case 9:
+        ui->pushButton_9->setStyleSheet(back_color);
+        break;
+    case 10:
+        ui->pushButton_10->setStyleSheet(back_color);
+        break;
+    case 11:
+        ui->pushButton_11->setStyleSheet(back_color);
+        break;
+    case 12:
+        ui->pushButton_12->setStyleSheet(back_color);
+        break;
+    case 13:
+        ui->pushButton_13->setStyleSheet(back_color);
+        break;
+    case 14:
+        ui->pushButton_14->setStyleSheet(back_color);
+        break;
+    case 15:
+        ui->pushButton_15->setStyleSheet(back_color);
+        break;
+    case 16:
+        ui->pushButton_16->setStyleSheet(back_color);
+        break;
+    case 17:
+        ui->pushButton_17->setStyleSheet(back_color);
+        break;
+    case 18:
+        ui->pushButton_18->setStyleSheet(back_color);
+        break;
+    case 19:
+        ui->pushButton_19->setStyleSheet(back_color);
+        break;
+    case 20:
+        ui->pushButton_20->setStyleSheet(back_color);
+        break;
+    case 21:
+        ui->pushButton_21->setStyleSheet(back_color);
+        break;
+    case 22:
+        ui->pushButton_22->setStyleSheet(back_color);
+        break;
+    case 23:
+        ui->pushButton_23->setStyleSheet(back_color);
+        break;
+    case 24:
+        ui->pushButton_24->setStyleSheet(back_color);
+        break;
+    case 25:
+        ui->pushButton_25->setStyleSheet(back_color);
+        break;
+    case 26:
+        ui->pushButton_26->setStyleSheet(back_color);
+        break;
+    case 27:
+        ui->pushButton_27->setStyleSheet(back_color);
+        break;
+    case 28:
+        ui->pushButton_28->setStyleSheet(back_color);
+        break;
+    case 29:
+        ui->pushButton_29->setStyleSheet(back_color);
+        break;
+    case 30:
+        ui->pushButton_30->setStyleSheet(back_color);
+        break;
+    case 31:
+        ui->pushButton_31->setStyleSheet(back_color);
+        break;
+    case 32:
+        ui->pushButton_32->setStyleSheet(back_color);
+        break;
+    default:
+        break;
+    }
+
 }
 
 void MainWindow::on_lineEdit_editingFinished()
@@ -289,7 +328,7 @@ void MainWindow::on_lineEdit_editingFinished()
     lineEdit_background(1);
     if(entr_bright==1 || ui->lineEdit->text().toInt()>255){
         entr_bright=0;
-               return;
+        return;
     }
     entr_bright=1;
     ui->verticalSlider->setValue(ui->lineEdit->text().toInt());
@@ -1071,20 +1110,20 @@ void MainWindow::on_verticalSlider_13_valueChanged(int value)
 void MainWindow::on_verticalSlider_14_valueChanged(int value)
 {
     ch_num=14;
-   change_bright_btn(value);
-   massive_frame(value);
+    change_bright_btn(value);
+    massive_frame(value);
 
-   QString bright=QString::number(value);
-   if(value>0)
-       ui->pushButton_14->setChecked(true); // Если яркость выше нуля - соответствующая кнопка включается
-   if(entr_bright==0){
-       ui->lineEdit_14->setText(bright);
-       lineEdit_background(ch_num);
-   }
-   else{
-       ui->verticalSlider_14->setFocus();
-       entr_bright=0;
-   }
+    QString bright=QString::number(value);
+    if(value>0)
+        ui->pushButton_14->setChecked(true); // Если яркость выше нуля - соответствующая кнопка включается
+    if(entr_bright==0){
+        ui->lineEdit_14->setText(bright);
+        lineEdit_background(ch_num);
+    }
+    else{
+        ui->verticalSlider_14->setFocus();
+        entr_bright=0;
+    }
 }
 void MainWindow::on_verticalSlider_15_valueChanged(int value)
 {
@@ -1421,7 +1460,7 @@ void MainWindow::on_pushButton_1_clicked(bool checked)
         entr_bright=0;
         ui->lineEdit->setText("0");
     }
-    ui->lineEdit->editingFinished();  
+    ui->lineEdit->editingFinished();
 }
 void MainWindow::on_pushButton_2_clicked(bool checked)
 {
@@ -1835,7 +1874,7 @@ void MainWindow::frame_text(int value, QByteArray fra) // Текущий кад�
 
     frame_string=str2;
     if(all_frames==0)  // Условие, что не работает слот frame_text_all()
-    ui->textEdit->setText(frame_string);
+        ui->textEdit->setText(frame_string);
 }
 void MainWindow::frame_text_all() // Все кадры в 16-тиричном формате (In the textEdit_2)
 {
@@ -1900,7 +1939,7 @@ void MainWindow::on_toolButton_all_time_clicked() // Запись текущег
     on_lineEdit_time_editingFinished();
     for(int i=0;i<frames_time.size();++i){
         frames_time[i]=time_current;
-    }  
+    }
 }
 
 void MainWindow::rev_ret() // обратная связь
@@ -1910,170 +1949,176 @@ void MainWindow::rev_ret() // обратная связь
         QByteArray ba=frame.mid(i,1);
         int k=ba.toHex().toInt(0,16);
         QString bright=QString::number(k);
-        if(i==0){
+
+        switch (i) {
+        case 0:
             ui->verticalSlider->setValue(k);
             ui->lineEdit->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==1){
+            break;
+        case 1:
             ui->verticalSlider_2->setValue(k);
             ui->lineEdit_2->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==2){
+            break;
+        case 2:
             ui->verticalSlider_3->setValue(k);
             ui->lineEdit_3->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==3){
+            break;
+        case 3:
             ui->verticalSlider_4->setValue(k);
             ui->lineEdit_4->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==4){
+            break;
+        case 4:
             ui->verticalSlider_5->setValue(k);
             ui->lineEdit_5->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==5){
+            break;
+        case 5:
             ui->verticalSlider_6->setValue(k);
             ui->lineEdit_6->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==6){
+            break;
+        case 6:
             ui->verticalSlider_7->setValue(k);
             ui->lineEdit_7->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==7){
+            break;
+        case 7:
             ui->verticalSlider_8->setValue(k);
             ui->lineEdit_8->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==8){
+            break;
+        case 8:
             ui->verticalSlider_9->setValue(k);
             ui->lineEdit_9->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==9){
+            break;
+        case 9:
             ui->verticalSlider_10->setValue(k);
             ui->lineEdit_10->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==10){
+            break;
+        case 10:
             ui->verticalSlider_11->setValue(k);
             ui->lineEdit_11->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==11){
+            break;
+        case 11:
             ui->verticalSlider_12->setValue(k);
             ui->lineEdit_12->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==12){
+            break;
+        case 12:
             ui->verticalSlider_13->setValue(k);
             ui->lineEdit_13->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==13){
+            break;
+        case 13:
             ui->verticalSlider_14->setValue(k);
             ui->lineEdit_14->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==14){
+            break;
+        case 14:
             ui->verticalSlider_15->setValue(k);
             ui->lineEdit_15->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==15){
+            break;
+        case 15:
             ui->verticalSlider_16->setValue(k);
             ui->lineEdit_16->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==16){
+            break;
+        case 16:
             ui->verticalSlider_17->setValue(k);
             ui->lineEdit_17->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==17){
+            break;
+        case 17:
             ui->verticalSlider_18->setValue(k);
             ui->lineEdit_18->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==18){
+            break;
+        case 18:
             ui->verticalSlider_19->setValue(k);
             ui->lineEdit_19->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==19){
+            break;
+        case 19:
             ui->verticalSlider_20->setValue(k);
             ui->lineEdit_20->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==20){
+            break;
+        case 20:
             ui->verticalSlider_21->setValue(k);
             ui->lineEdit_21->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==21){
+            break;
+        case 21:
             ui->verticalSlider_22->setValue(k);
             ui->lineEdit_22->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==22){
+            break;
+        case 22:
             ui->verticalSlider_23->setValue(k);
             ui->lineEdit_23->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==23){
+            break;
+        case 23:
             ui->verticalSlider_24->setValue(k);
             ui->lineEdit_24->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==24){
+            break;
+        case 24:
             ui->verticalSlider_25->setValue(k);
             ui->lineEdit_25->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==25){
+            break;
+        case 25:
             ui->verticalSlider_26->setValue(k);
             ui->lineEdit_26->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==26){
+            break;
+        case 26:
             ui->verticalSlider_27->setValue(k);
             ui->lineEdit_27->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==27){
+            break;
+        case 27:
             ui->verticalSlider_28->setValue(k);
             ui->lineEdit_28->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==28){
+            break;
+        case 28:
             ui->verticalSlider_29->setValue(k);
             ui->lineEdit_29->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==29){
+            break;
+        case 29:
             ui->verticalSlider_30->setValue(k);
             ui->lineEdit_30->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==30){
+            break;
+        case 30:
             ui->verticalSlider_31->setValue(k);
             ui->lineEdit_31->setText(bright);
             lineEdit_background(i);
-        }
-        if(i==31){
+            break;
+        case 31:
             ui->verticalSlider_32->setValue(k);
             ui->lineEdit_32->setText(bright);
             lineEdit_background(i);
+            break;
+
+        default:
+            break;
         }
     }
 }
 
-void MainWindow::frame_num_lcd()
+void MainWindow::frame_num_lcd(int num)
 {
     ui->num_frame_lcd->display(num_frame);
 }
@@ -2088,37 +2133,37 @@ void MainWindow::on_action8_triggered(bool checked)
 {
     num_channels=8;
     if(checked==true){
-    ui->action16->setChecked(false);
-    ui->action24->setChecked(false);
-    ui->action32->setChecked(false);
-//============================================
-    ui->verticalSlider_9->setEnabled(false);
-    ui->verticalSlider_10->setEnabled(false);
-    ui->verticalSlider_11->setEnabled(false);
-    ui->verticalSlider_12->setEnabled(false);
-    ui->verticalSlider_13->setEnabled(false);
-    ui->verticalSlider_14->setEnabled(false);
-    ui->verticalSlider_15->setEnabled(false);
-    ui->verticalSlider_16->setEnabled(false);
-    ui->verticalSlider_17->setEnabled(false);
-    ui->verticalSlider_18->setEnabled(false);
-    ui->verticalSlider_19->setEnabled(false);
-    ui->verticalSlider_20->setEnabled(false);
-    ui->verticalSlider_21->setEnabled(false);
-    ui->verticalSlider_22->setEnabled(false);
-    ui->verticalSlider_23->setEnabled(false);
-    ui->verticalSlider_24->setEnabled(false);
-    ui->verticalSlider_25->setEnabled(false);
-    ui->verticalSlider_26->setEnabled(false);
-    ui->verticalSlider_27->setEnabled(false);
-    ui->verticalSlider_28->setEnabled(false);
-    ui->verticalSlider_29->setEnabled(false);
-    ui->verticalSlider_30->setEnabled(false);
-    ui->verticalSlider_31->setEnabled(false);
-    ui->verticalSlider_32->setEnabled(false);
-    ui->groupBox_3->hide();
-    ui->groupBox_4->hide();
-    ui->groupBox_5->hide();
+        ui->action16->setChecked(false);
+        ui->action24->setChecked(false);
+        ui->action32->setChecked(false);
+        //============================================
+        ui->verticalSlider_9->setEnabled(false);
+        ui->verticalSlider_10->setEnabled(false);
+        ui->verticalSlider_11->setEnabled(false);
+        ui->verticalSlider_12->setEnabled(false);
+        ui->verticalSlider_13->setEnabled(false);
+        ui->verticalSlider_14->setEnabled(false);
+        ui->verticalSlider_15->setEnabled(false);
+        ui->verticalSlider_16->setEnabled(false);
+        ui->verticalSlider_17->setEnabled(false);
+        ui->verticalSlider_18->setEnabled(false);
+        ui->verticalSlider_19->setEnabled(false);
+        ui->verticalSlider_20->setEnabled(false);
+        ui->verticalSlider_21->setEnabled(false);
+        ui->verticalSlider_22->setEnabled(false);
+        ui->verticalSlider_23->setEnabled(false);
+        ui->verticalSlider_24->setEnabled(false);
+        ui->verticalSlider_25->setEnabled(false);
+        ui->verticalSlider_26->setEnabled(false);
+        ui->verticalSlider_27->setEnabled(false);
+        ui->verticalSlider_28->setEnabled(false);
+        ui->verticalSlider_29->setEnabled(false);
+        ui->verticalSlider_30->setEnabled(false);
+        ui->verticalSlider_31->setEnabled(false);
+        ui->verticalSlider_32->setEnabled(false);
+        ui->groupBox_3->hide();
+        ui->groupBox_4->hide();
+        ui->groupBox_5->hide();
     }
     else{
         ui->action8->triggered(true);
@@ -2129,40 +2174,40 @@ void MainWindow::on_action16_triggered(bool checked)
 {
     num_channels=16;
     if(checked==true){
-    ui->action8->setChecked(false);
-    ui->action24->setChecked(false);
-    ui->action32->setChecked(false);
-    //============================================
-    ui->verticalSlider_9->setEnabled(true);
-    ui->verticalSlider_10->setEnabled(true);
-    ui->verticalSlider_11->setEnabled(true);
-    ui->verticalSlider_12->setEnabled(true);
-    ui->verticalSlider_13->setEnabled(true);
-    ui->verticalSlider_14->setEnabled(true);
-    ui->verticalSlider_15->setEnabled(true);
-    ui->verticalSlider_16->setEnabled(true);
-    //----------------------------------------
-    ui->verticalSlider_17->setEnabled(false);
-    ui->verticalSlider_18->setEnabled(false);
-    ui->verticalSlider_19->setEnabled(false);
-    ui->verticalSlider_20->setEnabled(false);
-    ui->verticalSlider_21->setEnabled(false);
-    ui->verticalSlider_22->setEnabled(false);
-    ui->verticalSlider_23->setEnabled(false);
-    ui->verticalSlider_24->setEnabled(false);
-    ui->verticalSlider_25->setEnabled(false);
-    ui->verticalSlider_26->setEnabled(false);
-    ui->verticalSlider_27->setEnabled(false);
-    ui->verticalSlider_28->setEnabled(false);
-    ui->verticalSlider_29->setEnabled(false);
-    ui->verticalSlider_30->setEnabled(false);
-    ui->verticalSlider_31->setEnabled(false);
-    ui->verticalSlider_32->setEnabled(false);
-    //=============================================
-    ui->groupBox_3->show();
-    //====================
-    ui->groupBox_4->hide();
-    ui->groupBox_5->hide();
+        ui->action8->setChecked(false);
+        ui->action24->setChecked(false);
+        ui->action32->setChecked(false);
+        //============================================
+        ui->verticalSlider_9->setEnabled(true);
+        ui->verticalSlider_10->setEnabled(true);
+        ui->verticalSlider_11->setEnabled(true);
+        ui->verticalSlider_12->setEnabled(true);
+        ui->verticalSlider_13->setEnabled(true);
+        ui->verticalSlider_14->setEnabled(true);
+        ui->verticalSlider_15->setEnabled(true);
+        ui->verticalSlider_16->setEnabled(true);
+        //----------------------------------------
+        ui->verticalSlider_17->setEnabled(false);
+        ui->verticalSlider_18->setEnabled(false);
+        ui->verticalSlider_19->setEnabled(false);
+        ui->verticalSlider_20->setEnabled(false);
+        ui->verticalSlider_21->setEnabled(false);
+        ui->verticalSlider_22->setEnabled(false);
+        ui->verticalSlider_23->setEnabled(false);
+        ui->verticalSlider_24->setEnabled(false);
+        ui->verticalSlider_25->setEnabled(false);
+        ui->verticalSlider_26->setEnabled(false);
+        ui->verticalSlider_27->setEnabled(false);
+        ui->verticalSlider_28->setEnabled(false);
+        ui->verticalSlider_29->setEnabled(false);
+        ui->verticalSlider_30->setEnabled(false);
+        ui->verticalSlider_31->setEnabled(false);
+        ui->verticalSlider_32->setEnabled(false);
+        //=============================================
+        ui->groupBox_3->show();
+        //====================
+        ui->groupBox_4->hide();
+        ui->groupBox_5->hide();
     }
     else{
         ui->action16->triggered(true);
@@ -2173,40 +2218,40 @@ void MainWindow::on_action24_triggered(bool checked)
 {
     num_channels=24;
     if(checked==true){
-    ui->action8->setChecked(false);
-    ui->action16->setChecked(false);
-    ui->action32->setChecked(false);
-    //============================================
-    ui->verticalSlider_9->setEnabled(true);
-    ui->verticalSlider_10->setEnabled(true);
-    ui->verticalSlider_11->setEnabled(true);
-    ui->verticalSlider_12->setEnabled(true);
-    ui->verticalSlider_13->setEnabled(true);
-    ui->verticalSlider_14->setEnabled(true);
-    ui->verticalSlider_15->setEnabled(true);
-    ui->verticalSlider_16->setEnabled(true);
-    ui->verticalSlider_17->setEnabled(true);
-    ui->verticalSlider_18->setEnabled(true);
-    ui->verticalSlider_19->setEnabled(true);
-    ui->verticalSlider_20->setEnabled(true);
-    ui->verticalSlider_21->setEnabled(true);
-    ui->verticalSlider_22->setEnabled(true);
-    ui->verticalSlider_23->setEnabled(true);
-    ui->verticalSlider_24->setEnabled(true);
-    //=-----------=-============================---
-    ui->verticalSlider_25->setEnabled(false);
-    ui->verticalSlider_26->setEnabled(false);
-    ui->verticalSlider_27->setEnabled(false);
-    ui->verticalSlider_28->setEnabled(false);
-    ui->verticalSlider_29->setEnabled(false);
-    ui->verticalSlider_30->setEnabled(false);
-    ui->verticalSlider_31->setEnabled(false);
-    ui->verticalSlider_32->setEnabled(false);
-    //=============================================
-    ui->groupBox_3->show();
-    ui->groupBox_4->show();
-    //====================
-    ui->groupBox_5->hide();
+        ui->action8->setChecked(false);
+        ui->action16->setChecked(false);
+        ui->action32->setChecked(false);
+        //============================================
+        ui->verticalSlider_9->setEnabled(true);
+        ui->verticalSlider_10->setEnabled(true);
+        ui->verticalSlider_11->setEnabled(true);
+        ui->verticalSlider_12->setEnabled(true);
+        ui->verticalSlider_13->setEnabled(true);
+        ui->verticalSlider_14->setEnabled(true);
+        ui->verticalSlider_15->setEnabled(true);
+        ui->verticalSlider_16->setEnabled(true);
+        ui->verticalSlider_17->setEnabled(true);
+        ui->verticalSlider_18->setEnabled(true);
+        ui->verticalSlider_19->setEnabled(true);
+        ui->verticalSlider_20->setEnabled(true);
+        ui->verticalSlider_21->setEnabled(true);
+        ui->verticalSlider_22->setEnabled(true);
+        ui->verticalSlider_23->setEnabled(true);
+        ui->verticalSlider_24->setEnabled(true);
+        //=-----------=-============================---
+        ui->verticalSlider_25->setEnabled(false);
+        ui->verticalSlider_26->setEnabled(false);
+        ui->verticalSlider_27->setEnabled(false);
+        ui->verticalSlider_28->setEnabled(false);
+        ui->verticalSlider_29->setEnabled(false);
+        ui->verticalSlider_30->setEnabled(false);
+        ui->verticalSlider_31->setEnabled(false);
+        ui->verticalSlider_32->setEnabled(false);
+        //=============================================
+        ui->groupBox_3->show();
+        ui->groupBox_4->show();
+        //====================
+        ui->groupBox_5->hide();
     }
     else{
         ui->action24->triggered(true);
@@ -2217,38 +2262,38 @@ void MainWindow::on_action32_triggered(bool checked)
 {
     num_channels=32;
     if(checked==true){
-    ui->action8->setChecked(false);
-    ui->action16->setChecked(false);
-    ui->action24->setChecked(false);
-    //============================================
-    ui->verticalSlider_9->setEnabled(true);
-    ui->verticalSlider_10->setEnabled(true);
-    ui->verticalSlider_11->setEnabled(true);
-    ui->verticalSlider_12->setEnabled(true);
-    ui->verticalSlider_13->setEnabled(true);
-    ui->verticalSlider_14->setEnabled(true);
-    ui->verticalSlider_15->setEnabled(true);
-    ui->verticalSlider_16->setEnabled(true);
-    ui->verticalSlider_17->setEnabled(true);
-    ui->verticalSlider_18->setEnabled(true);
-    ui->verticalSlider_19->setEnabled(true);
-    ui->verticalSlider_20->setEnabled(true);
-    ui->verticalSlider_21->setEnabled(true);
-    ui->verticalSlider_22->setEnabled(true);
-    ui->verticalSlider_23->setEnabled(true);
-    ui->verticalSlider_24->setEnabled(true);
-    ui->verticalSlider_25->setEnabled(true);
-    ui->verticalSlider_26->setEnabled(true);
-    ui->verticalSlider_27->setEnabled(true);
-    ui->verticalSlider_28->setEnabled(true);
-    ui->verticalSlider_29->setEnabled(true);
-    ui->verticalSlider_30->setEnabled(true);
-    ui->verticalSlider_31->setEnabled(true);
-    ui->verticalSlider_32->setEnabled(true);
-    //=============================================
-    ui->groupBox_3->show();
-    ui->groupBox_4->show();
-    ui->groupBox_5->show();
+        ui->action8->setChecked(false);
+        ui->action16->setChecked(false);
+        ui->action24->setChecked(false);
+        //============================================
+        ui->verticalSlider_9->setEnabled(true);
+        ui->verticalSlider_10->setEnabled(true);
+        ui->verticalSlider_11->setEnabled(true);
+        ui->verticalSlider_12->setEnabled(true);
+        ui->verticalSlider_13->setEnabled(true);
+        ui->verticalSlider_14->setEnabled(true);
+        ui->verticalSlider_15->setEnabled(true);
+        ui->verticalSlider_16->setEnabled(true);
+        ui->verticalSlider_17->setEnabled(true);
+        ui->verticalSlider_18->setEnabled(true);
+        ui->verticalSlider_19->setEnabled(true);
+        ui->verticalSlider_20->setEnabled(true);
+        ui->verticalSlider_21->setEnabled(true);
+        ui->verticalSlider_22->setEnabled(true);
+        ui->verticalSlider_23->setEnabled(true);
+        ui->verticalSlider_24->setEnabled(true);
+        ui->verticalSlider_25->setEnabled(true);
+        ui->verticalSlider_26->setEnabled(true);
+        ui->verticalSlider_27->setEnabled(true);
+        ui->verticalSlider_28->setEnabled(true);
+        ui->verticalSlider_29->setEnabled(true);
+        ui->verticalSlider_30->setEnabled(true);
+        ui->verticalSlider_31->setEnabled(true);
+        ui->verticalSlider_32->setEnabled(true);
+        //=============================================
+        ui->groupBox_3->show();
+        ui->groupBox_4->show();
+        ui->groupBox_5->show();
     }
     else{
         ui->action32->triggered(true);
@@ -2262,14 +2307,14 @@ void MainWindow::on_action32_triggered(bool checked)
 void MainWindow::on_pushButton_111_clicked() // Create Frame
 {
     fix_num_of_lineedits(); // Все введённые цифры записываются
-    frames_to_map(num_frame,frame); //запись данных кадра в мап    
+    frames_to_map(num_frame,frame); //запись данных кадра в мап
     num_frame+=1;
     if(num_frame<num_sum)
         add_frame(num_frame); // вставка нового кадра
     else
         new_frame(); // добавление нового кадра в конец списка
     frame_text_all();
-    frame_num_lcd();
+    frame_num_lcd(num_frame);
     frame_sum_lcd();
     rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
@@ -2284,7 +2329,7 @@ void MainWindow::on_toolButton_9_clicked() // Кадр назад
     }
     else
         return;
-    frame_num_lcd();
+    frame_num_lcd(num_frame);
     frame_sum_lcd();
     rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
@@ -2297,7 +2342,7 @@ void MainWindow::on_toolButton_11_clicked() //Кадр вперёд
     if(num_frame==frames_list.size())
         return;
     num_frame+=1;
-    frame_num_lcd();
+    frame_num_lcd(num_frame);
     frame_sum_lcd();
     rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
@@ -2313,7 +2358,7 @@ void MainWindow::on_toolButton_15_clicked() //В начало
     }
     else
         return;
-    frame_num_lcd();
+    frame_num_lcd(num_frame);
     frame_sum_lcd();
     rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
@@ -2324,7 +2369,7 @@ void MainWindow::on_toolButton_13_clicked() // В конец
     frames_to_map(num_frame,frame); //запись данных кадра в мап
     frame_text_all();
     num_frame=frames_list.size();
-    frame_num_lcd();
+    frame_num_lcd(num_frame);
     frame_sum_lcd();
     rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
@@ -2336,62 +2381,62 @@ void MainWindow::on_pushButton_100_clicked() //Удалить кадр
     if(num_frame==frames_list.size()+1 && num_frame!=1){
         num_frame-=1;
     }
-    frame_num_lcd();
+    frame_num_lcd(num_frame);
     frame_sum_lcd();
     rev_ret_time(); //Обратная связь со времением
     rev_ret(); //Обратная связь с движками
 }
 void MainWindow::on_pushButton_inv_clicked() // Inversion
 {
-   fix_num_of_lineedits(); // Все введённые цифры записываются
-   QByteArray buff;
-   int k;
-   buff=frames_list[num_frame-1];
-   for(int i=0;i<num_channels;++i){
-       QByteArray ba=buff.mid(i,1);
-       k=ba.toHex().toInt(0,16);
-       int ink=255-k;
-       ch_num=i+1;
-       massive_frame(ink);
-   }
-   rev_ret();
-   rev_ret_time();
+    fix_num_of_lineedits(); // Все введённые цифры записываются
+    QByteArray buff;
+    int k;
+    buff=frames_list[num_frame-1];
+    for(int i=0;i<num_channels;++i){
+        QByteArray ba=buff.mid(i,1);
+        k=ba.toHex().toInt(0,16);
+        int ink=255-k;
+        ch_num=i+1;
+        massive_frame(ink);
+    }
+    rev_ret();
+    rev_ret_time();
 }
 
 void MainWindow::fix_num_of_lineedits() // fix_num_of_LineEdits
 {
-       ui->lineEdit->clearFocus();
-       ui->lineEdit_2->clearFocus();
-       ui->lineEdit_3->clearFocus();
-       ui->lineEdit_4->clearFocus();
-       ui->lineEdit_5->clearFocus();
-       ui->lineEdit_6->clearFocus();
-       ui->lineEdit_7->clearFocus();
-       ui->lineEdit_8->clearFocus();
-       ui->lineEdit_9->clearFocus();
-       ui->lineEdit_10->clearFocus();
-       ui->lineEdit_11->clearFocus();
-       ui->lineEdit_12->clearFocus();
-       ui->lineEdit_13->clearFocus();
-       ui->lineEdit_14->clearFocus();
-       ui->lineEdit_15->clearFocus();
-       ui->lineEdit_16->clearFocus();
-       ui->lineEdit_17->clearFocus();
-       ui->lineEdit_18->clearFocus();
-       ui->lineEdit_19->clearFocus();
-       ui->lineEdit_20->clearFocus();
-       ui->lineEdit_21->clearFocus();
-       ui->lineEdit_22->clearFocus();
-       ui->lineEdit_23->clearFocus();
-       ui->lineEdit_24->clearFocus();
-       ui->lineEdit_25->clearFocus();
-       ui->lineEdit_26->clearFocus();
-       ui->lineEdit_27->clearFocus();
-       ui->lineEdit_28->clearFocus();
-       ui->lineEdit_29->clearFocus();
-       ui->lineEdit_30->clearFocus();
-       ui->lineEdit_31->clearFocus();
-       ui->lineEdit_32->clearFocus();
+    ui->lineEdit->clearFocus();
+    ui->lineEdit_2->clearFocus();
+    ui->lineEdit_3->clearFocus();
+    ui->lineEdit_4->clearFocus();
+    ui->lineEdit_5->clearFocus();
+    ui->lineEdit_6->clearFocus();
+    ui->lineEdit_7->clearFocus();
+    ui->lineEdit_8->clearFocus();
+    ui->lineEdit_9->clearFocus();
+    ui->lineEdit_10->clearFocus();
+    ui->lineEdit_11->clearFocus();
+    ui->lineEdit_12->clearFocus();
+    ui->lineEdit_13->clearFocus();
+    ui->lineEdit_14->clearFocus();
+    ui->lineEdit_15->clearFocus();
+    ui->lineEdit_16->clearFocus();
+    ui->lineEdit_17->clearFocus();
+    ui->lineEdit_18->clearFocus();
+    ui->lineEdit_19->clearFocus();
+    ui->lineEdit_20->clearFocus();
+    ui->lineEdit_21->clearFocus();
+    ui->lineEdit_22->clearFocus();
+    ui->lineEdit_23->clearFocus();
+    ui->lineEdit_24->clearFocus();
+    ui->lineEdit_25->clearFocus();
+    ui->lineEdit_26->clearFocus();
+    ui->lineEdit_27->clearFocus();
+    ui->lineEdit_28->clearFocus();
+    ui->lineEdit_29->clearFocus();
+    ui->lineEdit_30->clearFocus();
+    ui->lineEdit_31->clearFocus();
+    ui->lineEdit_32->clearFocus();
 }
 
 //======================Animation====================================================
@@ -2445,19 +2490,19 @@ void MainWindow::animation_body_one() //первый кадр анимации**
         return;
     num_frame=1; //номер первого запрашиваемого кадра
     if(num_frame<=frames_list.size()-1){
-        frame_num_lcd();
+        frame_num_lcd(num_frame);
         frame_text_all();
-//        block_anim=true; // блокировка записи кадров при анимации и переключении кадров
+        //        block_anim=true; // блокировка записи кадров при анимации и переключении кадров
         rev_ret_time(); //Обратная связь со времением
         rev_ret(); //Обратная связь с движками
-//        block_anim=false; // блокировка записи кадров при анимации и переключении кадров
+        //        block_anim=false; // блокировка записи кадров при анимации и переключении кадров
         int time_frame=time_current*10;
-//===========таймер анимации========
+        //===========таймер анимации========
         timer->start(time_frame);
-//===========прогресс анимации========
+        //===========прогресс анимации========
         int p=100.0*(num_frame)/frames_list.size();
         ui->progressBar->setValue(p);
-//=====================================
+        //=====================================
     }
     else{
         ui->toolButton_16->click();
@@ -2479,20 +2524,20 @@ void MainWindow::animation_body() //все кадры анимации (кром
     if(num_frame<=frames_list.size()-1){
         num_frame+=1;
         block_anim=true; // блокировка записи кадров при анимации и переключении кадров
-        frame_num_lcd();
+        frame_num_lcd(num_frame);
 
 
-//        block_anim=true; // блокировка записи кадров при анимации и переключении кадров
+        //        block_anim=true; // блокировка записи кадров при анимации и переключении кадров
         rev_ret_time(); //Обратная связь со времением
         rev_ret(); //переключение элементов в соответствии с вызываемым кадром анимации
-//        block_anim=false; // блокировка записи кадров при анимации и переключении кадров
+        //        block_anim=false; // блокировка записи кадров при анимации и переключении кадров
         int time_frame=time_current*10;
-//===========таймер анимации==============
+        //===========таймер анимации==============
         timer->start(time_frame);
-// ===========для прогресс-бара=============
+        // ===========для прогресс-бара=============
         int p=100.0*(num_frame)/frames_list.size();
         ui->progressBar->setValue(p);
-//============================================
+        //============================================
     }
     else{
         if (repeat==1){
@@ -2529,12 +2574,12 @@ void MainWindow::on_toolButton_12_clicked(bool checked) //старт анима�
         animation_init(); //инициализация анимации
         animation_body_one(); // запуск анимации
     }
-        else {
+    else {
         if (anim_stop==0){
-        anim_pause=1; //ставим флаг для паузы анимации
-        block_anim=false; // блокировка записи кадров при анимации и переключении кадров
-        block_btn_anim(0); //блокировка кнопок навигации и редактирования анимации во время воспроизведения
-        ui->toolButton_12->setIcon(QIcon(":/play"));
+            anim_pause=1; //ставим флаг для паузы анимации
+            block_anim=false; // блокировка записи кадров при анимации и переключении кадров
+            block_btn_anim(0); //блокировка кнопок навигации и редактирования анимации во время воспроизведения
+            ui->toolButton_12->setIcon(QIcon(":/play"));
         }
     }
 }
@@ -2549,17 +2594,17 @@ void MainWindow::on_toolButton_16_clicked() //Stop animation********************
     frame_text_all();
     block_btn_anim(0); //блокировка кнопок навигации и редактирования анимации во время воспроизведения
     if (anim_pause==0)
-    ui->toolButton_12->setChecked(false); // отжимаем кнопку "старт"
+        ui->toolButton_12->setChecked(false); // отжимаем кнопку "старт"
     anim_pause=0;
     block_anim=false; // блокировка записи кадров при анимации и переключении кадров
     num_frame=1; //скидываем номер кадра на первый
-    frame_num_lcd();
+    frame_num_lcd(num_frame);
 
     ui->progressBar->setValue(num_frame); // прогресс-бар ставим в ноль
-//    block_anim=true; // блокировка записи кадров при анимации и переключении кадров
+    //    block_anim=true; // блокировка записи кадров при анимации и переключении кадров
     rev_ret(); //переключение элементов в соответствии с вызываемым кадром анимации
     rev_ret_time(); //Обратная связь со времением
-//    block_anim=false; // блокировка записи кадров при анимации и переключении кадров
+    //    block_anim=false; // блокировка записи кадров при анимации и переключении кадров
 }
 
 void MainWindow::on_toolButton_14_clicked(bool checked) // повтор анимации по кругу
@@ -2595,7 +2640,7 @@ void MainWindow::save_animation() // сохранение анимации в ф
     }
 
 
-// times all than frames all!!!!!
+    // times all than frames all!!!!!
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "",
                                                     tr("Animation Files (*.amt)"));
     if (fileName != "") {
@@ -2627,7 +2672,7 @@ void MainWindow::open_animation() // открытие анимации из фа
     else
         return; // Если передумали открывать файл, то прерываем дальнейшее выполнение операции
 
-//===============================Чистим массивы для нового проекта=============================
+    //===============================Чистим массивы для нового проекта=============================
 
     frame.clear(); // очищаем содержимое буфера текущего кадра
     int size=frames_list.size();
@@ -2635,7 +2680,7 @@ void MainWindow::open_animation() // открытие анимации из фа
         frames_list.removeAt(i); //чистим массив кадров (удаляем все к чертям)
         frames_time.removeAt(i); //чистим массив времени кадров
     }
-//=============================================================================================
+    //=============================================================================================
 
     int frames=0; //счётчик кадров
     for(int i=0;i<buffer_array_all.size();i+=num_of_ch+2){
@@ -2650,7 +2695,7 @@ void MainWindow::open_animation() // открытие анимации из фа
     }
     frame_sum_lcd();
     num_frame=1;
-    frame_num_lcd();
+    frame_num_lcd(num_frame);
     frame=frames_list.at(num_frame-1);
     rev_ret(); //обратная связь с движка
     rev_ret_time();
@@ -2662,7 +2707,7 @@ void MainWindow::on_slider_time_valueChanged(int value) //передаёт зн�
 {   
     double sl=value*0.01;
     QString time_string=QString::number(sl,'f',2); //=============конвертируем из double в string c точностью 2 знака после запятой
-    if (block_anim==false || anim_pause==1){// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе       
+    if (block_anim==false || anim_pause==1){// изменения вносятся в мап, только если анимация совсем выключена, либо стоит на паузе
         time_current=value;
         frames_time[num_frame-1]=value; //отправка времени кадра в QList
     }
@@ -2731,13 +2776,13 @@ void MainWindow::com_port_window_make()
         connect(com_port,SIGNAL(shim_from_plc(QByteArray,int)),this,SLOT(shim_from_astra(QByteArray,int)));
         connect(com_port,SIGNAL(res_data_to_plc()),this,SLOT(res_data_to_plc_main()));
         if(com_port_window_was_make==false){
-        connect(this,SIGNAL(data_to_astra_main(QList<FrameInfo>)),com_port,SIGNAL(data_to_astra(QList<FrameInfo>)));
+            connect(this,SIGNAL(data_to_astra_main(QList<FrameInfo>)),com_port,SIGNAL(data_to_astra(QList<FrameInfo>)));
         }
         com_port_window=true;
     }
     else{
         if(com_port_window==true)
-        return;
+            return;
 
     }
 }
@@ -2745,15 +2790,15 @@ void MainWindow::com_port_window_make()
 void MainWindow::times_from_astra(int time,int num_of_frame,int all_frames)
 {
     if(num_of_frame==0){
-//===============================Чистим массивы для нового проекта=============================
+        //===============================Чистим массивы для нового проекта=============================
 
-            frame.clear(); // очищаем содержимое буфера текущего кадра
-            int size=frames_list.size();
-            for(int i=size-1;i>=0;--i){
-                frames_list.removeAt(i); //чистим массив кадров (удаляем все к чертям)
-                frames_time.removeAt(i); //чистим массив времени кадров
-            }
-//=============================================================================================
+        frame.clear(); // очищаем содержимое буфера текущего кадра
+        int size=frames_list.size();
+        for(int i=size-1;i>=0;--i){
+            frames_list.removeAt(i); //чистим массив кадров (удаляем все к чертям)
+            frames_time.removeAt(i); //чистим массив времени кадров
+        }
+        //=============================================================================================
     }
     frames_time.append(time);
     num_frame=num_of_frame+1;
@@ -2766,7 +2811,7 @@ void MainWindow::shim_from_astra(QByteArray data, int num_of_frame)
     if(num_of_frame+1==num_sum){
         frame_sum_lcd();
         num_frame=1;
-        frame_num_lcd();
+        frame_num_lcd(num_frame);
         frame=frames_list.at(num_frame-1);
         rev_ret(); //обратная связь с движка
         rev_ret_time();
