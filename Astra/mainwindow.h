@@ -6,6 +6,7 @@
 #include <QTimer>
 
 #include "frameinfo.h"
+#include "com_port_main.h"
 
 
 namespace Ui {
@@ -27,7 +28,7 @@ private slots:
     void change_bright_btn(int);
     void massive_frame(int);
 
-    void frame_num_lcd();
+    void frame_num_lcd(int);
     void frame_sum_lcd();
     void frames_to_map(int,QByteArray);
     void new_frame();
@@ -191,6 +192,7 @@ signals:
 
 private:
     Ui::MainWindow *ui;
+    com_port_w *com_port;
     int ch_num,color_button,time_current;
     QString init_style,init_style_red,init_style_green,init_style_blue;
     //==================Animation==============

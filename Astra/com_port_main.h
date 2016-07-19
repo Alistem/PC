@@ -14,6 +14,7 @@ class com_port_w : public QWidget
 public:
 
     explicit com_port_w(QWidget *parent = 0);
+    void setWindowFlags(Qt::WindowFlags);
     ~com_port_w();
 
 signals:
@@ -32,7 +33,6 @@ signals:
     
 private slots:
 
-    void one(QByteArray basta);
     void connect_status(QString status);
     void connect_to_proccommand();
     void com_port_num_res();

@@ -82,15 +82,9 @@ com_port_w::~com_port_w()
     delete ui;
 }
 
-void com_port_w::one(QByteArray basta)
+void com_port_w::setWindowFlags(Qt::WindowFlags flags)
 {
-        for (int i=0; i<basta.length(); ++i) {
-            printf("%c - %x\n", basta.at(i), basta.at(i));
-        }
-        printf("\n");
-//    qDebug()<<cc.at(0);
-//    QString strq=cc;
-return;
+    QWidget::setWindowFlags(flags);
 }
 
 void com_port_w::connect_status(QString status)

@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Astra</string>
+   <string>Astra Animator</string>
   </property>
   <property name="windowIcon">
    <iconset resource="icons.qrc">
@@ -5763,7 +5763,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>580</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

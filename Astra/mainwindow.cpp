@@ -1,7 +1,5 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
-//#include "CommunicationForm.ui.qml"
-#include "com_port_main.h"
 #include <QDebug>
 #include <QTimer>
 #include <QFileDialog>
@@ -2769,7 +2767,9 @@ void MainWindow::com_port_window_status(bool flag)
 void MainWindow::com_port_window_make()
 {
     if(com_port_window==false){
-        com_port_w *com_port = new com_port_w();
+        com_port = new com_port_w(this);
+        Qt::WindowFlags flags = Qt::Window;
+        com_port->setWindowFlags(flags);
         com_port->show();
         connect(com_port,SIGNAL(flag_close_win(bool)),this,SLOT(com_port_window_status(bool)));
         connect(com_port,SIGNAL(times_from_plc(int,int,int)),this,SLOT(times_from_astra(int,int,int)));

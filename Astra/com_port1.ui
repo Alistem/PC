@@ -30,7 +30,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>com_port</string>
+   <string>Связь с Астра</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="geometry">
