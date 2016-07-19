@@ -1,6 +1,7 @@
 #include "ComPort.h"
 #include "operation.h"
 #include <QtCore>
+#include <QtSerialPort/QSerialPortInfo>
 
 QT_USE_NAMESPACE
 
@@ -8,6 +9,12 @@ ComPort::ComPort(QString port, QObject *parent): port_open(false),
     QObject(parent)
 {
     read_finish=false;
+
+    foreach (const QSerialPortInfo &info, port_info->availablePorts()) {
+     qDebug() << "Name : " << info.portName();
+     qDebug() << "Description : " << info.description().toUtf8();
+     qDebug() << "Manufacturer: " << info.manufacturer().toUtf8();
+    }
 
     serial_port = new QSerialPort(port);
 
@@ -22,6 +29,8 @@ ComPort::ComPort(QString port, QObject *parent): port_open(false),
     serial_port->setParity(QSerialPort::NoParity);
     serial_port->setDataBits(QSerialPort::Data8);
     serial_port->setStopBits(QSerialPort::OneStop);
+
+
 
     if(!portOpen())
         qDebug() << "Error connect";
