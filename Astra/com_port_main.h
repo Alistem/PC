@@ -29,13 +29,12 @@ signals:
     void shim_from_plc(QByteArray,int);
     void res_data_to_plc();
     void data_to_astra(QList<FrameInfo>);
-    void num_com_proccommand(int);
+    void num_com_proccommand(QString);
     
 private slots:
 
     void connect_status(QString status);
     void connect_to_proccommand();
-    void com_port_num_res();
     void closeEvent(QCloseEvent *ev);
     void error_label_main(QString error);
     void read_data(QByteArray recieve_data);
@@ -52,7 +51,7 @@ private slots:
 
 private:
     Ui::com_port *ui;
-//    QString hex;
+    QSerialPortInfo *port_info;
     QString hex_0x0,frames_reading;
     QString back_color_on;
     QString back_color_off;

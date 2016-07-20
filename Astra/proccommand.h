@@ -29,7 +29,7 @@ signals:
     void shim_from_plc1(QByteArray,int);
 
 public slots:
-    void slot_connect(int num);
+    void slot_connect(QString);
     void slot_disconnect();
     void slot_status();
     void slot_reset();

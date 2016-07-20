@@ -22,10 +22,10 @@ ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
     data_all_frames_flag = false;
 }
 
-void ProcCommand::slot_connect(int num)
+void ProcCommand::slot_connect(QString num)
 {
     if (!com_port){
-        com_port = new ComPort(QString("%1%2").arg("COM").arg(num));
+        com_port = new ComPort(num);
         connect(com_port,SIGNAL(finish_read()),SLOT(listen_on_off()));
         connect(com_port,SIGNAL(PortError(QByteArray)),SLOT(comPortError(QByteArray)));
         if(com_port->portOpen()){
@@ -373,7 +373,7 @@ void ProcCommand::command_write(QString command)
 
 void ProcCommand::comPortError(QByteArray com_port_error)
 {
-    qDebug()<<com_port_error;
+    qDebug()<<com_port_error<<"com_port_error";
 }
 
 void ProcCommand::data_to_zero_sector(QList<FrameInfo> animation)

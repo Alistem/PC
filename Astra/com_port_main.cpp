@@ -36,7 +36,7 @@ com_port_w::com_port_w(QWidget *parent)
 
     //=====================================Connect=============================================
     connect(this->ui->connectButton,SIGNAL(clicked()),this,SLOT(connect_to_proccommand()));
-    connect(this,SIGNAL(num_com_proccommand(int)),proccommand,SLOT(slot_connect(int)));
+    connect(this,SIGNAL(num_com_proccommand(QString)),proccommand,SLOT(slot_connect(QString)));
     connect(proccommand,SIGNAL(connection(QString)),this,SLOT(connect_status(QString)));
 
     connect(this,SIGNAL(disconnect()),proccommand,SLOT(slot_disconnect()));
@@ -74,6 +74,13 @@ com_port_w::com_port_w(QWidget *parent)
     back_color_on="QLabel{background-color: rgb(0, 255, 0);}";
     back_color_off="QLabel{background-color: rgb(255, 0, 0);}";
     back_color_none="QLabel{background-color: rgb(255, 255, 255,0);}";
+
+    foreach (const QSerialPortInfo &info, port_info->availablePorts()) {
+        ui->comboBox->addItem(info.portName());
+     //qDebug() << "Name : " << info.portName();
+     //qDebug() << "Description : " << info.description().toUtf8();
+     //qDebug() << "Manufacturer: " << info.manufacturer().toUtf8();
+    }
 
 }
 
@@ -142,16 +149,9 @@ void com_port_w::read_data(QByteArray recieve_data)
     ui->textEdit->setText(str);
 }
 
-void com_port_w::com_port_num_res()
-{
-    int num=ui->comboBox->currentIndex();
-    emit num_com_port(num);
-}
-
 void com_port_w::connect_to_proccommand()
 {
-    int num=ui->comboBox->currentIndex();
-    emit num_com_proccommand(num);
+    emit num_com_proccommand(ui->comboBox->currentText());
 }
 
 void com_port_w::closeEvent(QCloseEvent *ev)
