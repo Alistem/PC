@@ -187,6 +187,8 @@ private slots:
 
     void on_pushButton_inv_clicked();
 
+    void on_action_about_triggered();
+
 signals:
     void data_to_astra_main(QList<FrameInfo>);
 

@@ -5800,8 +5800,9 @@ p, li { white-space: pre-wrap; }
    </widget>
    <widget class="QMenu" name="menu_5">
     <property name="title">
-     <string>О программе</string>
+     <string>Помощь</string>
     </property>
+    <addaction name="action_about"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -5906,6 +5907,11 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_about">
+   <property name="text">
+    <string>О программе</string>
    </property>
   </action>
  </widget>

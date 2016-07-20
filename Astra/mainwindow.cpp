@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QFileDialog>
 #include <QTextStream>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -2828,4 +2829,10 @@ void MainWindow::res_data_to_plc_main()
         animation.append(frame);
     }
     emit data_to_astra_main(animation);
+}
+
+void MainWindow::on_action_about_triggered()
+{
+    QMessageBox::about(this, tr("Astra Animator"),
+            tr("Эта программа предназначена для работы с контроллерами семейства Астра. Она позволяет создавать анимацию для контроллера, редактировать её, сохранять или записывать в контроллер. Мы рады, что Вы воспользовались нашим продуктом. Спасибо!"));
 }
