@@ -29,13 +29,12 @@ signals:
     void shim_from_plc(QByteArray,int);
     void res_data_to_plc();
     void data_to_astra(QList<FrameInfo>);
-    void num_com_proccommand(int);
+    void num_com_proccommand(QString);
     
 private slots:
 
     void connect_status(QString status);
     void connect_to_proccommand();
-    void com_port_num_res();
     void closeEvent(QCloseEvent *ev);
     void error_label_main(QString error);
     void read_data(QByteArray recieve_data);
@@ -62,6 +61,7 @@ private:
     QList<QByteArray> frames_list_to_com_port; // массив кадров
     QList<int> frames_time_to_com_port; //массив времён кадров
     ProcCommand *proccommand;
+    QSerialPortInfo *port_info;
 };
 
 #endif // COM_PORT_MAIN_H

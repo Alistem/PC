@@ -36,7 +36,7 @@ com_port_w::com_port_w(QWidget *parent)
 
     //=====================================Connect=============================================
     connect(this->ui->connectButton,SIGNAL(clicked()),this,SLOT(connect_to_proccommand()));
-    connect(this,SIGNAL(num_com_proccommand(int)),proccommand,SLOT(slot_connect(int)));
+    connect(this,SIGNAL(num_com_proccommand(QString)),proccommand,SLOT(slot_connect(QString)));
     connect(proccommand,SIGNAL(connection(QString)),this,SLOT(connect_status(QString)));
 
     connect(this,SIGNAL(disconnect()),proccommand,SLOT(slot_disconnect()));
@@ -69,11 +69,16 @@ com_port_w::com_port_w(QWidget *parent)
     connect(proccommand,SIGNAL(error_label(QString)),this,SLOT(error_label_main(QString)));
 
 
-
-
     back_color_on="QLabel{background-color: rgb(0, 255, 0);}";
     back_color_off="QLabel{background-color: rgb(255, 0, 0);}";
     back_color_none="QLabel{background-color: rgb(255, 255, 255,0);}";
+
+    foreach (const QSerialPortInfo &info, port_info->availablePorts()) {
+     ui->comboBox->addItem(info.portName());
+      //qDebug() << "Name : " << info.portName();
+     //qDebug() << "Description : " << info.description().toUtf8();
+     //qDebug() << "Manufacturer: " << info.manufacturer().toUtf8();
+    }
 
 }
 
@@ -89,7 +94,12 @@ void com_port_w::setWindowFlags(Qt::WindowFlags flags)
 
 void com_port_w::connect_status(QString status)
 {
-    if (status=="Connected"){
+
+}
+
+void com_port_w::status_plc(bool status_plc)
+{
+    if (status_plc==true){
         ui->progressBar_frames->hide();
         ui->connect_color->setStyleSheet(back_color_on);
         ui->connectButton->setEnabled(false);// блокировка кнопки
@@ -99,10 +109,9 @@ void com_port_w::connect_status(QString status)
         ui->readButton->setEnabled(true);
         ui->writeButton->setEnabled(true);
     }
-    if (status=="Disconnected"){
+    if (status_plc==false){
         ui->progressBar_frames->hide();
         ui->connect_color->setStyleSheet(back_color_off);
-        ui->status_controller->setStyleSheet(back_color_off);
         ui->connectButton->setEnabled(true); // блокировка кнопки
         ui->comboBox->setEnabled(true); // блокировка комбобокса
         ui->label_num_frames->setText("");
@@ -113,10 +122,9 @@ void com_port_w::connect_status(QString status)
         ui->readButton->setEnabled(false);
         ui->writeButton->setEnabled(false);
     }
-    if (status!="Disconnected" && status!="Connected"){
+    if (status_plc!=true && status_plc!=false){
         ui->progressBar_frames->hide();
         ui->connect_color->setStyleSheet(back_color_none);
-        ui->status_controller->setStyleSheet(back_color_none);
         ui->label_num_frames->setText("");
         ui->label_num_frames_2->setText("");
         ui->num_current_frame->setText("");
@@ -125,33 +133,19 @@ void com_port_w::connect_status(QString status)
         ui->readButton->setEnabled(false);
         ui->writeButton->setEnabled(false);
     }
-}
 
-void com_port_w::status_plc(bool status_plc)
-{
-    if(status_plc==true)
-        ui->status_controller->setStyleSheet(back_color_on);
-    else
-       ui->status_controller->setStyleSheet(back_color_off);
 }
 
 void com_port_w::read_data(QByteArray recieve_data)
 {
 //    QString str=recieve_data;
     QString str(recieve_data.toHex());
-    ui->textEdit->setText(str);
-}
-
-void com_port_w::com_port_num_res()
-{
-    int num=ui->comboBox->currentIndex();
-    emit num_com_port(num);
+    //ui->textEdit->setText(str);
 }
 
 void com_port_w::connect_to_proccommand()
 {
-    int num=ui->comboBox->currentIndex();
-    emit num_com_proccommand(num);
+    emit num_com_proccommand(ui->comboBox->currentText());
 }
 
 void com_port_w::closeEvent(QCloseEvent *ev)

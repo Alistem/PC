@@ -29,7 +29,7 @@ signals:
     void shim_from_plc1(QByteArray,int);
 
 public slots:
-    void slot_connect(int num);
+    void slot_connect(QString);
     void slot_disconnect();
     void slot_status();
     void slot_reset();
@@ -51,6 +51,7 @@ private:
     void data_all_frames();
     void analise_reading_data();
     QString sector;
+    QTimer connect_tm;
     bool nums_all_frames_flag,data_all_frames_flag;
     void command_read(QString command);
     void command_write(QString command);

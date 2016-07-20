@@ -20,21 +20,19 @@ ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
     errors = 0;
     nums_all_frames_flag = false;
     data_all_frames_flag = false;
+    connect(&connect_tm, SIGNAL(timeout()),SLOT(slot_disconnect()));
 }
 
-void ProcCommand::slot_connect(int num)
+void ProcCommand::slot_connect(QString num)
 {
     if (!com_port){
-        com_port = new ComPort(QString("%1%2").arg("COM").arg(num));
+        com_port = new ComPort(num);
         connect(com_port,SIGNAL(finish_read()),SLOT(listen_on_off()));
         connect(com_port,SIGNAL(PortError(QByteArray)),SLOT(comPortError(QByteArray)));
         if(com_port->portOpen()){
-            emit connection("Connected");
-            emit connect_label("На связи");
             slot_status();
         }
         else{
-            emit connection("Disconnected");
             emit connect_label("Нет связи");
             slot_disconnect();
         }
@@ -46,7 +44,6 @@ void ProcCommand::slot_disconnect()
     if (com_port)
         delete com_port;
     com_port = NULL;
-    emit connection("Disconnected");
     emit connect_label("Нет связи");
 }
 
@@ -55,6 +52,8 @@ void ProcCommand::slot_status()
     flag_command = 1;
 
     emit status(false);
+
+    connect_tm.start(20);
 
     unique_ptr<Operation> get_status(new GetStatus());
 
@@ -130,6 +129,7 @@ void ProcCommand::listen_on_off()
 
     if(TempReadData.endsWith("OKOB")){
         emit status(true);
+        emit connect_label("На связи");
     }
     else if (TempReadData.endsWith("RROK")){
         if(nums_all_frames_flag){

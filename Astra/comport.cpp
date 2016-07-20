@@ -10,12 +10,6 @@ ComPort::ComPort(QString port, QObject *parent): port_open(false),
 {
     read_finish=false;
 
-    foreach (const QSerialPortInfo &info, port_info->availablePorts()) {
-     qDebug() << "Name : " << info.portName();
-     qDebug() << "Description : " << info.description().toUtf8();
-     qDebug() << "Manufacturer: " << info.manufacturer().toUtf8();
-    }
-
     serial_port = new QSerialPort(port);
 
     port_open = serial_port->open(QIODevice::ReadWrite);
