@@ -45,6 +45,7 @@ void ProcCommand::slot_disconnect()
         delete com_port;
     com_port = NULL;
     emit connect_label("Нет связи");
+    emit status(false);
 }
 
 void ProcCommand::slot_status()
@@ -53,12 +54,11 @@ void ProcCommand::slot_status()
 
     emit status(false);
 
-    connect_tm.start(20);
+    connect_tm.start(100);
 
     unique_ptr<Operation> get_status(new GetStatus());
 
     get_status->sendCommandToPort(com_port, "");
-
 }
 
 void ProcCommand::slot_reset()
@@ -106,7 +106,8 @@ void ProcCommand::command_read(QString command)
 void ProcCommand::listen_on_off()
 {
     TempReadData=com_port->read();
-    if(TempReadData.endsWith("OkOk")){
+    qDebug()<<TempReadData;
+    if(TempReadData.contains("OkOk")){
         switch (flag_command) {
         case 1:
             slot_status();
@@ -127,11 +128,12 @@ void ProcCommand::listen_on_off()
         }
     }
 
-    if(TempReadData.endsWith("OKOB")){
+    if(TempReadData.contains("OKOB")){
         emit status(true);
         emit connect_label("На связи");
+        connect_tm.stop();
     }
-    else if (TempReadData.endsWith("RROK")){
+    else if (TempReadData.contains("RROK")){
         if(nums_all_frames_flag){
             nums_all_frames();
             return;

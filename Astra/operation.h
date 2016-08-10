@@ -19,7 +19,7 @@ public:
 //        if(!port->read().endsWith("OkOk") /*|| !port->read().endsWith("OkWR")*/){
 
 //        }
-        if(port->read().endsWith("OkOk") || port->read().endsWith("OkWR")){
+        if(port->read().contains("OkOk") || port->read().endsWith("OkWR")){
             qDebug()<<port->read().right(4);
             QByteArray res2 = operation(port, string);
             return res2;
