@@ -68,6 +68,8 @@ com_port_w::com_port_w(QWidget *parent)
 
     connect(proccommand,SIGNAL(error_label(QString)),this,SLOT(error_label_main(QString)));
 
+    connect(ui->com_button,SIGNAL(clicked()),this,SLOT(com_port_type_connection()));
+    connect(ui->wifi_button,SIGNAL(clicked()),this,SLOT(wifi_type_connection()));
 
     back_color_on="QLabel{background-color: rgb(0, 255, 0);}";
     back_color_off="QLabel{background-color: rgb(255, 0, 0);}";
@@ -113,7 +115,8 @@ void com_port_w::status_plc(bool status_plc)
         ui->progressBar_frames->hide();
         ui->connect_color->setStyleSheet(back_color_off);
         ui->connectButton->setEnabled(true); // блокировка кнопки
-        ui->comboBox->setEnabled(true); // блокировка комбобокса
+        if(!ui->wifi_button->isChecked())
+            ui->comboBox->setEnabled(true); // блокировка комбобокса
         ui->label_num_frames->setText("");
         ui->label_num_frames_2->setText("");
         ui->num_current_frame->setText("");
@@ -134,6 +137,16 @@ void com_port_w::status_plc(bool status_plc)
         ui->writeButton->setEnabled(false);
     }
 
+}
+
+void com_port_w::com_port_type_connection()
+{
+    ui->comboBox->setEnabled(true); // блокировка комбобокса
+}
+
+void com_port_w::wifi_type_connection()
+{
+    ui->comboBox->setEnabled(false); // блокировка комбобокса
 }
 
 void com_port_w::read_data(QByteArray recieve_data)

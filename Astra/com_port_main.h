@@ -48,6 +48,9 @@ private slots:
 
     void on_writeButton_clicked(bool checked);
 
+    void com_port_type_connection();
+    void wifi_type_connection();
+
 
 private:
     Ui::com_port *ui;

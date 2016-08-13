@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>250</width>
-    <height>263</height>
+    <height>280</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,7 +26,7 @@
   <property name="maximumSize">
    <size>
     <width>250</width>
-    <height>263</height>
+    <height>280</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -46,8 +46,8 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>185</y>
-     <width>231</width>
+     <y>200</y>
+     <width>233</width>
      <height>51</height>
     </rect>
    </property>
@@ -110,7 +110,7 @@
      <x>10</x>
      <y>29</y>
      <width>231</width>
-     <height>126</height>
+     <height>121</height>
     </rect>
    </property>
    <property name="title">
@@ -295,7 +295,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>235</y>
+     <y>250</y>
      <width>231</width>
      <height>25</height>
     </rect>
@@ -428,6 +428,35 @@
    </property>
    <property name="textInteractionFlags">
     <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="wifi_button">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>180</y>
+     <width>46</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>WIFI</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="com_button">
+   <property name="geometry">
+    <rect>
+     <x>65</x>
+     <y>180</y>
+     <width>46</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>COM</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
