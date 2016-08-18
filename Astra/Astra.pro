@@ -13,6 +13,8 @@ TEMPLATE = app
 QT+= serialport
 CONFIG +=C++11
 
+OBJECTS_DIR = _build
+DESTDIR  = ../bin
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -39,8 +41,8 @@ FORMS    += mainwindow.ui \
     com_port1.ui
 
 RESOURCES += \
-    icons.qrc
-RC_FILE = myapp.rc
+    pics/icons.qrc
+RC_FILE = pics/myapp.rc
 
 
 DISTFILES +=

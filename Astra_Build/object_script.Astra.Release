@@ -1,0 +1,16 @@
+INPUT(
+./_build/main.o
+./_build/mainwindow.o
+./_build/com_port_main.o
+./_build/comport.o
+./_build/proccommand.o
+./_build/getstatus.o
+./_build/readflash.o
+./_build/writeflash.o
+./_build/reset.o
+./_build/qrc_icons.o
+./_build/moc_mainwindow.o
+./_build/moc_com_port_main.o
+./_build/moc_comport.o
+./_build/moc_proccommand.o
+);
