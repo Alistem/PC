@@ -27,9 +27,14 @@ ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
 void ProcCommand::slot_connect(QString num)
 {
     if (!com_port){
+        if(type_connect == 1){
         com_port = new ComPort(num);
         connect(com_port,SIGNAL(finish_read()),SLOT(listen_on_off()));
         connect(com_port,SIGNAL(PortError(QByteArray)),SLOT(comPortError(QByteArray)));
+        }
+        else if(type_connect == 2){
+            com_port = new Tcpclient();
+        }
         if(com_port->portOpen()){
             slot_status();
         }
@@ -66,16 +71,9 @@ void ProcCommand::slot_reset()
 {
     flag_command = 2;
 
-    if(type_connect == 1){
-
         unique_ptr<Operation> reset(new Reset());
 
         reset->sendCommandToPort(com_port, "");
-    }
-    else if(type_connect == 2){}
-
-
-
 }
 
 void ProcCommand::slot_read()
@@ -105,6 +103,7 @@ void ProcCommand::slot_read()
 void ProcCommand::command_read(QString command)
 {
     sector = command;
+
     unique_ptr<Operation> read_flash(new ReadFlash());
 
     read_flash->sendCommandToPort(com_port, command);
@@ -119,11 +118,7 @@ void ProcCommand::data_from_tcp(QString data)
 
 void ProcCommand::listen_on_off()
 {
-    if(type_connect == 1)
-        TempReadData=com_port->read();
-    else if(type_connect == 2)
-        TempReadData.append(data_tcp);
-
+    TempReadData=com_port->read();
     qDebug()<<TempReadData;
     if(TempReadData.contains("OkOk")){
         switch (flag_command) {

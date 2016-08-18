@@ -156,13 +156,6 @@ void com_port_w::wifi_type_connect(bool pos)
         ui->comboBox->setEnabled(false); // блокировка комбобокса
         ui->com->setChecked(false);
         emit connection_type(2);
-        connect(proccommand,SIGNAL(write_tcp(QString)),tcpclient,SLOT(slotSendToServer(QString)));
-        connect(tcpclient, SIGNAL(message(QString)),proccommand, SLOT(data_from_tcp(QString)));
-
-    }
-    else{
-        //disconnect(proccommand,SIGNAL(write_tcp(QString)),tcpclient,SLOT(slotSendToServer(QString)));
-        //disconnect(tcpclient, SIGNAL(message(QString)),proccommand, SLOT(data_from_tcp(QString)));
     }
 }
 
