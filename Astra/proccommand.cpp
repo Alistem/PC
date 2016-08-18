@@ -97,10 +97,10 @@ void ProcCommand::slot_read()
 void ProcCommand::command_read(QString command)
 {
     sector = command;
-
     unique_ptr<Operation> read_flash(new ReadFlash());
 
     read_flash->sendCommandToPort(com_port, command);
+
 }
 
 void ProcCommand::listen_on_off()
@@ -367,10 +367,14 @@ void ProcCommand::slot_write()
 void ProcCommand::command_write(QString command)
 {
     sector = command;
-
+    if(type_connect == 1){
     unique_ptr<Operation> write_flash(new WriteFlash());
 
     write_flash->sendCommandToPort(com_port, command);
+    }
+    else if(type_connect == 2){
+        emit data_tcp(command);
+    }
 }
 
 void ProcCommand::comPortError(QByteArray com_port_error)
@@ -437,4 +441,9 @@ void ProcCommand::data_to_other_sector(QList<FrameInfo> animation)
         }
         i_write += 1;
         command_write(packet.toHex());
+}
+
+void ProcCommand::connection_type(int type)
+{
+    type_connect = type;
 }

@@ -1,11 +1,12 @@
 ﻿#include "com_port_main.h"
-#include "ui_com_port1.h"
+#include "ui_com_port.h"
 #include <QtCore/QDebug>
 #include <QFileDialog>
 #include <QBuffer>
 #include <QMessageBox>
 #include <iostream>
 #include "proccommand.h"
+#include "tcp_client.h"
 #include "mainwindow.h"
 //#include <QApplication>
 #include <QCloseEvent>
@@ -15,6 +16,7 @@ QT_USE_NAMESPACE
 com_port_w::com_port_w(QWidget *parent)
     : QWidget(parent)
     , proccommand(new ProcCommand(this))
+    , tcpclient(new Tcpclient(this))
     , ui(new Ui::com_port)
 {
     ui->setupUi(this);
@@ -68,8 +70,9 @@ com_port_w::com_port_w(QWidget *parent)
 
     connect(proccommand,SIGNAL(error_label(QString)),this,SLOT(error_label_main(QString)));
 
-    connect(ui->com_button,SIGNAL(clicked()),this,SLOT(com_port_type_connection()));
-    connect(ui->wifi_button,SIGNAL(clicked()),this,SLOT(wifi_type_connection()));
+    connect(ui->com,SIGNAL(toggled(bool)),this,SLOT(com_type_connect(bool)));
+    connect(ui->wifi,SIGNAL(toggled(bool)),this,SLOT(wifi_type_connect(bool)));
+    connect(this,SIGNAL(connection_type(int)),proccommand,SLOT(connection_type(int)));
 
     back_color_on="QLabel{background-color: rgb(0, 255, 0);}";
     back_color_off="QLabel{background-color: rgb(255, 0, 0);}";
@@ -115,8 +118,7 @@ void com_port_w::status_plc(bool status_plc)
         ui->progressBar_frames->hide();
         ui->connect_color->setStyleSheet(back_color_off);
         ui->connectButton->setEnabled(true); // блокировка кнопки
-        if(!ui->wifi_button->isChecked())
-            ui->comboBox->setEnabled(true); // блокировка комбобокса
+        ui->comboBox->setEnabled(true); // блокировка комбобокса
         ui->label_num_frames->setText("");
         ui->label_num_frames_2->setText("");
         ui->num_current_frame->setText("");
@@ -139,14 +141,25 @@ void com_port_w::status_plc(bool status_plc)
 
 }
 
-void com_port_w::com_port_type_connection()
+void com_port_w::com_type_connect(bool pos)
 {
-    ui->comboBox->setEnabled(true); // блокировка комбобокса
+    if(pos){
+        ui->comboBox->setEnabled(true); // блокировка комбобокса
+        ui->wifi->setChecked(false);
+        emit connection_type(1);
+    }
 }
-
-void com_port_w::wifi_type_connection()
+void com_port_w::wifi_type_connect(bool pos)
 {
-    ui->comboBox->setEnabled(false); // блокировка комбобокса
+    if(pos){
+        ui->comboBox->setEnabled(false); // блокировка комбобокса
+        ui->com->setChecked(false);
+        emit connection_type(2);
+        connect(tcpclient, SIGNAL(message(QString)),proccommand, SLOT(slotFromServer(QString)));
+    }
+    else{
+        disconnect(tcpclient, SIGNAL(message(QString)),proccommand, SLOT(slotFromServer(QString)));
+    }
 }
 
 void com_port_w::read_data(QByteArray recieve_data)

@@ -3,8 +3,9 @@
 
 #include <QDialog>
 
-#include "ui_com_port1.h"
+#include "ui_com_port.h"
 #include "proccommand.h"
+#include "tcp_client.h"
 #include "frameinfo.h"
 
 class com_port_w : public QWidget
@@ -30,6 +31,7 @@ signals:
     void res_data_to_plc();
     void data_to_astra(QList<FrameInfo>);
     void num_com_proccommand(QString);
+    void connection_type(int);
     
 private slots:
 
@@ -48,8 +50,8 @@ private slots:
 
     void on_writeButton_clicked(bool checked);
 
-    void com_port_type_connection();
-    void wifi_type_connection();
+    void com_type_connect(bool);
+    void wifi_type_connect(bool);
 
 
 private:
@@ -64,6 +66,8 @@ private:
     QList<QByteArray> frames_list_to_com_port; // массив кадров
     QList<int> frames_time_to_com_port; //массив времён кадров
     ProcCommand *proccommand;
+    Tcpclient *tcpclient;
+
     QSerialPortInfo *port_info;
 };
 

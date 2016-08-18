@@ -32,7 +32,7 @@
    <string>Astra Animator</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="icons.qrc">
+   <iconset resource="pics/icons.qrc">
     <normaloff>:/green</normaloff>:/green</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -363,7 +363,7 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="icons.qrc">
+           <iconset resource="pics/icons.qrc">
             <normaloff>:/pause</normaloff>:/pause</iconset>
           </property>
           <property name="iconSize">
@@ -401,7 +401,7 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="icons.qrc">
+           <iconset resource="pics/icons.qrc">
             <normaloff>:/в конец.png</normaloff>:/в конец.png</iconset>
           </property>
           <property name="iconSize">
@@ -489,7 +489,7 @@
            <string>Repeat</string>
           </property>
           <property name="icon">
-           <iconset resource="icons.qrc">
+           <iconset resource="pics/icons.qrc">
             <normaloff>:/повтор.png</normaloff>:/повтор.png</iconset>
           </property>
           <property name="iconSize">
@@ -555,7 +555,7 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="icons.qrc">
+           <iconset resource="pics/icons.qrc">
             <normaloff>:/в начало.png</normaloff>:/в начало.png</iconset>
           </property>
           <property name="iconSize">
@@ -627,7 +627,7 @@
            <string>Stop</string>
           </property>
           <property name="icon">
-           <iconset resource="icons.qrc">
+           <iconset resource="pics/icons.qrc">
             <normaloff>:/стоп.png</normaloff>:/стоп.png</iconset>
           </property>
           <property name="shortcut">
@@ -5917,7 +5917,7 @@ p, li { white-space: pre-wrap; }
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="icons.qrc"/>
+  <include location="pics/icons.qrc"/>
  </resources>
  <connections/>
 </ui>

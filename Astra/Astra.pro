@@ -6,13 +6,17 @@
 
 QT       += core gui
 
+QT       += network
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Astra
+TARGET = Astra Animator
 TEMPLATE = app
 QT+= serialport
 CONFIG +=C++11
 
+OBJECTS_DIR = _build
+DESTDIR  = ../Alistem/bin
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -22,7 +26,8 @@ SOURCES += main.cpp\
     getstatus.cpp \
     readflash.cpp \
     writeflash.cpp \
-    reset.cpp
+    reset.cpp \
+    tcp_client.cpp
 
 HEADERS  += mainwindow.h \
     com_port_main.h \
@@ -33,14 +38,15 @@ HEADERS  += mainwindow.h \
     readflash.h \
     writeflash.h \
     reset.h \
-    frameinfo.h
+    frameinfo.h \
+    tcp_client.h
 
 FORMS    += mainwindow.ui \
-    com_port1.ui
+     com_port.ui
 
 RESOURCES += \
-    icons.qrc
-RC_FILE = myapp.rc
+    pics/icons.qrc
+RC_FILE = pics/myapp.rc\
 
 
 DISTFILES +=
