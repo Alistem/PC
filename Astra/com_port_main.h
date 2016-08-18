@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "ui_com_port1.h"
+#include "ui_com_port.h"
 #include "proccommand.h"
 #include "frameinfo.h"
 

@@ -8,13 +8,13 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Astra
+TARGET = Astra Animator
 TEMPLATE = app
 QT+= serialport
 CONFIG +=C++11
 
 OBJECTS_DIR = _build
-DESTDIR  = ../bin
+DESTDIR  = ../Alistem/bin
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -38,11 +38,11 @@ HEADERS  += mainwindow.h \
     frameinfo.h
 
 FORMS    += mainwindow.ui \
-    com_port1.ui
+     com_port.ui
 
 RESOURCES += \
     pics/icons.qrc
-RC_FILE = pics/myapp.rc
+RC_FILE = pics/myapp.rc\
 
 
 DISTFILES +=

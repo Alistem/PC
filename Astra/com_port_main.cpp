@@ -1,5 +1,5 @@
 ﻿#include "com_port_main.h"
-#include "ui_com_port1.h"
+#include "ui_com_port.h"
 #include <QtCore/QDebug>
 #include <QFileDialog>
 #include <QBuffer>
