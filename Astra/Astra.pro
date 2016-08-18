@@ -6,6 +6,8 @@
 
 QT       += core gui
 
+QT       += network
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Astra Animator
@@ -24,7 +26,8 @@ SOURCES += main.cpp\
     getstatus.cpp \
     readflash.cpp \
     writeflash.cpp \
-    reset.cpp
+    reset.cpp \
+    tcp_client.cpp
 
 HEADERS  += mainwindow.h \
     com_port_main.h \
@@ -35,7 +38,8 @@ HEADERS  += mainwindow.h \
     readflash.h \
     writeflash.h \
     reset.h \
-    frameinfo.h
+    frameinfo.h \
+    tcp_client.h
 
 FORMS    += mainwindow.ui \
      com_port.ui
