@@ -97,14 +97,10 @@ void ProcCommand::slot_read()
 void ProcCommand::command_read(QString command)
 {
     sector = command;
-    if(type_connect == 2){
     unique_ptr<Operation> read_flash(new ReadFlash());
 
     read_flash->sendCommandToPort(com_port, command);
-    }
-    if(type_connect == 2){
-        emit read_tcp(command);
-    }
+
 }
 
 void ProcCommand::listen_on_off()
