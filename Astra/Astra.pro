@@ -16,7 +16,7 @@ QT+= serialport
 CONFIG +=C++11
 
 OBJECTS_DIR = _build
-DESTDIR  = ../Alistem/bin
+DESTDIR  = bin
 
 SOURCES += main.cpp\
         mainwindow.cpp \

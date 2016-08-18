@@ -33,7 +33,7 @@ void ProcCommand::slot_connect(QString num)
         connect(com_port,SIGNAL(PortError(QByteArray)),SLOT(comPortError(QByteArray)));
         }
         else if(type_connect == 2){
-            com_port = new Tcpclient();
+            //com_port = new Tcpclient();
         }
         if(com_port->portOpen()){
             slot_status();
