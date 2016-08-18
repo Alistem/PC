@@ -27,7 +27,7 @@ signals:
     void data_from_com(QByteArray);
     void times_from_plc1(int,int,int);
     void shim_from_plc1(QByteArray,int);
-    void data_tcp(QString);
+    void write_tcp(QString);
     void read_tcp(QString);
 
 public slots:
@@ -43,6 +43,7 @@ public slots:
     void data_to_project();
     void data_from_project(QList<FrameInfo>);
     void connection_type(int);
+    void data_from_tcp(QString);
 
 private:
     ComPort *com_port;
@@ -51,6 +52,7 @@ private:
     int type_connect;
     bool ctrl_sum_verify(QByteArray);
     QByteArray ctrl_sum_xor(QByteArray);
+    QString data_tcp;
     void nums_all_frames();
     void data_all_frames();
     void analise_reading_data();

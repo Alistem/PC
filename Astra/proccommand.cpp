@@ -13,9 +13,10 @@ using namespace std;
 
 ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
 {
+    type_connect = 1;
     flag_command = 0;
-    read_stage = 0;
     write_stage = 0;
+    read_stage = 0;
     i_write = 0;
     errors = 0;
     nums_all_frames_flag = false;
@@ -103,9 +104,19 @@ void ProcCommand::command_read(QString command)
 
 }
 
+void ProcCommand::data_from_tcp(QString data)
+{
+    data_tcp = data;
+    listen_on_off();
+}
+
 void ProcCommand::listen_on_off()
 {
-    TempReadData=com_port->read();
+    if(type_connect == 1)
+        TempReadData=com_port->read();
+    else if(type_connect == 2)
+        TempReadData.append(data_tcp);
+
     qDebug()<<TempReadData;
     if(TempReadData.contains("OkOk")){
         switch (flag_command) {
@@ -366,6 +377,7 @@ void ProcCommand::slot_write()
 
 void ProcCommand::command_write(QString command)
 {
+    qDebug()<<type_connect;
     sector = command;
     if(type_connect == 1){
     unique_ptr<Operation> write_flash(new WriteFlash());
@@ -373,7 +385,7 @@ void ProcCommand::command_write(QString command)
     write_flash->sendCommandToPort(com_port, command);
     }
     else if(type_connect == 2){
-        emit data_tcp(command);
+        emit write_tcp(command);
     }
 }
 

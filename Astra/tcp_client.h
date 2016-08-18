@@ -11,13 +11,13 @@ public:
     virtual ~Tcpclient();
 
 signals:
-    void message(QByteArray);
+    void message(QString);
     void info(QString);
 
 public slots:
     void slotReadyRead();
     void slotError(QAbstractSocket::SocketError err);
-    void slotSendToServer(QByteArray);
+    void slotSendToServer(QString);
     void slotConnected();
 
 private:
@@ -26,7 +26,7 @@ private:
     QHostAddress s_address;
     quint16 m_nNextBlockSize;
     quint16 port;
-    bool connect;
+    bool connect_st;
 
 };
 

@@ -1,13 +1,16 @@
 #include "tcp_client.h"
 
+QT_USE_NAMESPACE
+
 Tcpclient::Tcpclient(QObject *parent) :
-    QObject(parent), m_nNextBlockSize(0)
+    QObject(parent)
+  , m_nNextBlockSize(0)
+  , m_pTcpSocket (new QTcpSocket(this))
 {
 
     s_address = "10.10.33.1";
     port = 1024;
 
-    m_pTcpSocket = new QTcpSocket(this);
     m_pTcpSocket->connectToHost(s_address,port);
 
     connect(m_pTcpSocket, SIGNAL(connected()), SLOT(slotConnected()));
@@ -15,25 +18,26 @@ Tcpclient::Tcpclient(QObject *parent) :
     connect(m_pTcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
             this,         SLOT(slotError(QAbstractSocket::SocketError)));
 
-    connect(ui->message_send, SIGNAL(returnPressed(QByteArray)),SLOT(slotSendToServer(QByteArray)));
-
 
 }
 
 Tcpclient::~Tcpclient()
 {
-    if(connect)
+    if(connect_st)
         m_pTcpSocket->close();
     delete m_pTcpSocket;
 }
 
-void Tcpclient::slotSendToServer(QByteArray buffer){
-    m_pTcpSocket->write(buffer);
+void Tcpclient::slotSendToServer(QString buffer){
+    QByteArray ba;
+    ba.append(buffer);
+    qDebug()<<"slotSendToServer"<<ba;
+    m_pTcpSocket->write(ba);
     buffer.clear();
 }
 
 void Tcpclient::slotConnected() {
-    connect = true;
+    connect_st = true;
     emit info("Connected");
 }
 
@@ -55,7 +59,7 @@ void Tcpclient::slotReadyRead() {
 
         qDebug()<<"buff"<<buff.toHex();
 
-        ui->messages->append(QString::fromUtf8(buff.toHex()));
+        emit message(buff);
 
         m_nNextBlockSize = 0;
     }
@@ -71,5 +75,5 @@ void Tcpclient::slotError(QAbstractSocket::SocketError err){
                                      "The connection was refused." :
                                      QString(m_pTcpSocket->errorString())
                                      );
-    ui->messages->append(strError);
+    emit info(strError);
 }

@@ -8,7 +8,6 @@
 #include "proccommand.h"
 #include "tcp_client.h"
 #include "mainwindow.h"
-//#include <QApplication>
 #include <QCloseEvent>
 
 QT_USE_NAMESPACE
@@ -68,8 +67,10 @@ com_port_w::com_port_w(QWidget *parent)
     //=========================================================================================
 
 
+
     connect(proccommand,SIGNAL(error_label(QString)),this,SLOT(error_label_main(QString)));
 
+    //===========================WIFI or COM================================
     connect(ui->com,SIGNAL(toggled(bool)),this,SLOT(com_type_connect(bool)));
     connect(ui->wifi,SIGNAL(toggled(bool)),this,SLOT(wifi_type_connect(bool)));
     connect(this,SIGNAL(connection_type(int)),proccommand,SLOT(connection_type(int)));
@@ -155,10 +156,13 @@ void com_port_w::wifi_type_connect(bool pos)
         ui->comboBox->setEnabled(false); // блокировка комбобокса
         ui->com->setChecked(false);
         emit connection_type(2);
-        connect(tcpclient, SIGNAL(message(QString)),proccommand, SLOT(slotFromServer(QString)));
+        connect(proccommand,SIGNAL(write_tcp(QString)),tcpclient,SLOT(slotSendToServer(QString)));
+        connect(tcpclient, SIGNAL(message(QString)),proccommand, SLOT(data_from_tcp(QString)));
+
     }
     else{
-        disconnect(tcpclient, SIGNAL(message(QString)),proccommand, SLOT(slotFromServer(QString)));
+        //disconnect(proccommand,SIGNAL(write_tcp(QString)),tcpclient,SLOT(slotSendToServer(QString)));
+        //disconnect(tcpclient, SIGNAL(message(QString)),proccommand, SLOT(data_from_tcp(QString)));
     }
 }
 
