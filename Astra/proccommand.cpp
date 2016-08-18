@@ -66,9 +66,16 @@ void ProcCommand::slot_reset()
 {
     flag_command = 2;
 
-    unique_ptr<Operation> reset(new Reset());
+    if(type_connect == 1){
 
-    reset->sendCommandToPort(com_port, "");
+        unique_ptr<Operation> reset(new Reset());
+
+        reset->sendCommandToPort(com_port, "");
+    }
+    else if(type_connect == 2){}
+
+
+
 }
 
 void ProcCommand::slot_read()
@@ -377,7 +384,6 @@ void ProcCommand::slot_write()
 
 void ProcCommand::command_write(QString command)
 {
-    qDebug()<<type_connect;
     sector = command;
     if(type_connect == 1){
     unique_ptr<Operation> write_flash(new WriteFlash());
