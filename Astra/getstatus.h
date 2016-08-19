@@ -8,7 +8,7 @@ class GetStatus : public Operation
 public:
     GetStatus();
 
-    QByteArray operation(ComPort*, QString);
+    QByteArray operation(IAdapterInterface *, QString);
 };
 
 #endif // GETSTATUS_H

@@ -7,7 +7,7 @@ class Reset : public Operation
 public:
     Reset();
 
-    QByteArray operation(ComPort*, QString);
+    QByteArray operation(IAdapterInterface*, QString);
 };
 
 #endif // RESET_H

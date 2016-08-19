@@ -2,10 +2,10 @@
 #define COM_PORT_MAIN_H
 
 #include <QDialog>
+#include <QSerialPortInfo>
 
 #include "ui_com_port.h"
 #include "proccommand.h"
-#include "tcp_client.h"
 #include "frameinfo.h"
 
 class com_port_w : public QWidget
@@ -66,7 +66,6 @@ private:
     QList<QByteArray> frames_list_to_com_port; // массив кадров
     QList<int> frames_time_to_com_port; //массив времён кадров
     ProcCommand *proccommand;
-    Tcpclient *tcpclient;
 
     QSerialPortInfo *port_info;
 };

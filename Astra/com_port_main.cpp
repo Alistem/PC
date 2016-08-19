@@ -15,7 +15,6 @@ QT_USE_NAMESPACE
 com_port_w::com_port_w(QWidget *parent)
     : QWidget(parent)
     , proccommand(new ProcCommand(this))
-    , tcpclient(new Tcpclient(this))
     , ui(new Ui::com_port)
 {
     ui->setupUi(this);

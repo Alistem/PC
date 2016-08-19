@@ -7,6 +7,7 @@
 #include "readflash.h"
 #include "writeflash.h"
 #include "frameinfo.h"
+#include "common/clientsocketadapter.h"
 
 using namespace std;
 
@@ -27,15 +28,12 @@ ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
 void ProcCommand::slot_connect(QString num)
 {
     if (!com_port){
-        if(type_connect == 1){
-        com_port = new ComPort(num);
+        com_port = new ClientSocketAdapter(this);
+        com_port->port(num);
         connect(com_port,SIGNAL(finish_read()),SLOT(listen_on_off()));
         connect(com_port,SIGNAL(PortError(QByteArray)),SLOT(comPortError(QByteArray)));
-        }
-        else if(type_connect == 2){
-            //com_port = new Tcpclient();
-        }
-        if(com_port->portOpen()){
+
+        if(com_port->portConnect()){
             slot_status();
         }
         else{

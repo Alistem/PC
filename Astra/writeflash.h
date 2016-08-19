@@ -10,7 +10,7 @@ public:
 
     QByteArray ctrl_sum_xor(QByteArray);
 
-    QByteArray operation(ComPort*, QString);
+    QByteArray operation(IAdapterInterface*, QString);
 };
 
 #endif // WRITEFLASH_H

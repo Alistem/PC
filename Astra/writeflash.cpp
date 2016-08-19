@@ -5,7 +5,7 @@ WriteFlash::WriteFlash()
 
 }
 
-QByteArray WriteFlash::operation(ComPort *port, QString string)
+QByteArray WriteFlash::operation(IAdapterInterface *port, QString string)
 {
     if(!port->read().endsWith("OkWR")){
     QByteArray buffer,ba,ba1,buff;

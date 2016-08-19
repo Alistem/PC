@@ -27,7 +27,10 @@ SOURCES += main.cpp\
     readflash.cpp \
     writeflash.cpp \
     reset.cpp \
-    tcp_client.cpp
+    tcp_client.cpp \
+    common/adapterinterface.cpp \
+    common/iadapterinterface.cpp \
+    common/clientsocketadapter.cpp
 
 HEADERS  += mainwindow.h \
     com_port_main.h \
@@ -39,7 +42,10 @@ HEADERS  += mainwindow.h \
     writeflash.h \
     reset.h \
     frameinfo.h \
-    tcp_client.h
+    tcp_client.h \
+    common/adapterinterface.h \
+    common/iadapterinterface.h \
+    common/clientsocketadapter.h
 
 FORMS    += mainwindow.ui \
      com_port.ui

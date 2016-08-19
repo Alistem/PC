@@ -2,7 +2,7 @@
 #define OPERATION
 #include <QtCore>
 
-#include "comport.h"
+#include "common/iadapterinterface.h"
 
 class Operation
 {
@@ -10,11 +10,11 @@ public:
     Operation() {}
     virtual ~Operation () {}
 
-    QByteArray sendCommandToPort(ComPort* port, QString string)
+    QByteArray sendCommandToPort(IAdapterInterface* port, QString string)
     {
         QByteArray buffer;
         // Работает только с успешно подключенным COM портом
-        if (! port->portOpen())
+        if (! port->portConnect())
             return buffer;
 //        if(!port->read().endsWith("OkOk") /*|| !port->read().endsWith("OkWR")*/){
 
@@ -34,7 +34,7 @@ public:
         return buffer;
     }
 
-    virtual QByteArray operation(ComPort*, QString) = 0;
+    virtual QByteArray operation(IAdapterInterface*, QString) = 0;
 
 };
 

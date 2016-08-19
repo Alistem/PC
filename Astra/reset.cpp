@@ -5,7 +5,7 @@ Reset::Reset()
 
 }
 
-QByteArray Reset::operation(ComPort* port, QString string)
+QByteArray Reset::operation(IAdapterInterface *port, QString string)
 {
     QString listen = "63ff00000000039f";
     QByteArray buffer;

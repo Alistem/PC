@@ -3,12 +3,12 @@
 
 #include <QObject>
 #include <QTimer>
-#include "comport.h"
-#include "tcp_client.h"
+#include "common/iadapterinterface.h"
 #include "frameinfo.h"
 
 
 class Gui;
+class IAdapterInterface;
 
 class ProcCommand : public QObject
 {
@@ -48,7 +48,7 @@ public slots:
 
 private:
 
-    ComPort * com_port;
+    IAdapterInterface * com_port;
     QByteArray BufferReadData,TempReadData,all_data_from_plc,times_of_frames,shim_of_frames;
     int flag_command,read_stage,write_stage,ctrl_sum_errors,num_frames,current_sector,errors,i_write;
     int type_connect;
