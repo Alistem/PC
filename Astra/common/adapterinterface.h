@@ -5,22 +5,27 @@
 #include <QtCore>
 
 #include "common/iadapterinterface.h"
-//#include "comport.h"
-//#include "tcp_client.h"
+#include "comport.h"
+#include "tcp_client.h"
 
-class AdapterInterface : public IAdapterInterface/*, private ComPort , private Tcpclient*/
+class ComPort;
+class Tcpclient;
+class AdapterInterface : public IAdapterInterface
 {
     Q_OBJECT
 
 public:
-    explicit AdapterInterface(QObject *parent = 0);
+    explicit AdapterInterface(QObject *parent/*, ComPort *pCom = 0, Tcpclient *pTcp = 0*/);
     ~AdapterInterface();
-    QString port;
 
     virtual bool portConnect();
     virtual QByteArray read();
-    virtual int write(const QByteArray &data);
-    //virtual void port(QString);
+    virtual int write(QByteArray);
+    virtual void port(QString);
+
+protected:
+    ComPort * mCom;
+    Tcpclient * mTcp;
 
 };
 

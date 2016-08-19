@@ -29,8 +29,7 @@ SOURCES += main.cpp\
     reset.cpp \
     tcp_client.cpp \
     common/adapterinterface.cpp \
-    common/iadapterinterface.cpp \
-    common/clientsocketadapter.cpp
+    common/iadapterinterface.cpp
 
 HEADERS  += mainwindow.h \
     com_port_main.h \
@@ -44,8 +43,7 @@ HEADERS  += mainwindow.h \
     frameinfo.h \
     tcp_client.h \
     common/adapterinterface.h \
-    common/iadapterinterface.h \
-    common/clientsocketadapter.h
+    common/iadapterinterface.h
 
 FORMS    += mainwindow.ui \
      com_port.ui

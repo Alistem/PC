@@ -2,9 +2,12 @@
 
 QT_USE_NAMESPACE
 
-AdapterInterface::AdapterInterface(QObject *parent): IAdapterInterface(parent)
+AdapterInterface::AdapterInterface(QObject *parent)
+    : IAdapterInterface(parent)
 {
-
+    QString str;
+    mCom = new ComPort(str,this);
+    mTcp = new Tcpclient(this);
 }
 
 AdapterInterface::~AdapterInterface()
@@ -24,12 +27,12 @@ QByteArray AdapterInterface::read()
     return s;
 }
 
-int AdapterInterface::write(const QByteArray &data)
+int AdapterInterface::write(QByteArray data)
 {
     return data.size();
 }
 
-//void AdapterInterface::port(QString num)
-//{
+void AdapterInterface::port(QString num)
+{
 
-//}
+}
