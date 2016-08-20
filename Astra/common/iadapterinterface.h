@@ -10,9 +10,10 @@ class IAdapterInterface: public QObject
     Q_OBJECT
 
   public:
-    explicit IAdapterInterface(QObject *parent);
+    explicit IAdapterInterface(QString type);
     virtual ~IAdapterInterface() = 0;
-    virtual bool portConnect() = 0;
+    virtual void portConnect() = 0;
+    virtual bool portOpen() = 0;
     virtual QByteArray read() = 0;
     virtual int write(QByteArray) = 0;
     virtual void port(QString) = 0;

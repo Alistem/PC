@@ -28,12 +28,13 @@ ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
 void ProcCommand::slot_connect(QString num)
 {
     if (!com_port){
-        com_port = new AdapterInterface(this);
+        com_port = new AdapterInterface(QString::number(type_connect));
         com_port->port(num);
+        com_port->portConnect();
         connect(com_port,SIGNAL(finish_read()),SLOT(listen_on_off()));
         connect(com_port,SIGNAL(PortError(QByteArray)),SLOT(comPortError(QByteArray)));
 
-        if(com_port->portConnect()){
+        if(com_port->portOpen()){
             slot_status();
         }
         else{

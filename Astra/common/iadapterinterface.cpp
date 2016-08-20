@@ -3,8 +3,7 @@
 
 QT_USE_NAMESPACE
 
-IAdapterInterface::IAdapterInterface(QObject *parent): port_open(false),
-    QObject(parent)
+IAdapterInterface::IAdapterInterface(QString): port_open(false)
 {
 
 }

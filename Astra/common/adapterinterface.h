@@ -15,13 +15,17 @@ class AdapterInterface : public IAdapterInterface
     Q_OBJECT
 
 public:
-    explicit AdapterInterface(QObject *parent/*, ComPort *pCom = 0, Tcpclient *pTcp = 0*/);
+    explicit AdapterInterface(QString type);
     ~AdapterInterface();
 
-    virtual bool portConnect();
+    virtual void portConnect();
+    virtual bool portOpen();
     virtual QByteArray read();
     virtual int write(QByteArray);
     virtual void port(QString);
+    QString port_num;
+    int type_connection;
+    bool port_ok;
 
 protected:
     ComPort * mCom;

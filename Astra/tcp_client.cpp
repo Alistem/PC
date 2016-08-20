@@ -38,7 +38,7 @@ void Tcpclient::slotSendToServer(QString buffer){
 
 void Tcpclient::slotConnected() {
     connect_st = true;
-    emit info("Connected");
+    //emit info("Connected");
 }
 
 void Tcpclient::slotReadyRead() {

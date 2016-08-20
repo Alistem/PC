@@ -2,12 +2,10 @@
 
 QT_USE_NAMESPACE
 
-AdapterInterface::AdapterInterface(QObject *parent)
-    : IAdapterInterface(parent)
+AdapterInterface::AdapterInterface(QString type)
+    : IAdapterInterface(type)
 {
-    QString str;
-    mCom = new ComPort(str,this);
-    mTcp = new Tcpclient(this);
+    type_connection = type.toInt(0);
 }
 
 AdapterInterface::~AdapterInterface()
@@ -15,10 +13,28 @@ AdapterInterface::~AdapterInterface()
 
 }
 
-bool AdapterInterface::portConnect()
+void AdapterInterface::portConnect()
 {
-    bool s = true;
- return  s;
+    switch (type_connection) {
+    case 1:
+        mCom = new ComPort(port_num);
+        port_ok = mCom->portOpen();
+        qDebug()<<"ComPort"<<port_num<<port_ok;
+        break;
+    case 2:
+        mTcp = new Tcpclient(this);
+        port_ok = mTcp->slotConnected();
+        qDebug()<<"Tcpclient"<<port_num<<port_ok;
+        break;
+
+    default:
+        break;
+    }
+}
+
+bool AdapterInterface::portOpen()
+{
+    return port_ok;
 }
 
 QByteArray AdapterInterface::read()
@@ -34,5 +50,5 @@ int AdapterInterface::write(QByteArray data)
 
 void AdapterInterface::port(QString num)
 {
-
+    port_num = num;
 }

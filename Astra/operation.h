@@ -14,7 +14,7 @@ public:
     {
         QByteArray buffer;
         // Работает только с успешно подключенным COM портом
-        if (! port->portConnect())
+        if (!port->portOpen())
             return buffer;
 //        if(!port->read().endsWith("OkOk") /*|| !port->read().endsWith("OkWR")*/){
 
