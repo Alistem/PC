@@ -45,13 +45,14 @@ public slots:
     void data_from_project(QList<FrameInfo>);
     void connection_type(int);
     void data_from_tcp(QString);
+    void slot_ok_connect();
 
 private:
 
     IAdapterInterface * com_port;
     QByteArray BufferReadData,TempReadData,all_data_from_plc,times_of_frames,shim_of_frames;
     int flag_command,read_stage,write_stage,ctrl_sum_errors,num_frames,current_sector,errors,i_write;
-    int type_connect;
+    int type_connect,timeout;
     bool ctrl_sum_verify(QByteArray);
     QByteArray ctrl_sum_xor(QByteArray);
     QString data_tcp;

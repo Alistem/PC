@@ -18,7 +18,7 @@ public:
     explicit AdapterInterface(QString type);
     ~AdapterInterface();
 
-    virtual void portConnect();
+    virtual void portConnect();   
     virtual bool portOpen();
     virtual QByteArray read();
     virtual int write(QByteArray);
@@ -30,6 +30,14 @@ public:
 protected:
     ComPort * mCom;
     Tcpclient * mTcp;
+
+signals:
+    void finish_read();
+    void PortError(QByteArray);
+    bool ok_connect();
+
+public slots:
+    virtual void ok_connect_st();
 
 };
 

@@ -25,11 +25,13 @@ ComPort::ComPort(QString port, QObject *parent): port_open(false),
     serial_port->setStopBits(QSerialPort::OneStop);
 
 
-
     if(!portOpen())
         qDebug() << "Error connect";
-    else
+    else{
+        emit ok_com();
         qDebug() << port;
+    }
+
 }
 
 ComPort::~ComPort()

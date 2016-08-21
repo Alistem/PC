@@ -38,7 +38,7 @@ private slots:
 signals:
     void finish_read();
     void PortError(QByteArray);
-
+    void ok_com();
 };
 
 #endif // COMPORT_H

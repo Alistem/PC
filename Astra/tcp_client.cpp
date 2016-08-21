@@ -10,6 +10,7 @@ Tcpclient::Tcpclient(QObject *parent) :
 
     s_address = "10.10.33.1";
     port = 1024;
+    timeout = 100;
 
     m_pTcpSocket->connectToHost(s_address,port);
 
@@ -17,6 +18,7 @@ Tcpclient::Tcpclient(QObject *parent) :
     connect(m_pTcpSocket, SIGNAL(readyRead()), SLOT(slotReadyRead()));
     connect(m_pTcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
             this,         SLOT(slotError(QAbstractSocket::SocketError)));
+    connect(&r_timer, SIGNAL(timeout()),SLOT(readFinish()));
 
 
 }
@@ -28,23 +30,22 @@ Tcpclient::~Tcpclient()
     delete m_pTcpSocket;
 }
 
-void Tcpclient::slotSendToServer(QString buffer){
-    QByteArray ba;
-    ba.append(buffer);
-    qDebug()<<"slotSendToServer"<<ba;
-    m_pTcpSocket->write(ba);
+void Tcpclient::slotSendToServer(QByteArray buffer)
+{
+    m_pTcpSocket->write(buffer);
     buffer.clear();
 }
 
 void Tcpclient::slotConnected() {
     connect_st = true;
-    //emit info("Connected");
+    emit ok_connect_tcp();
 }
 
-void Tcpclient::slotReadyRead() {
-    QByteArray buff;
-
+void Tcpclient::slotReadyRead()
+{
+    read_data.clear();
     for (;;) {
+        r_timer.start(timeout);
         if (!m_nNextBlockSize) {
             if (m_pTcpSocket->bytesAvailable() < sizeof(quint8))
                 return;
@@ -55,17 +56,32 @@ void Tcpclient::slotReadyRead() {
         if (m_pTcpSocket->bytesAvailable() < m_nNextBlockSize)
             return;
 
-        buff=m_pTcpSocket->readAll();
+        read_data=m_pTcpSocket->readAll();
 
-        qDebug()<<"buff"<<buff.toHex();
-
-        emit message(buff);
+        qDebug()<<"read_data"<<read_data.toHex();
 
         m_nNextBlockSize = 0;
     }
 }
 
-void Tcpclient::slotError(QAbstractSocket::SocketError err){
+QByteArray Tcpclient::read()
+{
+    return read_data;
+}
+
+int Tcpclient::write(QByteArray buffer)
+{
+    slotSendToServer(buffer);
+    return buffer.size();
+}
+
+void Tcpclient::readFinish()
+{
+    emit finish_read();
+}
+
+void Tcpclient::slotError(QAbstractSocket::SocketError err)
+{
     QString strError =
             "Error: " + (err == QAbstractSocket::HostNotFoundError ?
                              "The host was not found." :

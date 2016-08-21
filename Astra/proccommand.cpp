@@ -20,6 +20,7 @@ ProcCommand::ProcCommand(QObject *parent) : QObject(parent), com_port(NULL)
     read_stage = 0;
     i_write = 0;
     errors = 0;
+    timeout = 100;
     nums_all_frames_flag = false;
     data_all_frames_flag = false;
     connect(&connect_tm, SIGNAL(timeout()),SLOT(slot_disconnect()));
@@ -31,17 +32,18 @@ void ProcCommand::slot_connect(QString num)
         com_port = new AdapterInterface(QString::number(type_connect));
         com_port->port(num);
         com_port->portConnect();
+        connect(com_port,SIGNAL(ok_connect()),SLOT(slot_ok_connect()));
         connect(com_port,SIGNAL(finish_read()),SLOT(listen_on_off()));
         connect(com_port,SIGNAL(PortError(QByteArray)),SLOT(comPortError(QByteArray)));
+        connect_tm.start(timeout);
 
-        if(com_port->portOpen()){
-            slot_status();
-        }
-        else{
-            emit connect_label("Нет связи");
-            slot_disconnect();
-        }
     }
+}
+
+void ProcCommand::slot_ok_connect()
+{
+    connect_tm.stop();
+    slot_status();
 }
 
 void ProcCommand::slot_disconnect()
@@ -59,7 +61,7 @@ void ProcCommand::slot_status()
 
     emit status(false);
 
-    connect_tm.start(100);
+    connect_tm.start(timeout);
 
     unique_ptr<Operation> get_status(new GetStatus());
 
@@ -111,8 +113,8 @@ void ProcCommand::command_read(QString command)
 
 void ProcCommand::data_from_tcp(QString data)
 {
-    data_tcp = data;
-    listen_on_off();
+//    data_tcp = data;
+//    listen_on_off();
 }
 
 void ProcCommand::listen_on_off()
